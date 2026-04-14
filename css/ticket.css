@@ -1,0 +1,261 @@
+body {
+    background: #f3f4f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-navbar {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.checkout-navbar-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: #111827;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.logo span {
+    font-size: 2rem;
+}
+
+.checkout-user-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cart-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: none;
+    background: #f3f4f6;
+    color: #374151;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #d946ef;
+    color: #fff;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.user-role {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.ticket-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.ticket-card {
+    width: 100%;
+    max-width: 450px;
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #eceff3;
+    padding: 2rem;
+    text-align: center;
+}
+
+.ticket-icon {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    margin: 0 auto 1.2rem;
+    background: linear-gradient(180deg, #d946ef 0%, #a21caf 100%);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 24px rgba(217, 70, 239, 0.35);
+}
+
+.ticket-card h1 {
+    font-size: 2rem;
+    margin-bottom: 0.7rem;
+}
+
+.ticket-message {
+    color: #6b7280;
+    line-height: 1.45;
+    margin-bottom: 1.3rem;
+}
+
+.ticket-message strong {
+    color: #d946ef;
+    display: block;
+    margin-top: 0.3rem;
+}
+
+.ticket-number-box {
+    border: 1px solid #f0abfc;
+    border-radius: 14px;
+    background: #fdf4ff;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.ticket-number-box span {
+    color: #9ca3af;
+    display: block;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.ticket-number-box strong {
+    color: #d946ef;
+    font-size: 2rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.ticket-benefits {
+    text-align: left;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 1.35rem;
+}
+
+.ticket-benefits li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    color: #4b5563;
+}
+
+.ticket-benefits svg {
+    margin-top: 0.1rem;
+    color: #d946ef;
+    flex-shrink: 0;
+}
+
+.back-catalog-btn {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #d946ef 0%, #a21caf 100%);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.main-footer {
+    background-color: #fff;
+    border-top: 1px solid #e2e8f0;
+    padding: 1.5rem;
+}
+
+.footer-content {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-mark {
+    background: #d946ef;
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.logo-text {
+    font-weight: 700;
+}
+
+.copyright,
+.footer-slogan {
+    color: #9ca3af;
+}
+
+@media (max-width: 640px) {
+    .checkout-navbar-inner,
+    .main-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .user-info {
+        display: none;
+    }
+
+    .logo span {
+        font-size: 1.55rem;
+    }
+
+    .ticket-card {
+        padding: 1.35rem;
+    }
+
+    .ticket-number-box strong {
+        font-size: 1.7rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 0.65rem;
+        align-items: flex-start;
+    }
+}

@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SportRent</title>
+    <meta name="description" content="Sistema de alquiler de artículos deportivos SportRent">
+    <meta name="keywords" content="alquiler, deportes, sportrent, sistema, tickets">
+    <meta name="author" content="Sergio Andres Casto Velasquez">
+    <link rel="Shortcut icon" href="img/icon.png">
+    <link rel="icon" type="image/png" href="img/icon.png?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/client.css">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="#df2be4"/>
+                    <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>SportRent</span>
+            </div>
+            
+            <div class="search-bar">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" placeholder="Busca bicicletas, raquetas, pesas...">
+            </div>
+
+            <div class="user-actions">
+                <button class="cart-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="cart-indicator" id="cartIndicator">1</span>
+                </button>
+                <div class="user-profile">
+                    <div class="avatar">CG</div>
+                    <div class="user-info">
+                        <span class="user-name">Carlos</span>
+                        <span class="user-role">Mi cuenta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Banner -->
+        <section class="banner">
+            <div class="banner-content">
+                <span class="banner-subtitle">CATÁLOGO 2026</span>
+                <h1 class="banner-title">Equipo deportivo <br><span class="highlight">premium</span> al mejor precio</h1>
+            </div>
+            <div class="banner-stats">
+                <div class="stat-item">
+                    <span class="stat-value">9+</span>
+                    <span class="stat-label">Productos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Categorías</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">€6/día</span>
+                    <span class="stat-label">Desde</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Layout 2 Columns -->
+        <div class="catalog-layout">
+            
+            <!-- Sidebar / Filtros -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Filtros</h2>
+                    <button class="reset-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Resetear
+                    </button>
+                </div>
+
+                <!-- Categorías -->
+                <div class="filter-section">
+                    <h3>CATEGORÍAS</h3>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" checked>
+                        <span class="checkmark"></span>
+                        <span class="filter-label">🚲 Ciclismo</span>
+                        <span class="filter-count">3</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="filter-label">🏋️ Pesas</span>
+                        <span class="filter-count">3</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="filter-label">🎾 Deportes de raqueta</span>
+                        <span class="filter-count">3</span>
+                    </label>
+                </div>
+
+                <!-- Precio por día -->
+                <div class="filter-section">
+                    <h3>PRECIO POR DÍA</h3>
+                    <div class="price-range">
+                        <div class="price-labels">
+                            <span class="price-min">€0</span>
+                            <span class="price-max">€50</span>
+                        </div>
+                        <input type="range" min="0" max="50" value="50" class="slider" id="priceRange">
+                        <div class="price-helper">
+                            <span>€0/día</span>
+                            <span>€50/día</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Valoración -->
+                <div class="filter-section">
+                    <h3>VALORACIÓN MÍNIMA</h3>
+                    <div class="rating-stars">
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                    </div>
+                </div>
+
+                <!-- Disponibilidad -->
+                <div class="availability-pill">
+                    <span class="dot"></span>
+                    <strong>9 artículos</strong> disponibles hoy
+                </div>
+            </aside>
+
+            <!-- Product Grid Area -->
+            <section class="products-area">
+                <div class="products-header">
+                    <span class="products-count"><strong>9</strong> productos encontrados</span>
+                    <div class="sort-by">
+                        <label for="sort">Ordenar:</label>
+                        <select id="sort" class="sort-select">
+                            <option>Relevancia</option>
+                            <option>Precio: menor a mayor</option>
+                            <option>Precio: mayor a menor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="product-grid">
+                    
+                    <!-- Producto 1 -->
+                    <div class="product-card">
+                        <div class="card-image-wrapper">
+                            <img src="img/bike-mountain.jpg" alt="Bicicleta de Montaña" class="product-image">
+                            <span class="badge badge-pink">Más alquilado</span>
+                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-tag">Ciclismo</span>
+                            <h3 class="product-title">Bicicleta de Montaña Pro</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span> <span class="rating-value">4.9 (128)</span>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price"><strong>€18</strong><span>/día</span></div>
+                                <button class="btn-rent">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Alquilar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 2 -->
+                    <div class="product-card">
+                        <div class="card-image-wrapper">
+                            <img src="img/bike-route.jpg" alt="Bicicleta de Ruta" class="product-image">
+                            <span class="badge badge-green">Nuevo</span>
+                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-tag">Ciclismo</span>
+                            <h3 class="product-title">Bicicleta de Ruta Elite</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span> <span class="rating-value">4.7 (94)</span>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price"><strong>€22</strong><span>/día</span></div>
+                                <button class="btn-rent">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Alquilar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 3 -->
+                    <div class="product-card">
+                        <div class="card-image-wrapper">
+                            <img src="img/scooter.jpg" alt="Patinete Eléctrico" class="product-image">
+                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-tag">Ciclismo</span>
+                            <h3 class="product-title">Patinete Eléctrico Urban</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span> <span class="rating-value">4.6 (67)</span>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price"><strong>€25</strong><span>/día</span></div>
+                                <button class="btn-rent">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Alquilar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 4 (Oferta) -->
+                    <div class="product-card">
+                        <div class="card-image-wrapper">
+                            <img src="img/weights-1.jpg" alt="Pesa Rusa" class="product-image">
+                            <span class="badge badge-orange">Oferta</span>
+                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-tag">Pesas</span>
+                            <h3 class="product-title">Pesa Rusa Kettlebell 16kg</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span> <span class="rating-value">4.8 (45)</span>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price"><strong>€8</strong><span>/día</span></div>
+                                <button class="btn-rent">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Alquilar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 5 (No Disponible) -->
+                    <div class="product-card disabled">
+                        <div class="card-image-wrapper">
+                            <img src="img/weights-2.jpg" alt="Mancuernas" class="product-image" style="opacity: 0.5;">
+                            <div class="overlay-disabled">No disponible</div>
+                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-tag">Pesas</span>
+                            <h3 class="product-title">Set de Mancuernas Ajustables</h3>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span> <span class="rating-value">4.5 (22)</span>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price" style="color:#94a3b8;"><strong>€12</strong><span>/día</span></div>
+                                <button class="btn-rent btn-disabled" disabled>
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Alquilar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-mark">SR</div>
+                <span class="logo-text">SportRent</span>
+                <span class="copyright">© 2026</span>
+            </div>
+            <div class="footer-slogan">
+                El mejor equipo deportivo de alquiler en España
+            </div>
+        </div>
+    </footer>
+
+        <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>
+                <span class="cart-title-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </span>
+                Tu Carrito
+                <span class="cart-count" id="cartCount">1</span>
+            </h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-body">
+            <div class="cart-item">
+                <img src="img/bike-mountain.jpg" alt="Bicicleta de Ruta Elite" class="cart-item-img">
+                <div class="cart-item-info">
+                    <h4>Bicicleta de Ruta Elite</h4>
+                    <span class="category-pill">Ciclismo</span>
+                    <p class="rent-dates">
+                        <span class="date-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+                            </svg>
+                        </span>
+                        15 abr &rarr; 23 abr &middot; 8 días
+                    </p>
+                    <div class="cart-item-price">&euro;176</div>
+                </div>
+            </div>
+            <!-- Empty state hidden by default, not needed for hardcoded mock -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary-line"><span>Subtotal alquiler</span><span>&euro;176.00</span></div>
+            <div class="cart-summary-line"><span>IVA (21%)</span><span>&euro;36.96</span></div>
+            <div class="cart-summary-line"><span>Depósito reembolsable</span><span>&euro;66.00</span></div>
+            <div class="cart-total"><span>Total</span><span>&euro;278.96</span></div>
+            <a href="checkout.html" class="btn-checkout">Proceder al pago &rarr;</a>
+            <button class="btn-continue" id="continueShopping">Seguir comprando</button>
+        </div>
+    </div>
+    <script src="scripts/client.js"></script>
+</body>
+</html>
+
+
+
+

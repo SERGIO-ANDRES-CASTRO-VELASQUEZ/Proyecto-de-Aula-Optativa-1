@@ -1,0 +1,20 @@
+﻿/* ==================================
+   Base / Reset global
+================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    color: #1e293b;
+    background-color: #f8fafc;
+}
+
+a {
+    text-decoration: none;
+}
