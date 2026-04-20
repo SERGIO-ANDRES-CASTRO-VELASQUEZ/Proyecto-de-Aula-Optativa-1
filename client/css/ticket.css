@@ -1,3 +1,4 @@
+/* Body Configuration */
 body {
     background: #f3f4f6;
     min-height: 100vh;
@@ -194,6 +195,7 @@ body {
     padding: 1.5rem;
 }
 
+/* Footer Section */
 .footer-content {
     max-width: 1240px;
     margin: 0 auto;
@@ -202,6 +204,7 @@ body {
     align-items: center;
 }
 
+/* Footer Section */
 .footer-logo {
     display: flex;
     align-items: center;
@@ -226,10 +229,13 @@ body {
 }
 
 .copyright,
+
+/* Footer Section */
 .footer-slogan {
     color: #9ca3af;
 }
 
+/* Responsive Breakpoints */
 @media (max-width: 640px) {
     .checkout-navbar-inner,
     .main-footer {

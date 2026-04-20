@@ -1,8 +1,7 @@
-﻿/* ==================================
-   Base / Reset global
-================================== */
+﻿
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* Base Resets & Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +9,7 @@
     font-family: 'Inter', sans-serif;
 }
 
+/* Body Configuration */
 body {
     color: #1e293b;
     background-color: #f8fafc;

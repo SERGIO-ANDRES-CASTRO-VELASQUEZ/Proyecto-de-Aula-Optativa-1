@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Funcionalidad de botones de favoritos (corazón)
+    // Favoritos
     const favoriteBtns = document.querySelectorAll('.favorite-btn');
     favoriteBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -59,35 +59,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Simulación de agregar al carrito/alquilar
-    const rentBtns = document.querySelectorAll('.btn-rent:not(.btn-disabled)');
-    rentBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const card = btn.closest('.product-card');
-            const productTitle = card.querySelector('.product-title').innerText;
-            const productPrice = card.querySelector('.price strong').innerText;
-            const productImg = card.querySelector('.product-image');
-
-            if (cartItemTitle) {
-                cartItemTitle.textContent = productTitle;
-            }
-            if (cartItemPrice) {
-                cartItemPrice.textContent = productPrice;
-            }
-            if (cartItemImage && productImg) {
-                cartItemImage.src = productImg.src;
-                cartItemImage.alt = productImg.alt;
-            }
-
-            const currentCount = Number(cartCount ? cartCount.textContent : 0) || 0;
-            updateCartCounters(currentCount + 1);
-            openCart();
-        });
-    });
+    // Abrir el carrito
+    // const rentBtns = document.querySelectorAll('.btn-rent');
+    
 
     if (cartBtn) cartBtn.addEventListener('click', openCart);
     if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
     if (continueShoppingBtn) continueShoppingBtn.addEventListener('click', closeCart);
     if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+
+
+    // --- Profile Sidebar Logic ---
+    const userProfileBtn = document.querySelector('.user-profile');
+    const profileSidebar = document.getElementById('profileSidebar');
+    const profileOverlay = document.getElementById('profileOverlay');
+    const closeProfileBtn = document.getElementById('closeProfile');
+
+    function openProfile() {
+        if (profileSidebar) profileSidebar.classList.add('open');
+        if (profileOverlay) profileOverlay.classList.add('active');
+    }
+
+    function closeProfile() {
+        if (profileSidebar) profileSidebar.classList.remove('open');
+        if (profileOverlay) profileOverlay.classList.remove('active');
+    }
+
+    if (userProfileBtn) userProfileBtn.addEventListener('click', openProfile);
+    if (closeProfileBtn) closeProfileBtn.addEventListener('click', closeProfile);
+    if (profileOverlay) profileOverlay.addEventListener('click', closeProfile);
+
+    // --- Edit Profile Logic ---
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const profileSidebarEl = document.getElementById('profileSidebar');
+    const cancelSidebarEditBtn = document.getElementById('cancelSidebarEditBtn');
+    const sidebarEditForm = document.getElementById('sidebarEditForm');
+
+    function enterEditMode(e) {
+        if(e) e.preventDefault();
+        if(profileSidebarEl) profileSidebarEl.classList.add('editing');
+    }
+
+    function exitEditMode(e) {
+        if(e) e.preventDefault();
+        if(profileSidebarEl) profileSidebarEl.classList.remove('editing');
+    }
+
+    if(editProfileBtn) editProfileBtn.addEventListener('click', enterEditMode);
+    if(cancelSidebarEditBtn) cancelSidebarEditBtn.addEventListener('click', exitEditMode);
+    
+    if(sidebarEditForm) {
+        sidebarEditForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Evita recargar
+            exitEditMode(); // Simplemente sale del modo edición, sin guardar
+        });
+    }
+
+    // Resetear al cerrar todo el panel
+    const closeProfileBtnEl = document.getElementById('closeProfile');
+    const profileOverlayEl = document.getElementById('profileOverlay');
+    if (closeProfileBtnEl) {
+        closeProfileBtnEl.addEventListener('click', () => setTimeout(exitEditMode, 300));
+    }
+    if (profileOverlayEl) {
+        profileOverlayEl.addEventListener('click', () => setTimeout(exitEditMode, 300));
+    }
 });
