@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'client_index.html';
             } else if (usernameInput === 'admin' && passwordInputVal === 'admin123') {
                 // Redirige al Dashboard de administración
-                window.location.href = 'admin_dashboard.html';
+                window.location.href = '../../admin/html/admin_dashboard.html';
             } else {
                 // Credenciales incorrectas, usando un simple alert como diseño limpio
                 alert('Credenciales incorrectas.\n\nPara Cliente: cliente / cliente123\nPara Admin: admin / admin123');

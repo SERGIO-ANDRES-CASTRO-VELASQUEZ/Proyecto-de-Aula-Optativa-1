@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SportRent</title>
+    <meta name="description" content="Crear prestamo en mostrador para administradores de SportRent">
+    <meta name="keywords" content="crear prestamo, alquiler, mostrador, administrador, sportrent">
+    <meta name="author" content="Sergio Andres Casto Velasquez">
+    <link rel="Shortcut icon" href="../../img/icon.png">
+    <link rel="icon" type="image/png" href="../../img/icon.png?v=2">
+    <link href="../css/boxicons.min.css" rel='stylesheet'>
+    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="../css/admin_loans.css">
+</head>
+<body>
+<div class="loan-overlay">
+    <main class="loan-modal-shell">
+        <section class="loan-modal-card">
+            <header class="loan-modal-header">
+                <div class="header-main">
+                    <h1>
+                        <i class='bx bx-cart header-title-icon'></i>
+                        Crear Alquiler en Mostrador
+                    </h1>
+                    <p>Asigna un articulo a un cliente de forma rapida</p>
+                </div>
+                <a href="admin_loans.html" class="close-btn" aria-label="Cerrar"><i class='bx bx-x'></i></a>
+            </header>
+
+            <div class="loan-modal-content">
+                <article class="loan-left-panel">
+                    <div class="block-title"><span><i class='bx bx-user'></i></span> DATOS DEL CLIENTE</div>
+                    <div class="input-with-icon">
+                        <i class='bx bx-search'></i>
+                        <input id="cliente" type="text" placeholder="Buscar por cedula o nombre..." value="Carlos Garcia - 12345678A">
+                    </div>
+
+                    <div class="block-title"><span><i class='bx bx-calendar'></i></span> FECHAS DEL PRESTAMO</div>
+                    <label for="inicio">Fecha de Salida</label>
+                    <input id="inicio" type="text" value="19/04/2026">
+
+                    <label for="fin">Fecha de Devolucion</label>
+                    <input id="fin" type="text" value="dd/mm/aaaa">
+
+                    <div class="block-title"><span><i class='bx bx-credit-card'></i></span> METODO DE PAGO</div>
+                    <div class="payment-grid">
+                        <button type="button" class="pay-chip active">Efectivo</button>
+                        <button type="button" class="pay-chip">Tarjeta</button>
+                    </div>
+                </article>
+
+                <article class="loan-right-panel">
+                    <div class="block-title"><span><i class='bx bx-package'></i></span> CATALOGO RAPIDO</div>
+                    <div class="input-with-icon catalog-search">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Buscar articulo...">
+                    </div>
+
+                    <div class="catalog-grid">
+                        <article class="item-card selected">
+                            <img src="../../img/bike-mountain.jpg" alt="Bicicleta de montana">
+                            <div class="item-info">
+                                <h4 class="item-name">Bicicleta de Montana Pro</h4>
+                                <div class="item-meta">
+                                    <span class="item-category">Ciclismo</span>
+                                    <strong class="item-price">€18/día</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="item-btn">Agregar al Ticket</button>
+                        </article>
+
+                        <article class="item-card">
+                            <img src="../../img/scooter.jpg" alt="Pelota de futbol">
+                            <div class="item-info">
+                                <h4 class="item-name">Pelota de Futbol Profesional</h4>
+                                <div class="item-meta">
+                                    <span class="item-category">Futbol</span>
+                                    <strong class="item-price">€5/día</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="item-btn">Agregar al Ticket</button>
+                        </article>
+
+                        <article class="item-card">
+                            <img src="../../img/bike-route.jpg" alt="Raqueta de tenis">
+                            <div class="item-info">
+                                <h4 class="item-name">Raqueta de Tenis Wilson</h4>
+                                <div class="item-meta">
+                                    <span class="item-category">Tenis</span>
+                                    <strong class="item-price">€12/día</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="item-btn">Agregar al Ticket</button>
+                        </article>
+
+                        <article class="item-card unavailable">
+                            <img src="../../img/weights-2.jpg" alt="Guantes de boxeo">
+                            <div class="item-info">
+                                <h4 class="item-name">Guantes de Boxeo Premium</h4>
+                                <div class="item-meta">
+                                    <span class="item-category">Boxeo</span>
+                                    <strong class="item-price">€10/día</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="item-btn" disabled>Sin stock</button>
+                        </article>
+
+                        <article class="item-card">
+                            <img src="../../img/weights-1.jpg" alt="Tabla de surf">
+                            <div class="item-info">
+                                <h4 class="item-name">Tabla de Surf Pro</h4>
+                                <div class="item-meta">
+                                    <span class="item-category">Acuatico</span>
+                                    <strong class="item-price">€25/día</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="item-btn">Agregar al Ticket</button>
+                        </article>
+
+                        <article class="item-card">
+                            <img src="../../img/bike-route.jpg" alt="Casco de ciclismo">
+                            <div class="item-info">
+                                <h4 class="item-name">Casco de Ciclismo</h4>
+                                <div class="item-meta">
+                                    <span class="item-category">Ciclismo</span>
+                                    <strong class="item-price">€8/día</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="item-btn">Agregar al Ticket</button>
+                        </article>
+                    </div>
+                </article>
+            </div>
+
+            <footer class="loan-modal-footer">
+                <div class="footer-summary">
+                    <div><span>Dias</span><strong>2</strong></div>
+                    <div><span>Pago</span><strong>Efectivo</strong></div>
+                    <div><span>Total a Cobrar</span><strong class="total-amount">€0.00</strong></div>
+                </div>
+                <div class="footer-actions">
+                    <a href="admin_loans.html" class="btn-cancel">Cancelar</a>
+                    <button type="button" class="btn-submit" disabled>Generar Ticket y Entregar Articulo</button>
+                </div>
+            </footer>
+        </section>
+    </main>
+</div>
+</body>
+</html>

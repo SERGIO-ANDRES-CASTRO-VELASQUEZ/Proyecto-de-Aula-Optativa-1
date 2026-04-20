@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SportRent - Añadir Artículo</title>
+    <meta name="description" content="Añadir un nuevo artículo deportivo en SportRent">
+    <link rel="Shortcut icon" href="../../img/icon.png">
+    <link rel="icon" type="image/png" href="../../img/icon.png?v=2">
+    <link href="../css/boxicons.min.css" rel='stylesheet'>
+    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="../css/admin_inventory.css">
+</head>
+<body>
+<div class="modal-overlay static-open">
+    <section class="article-modal" role="dialog" aria-modal="true" aria-labelledby="articleModalTitle">
+        <header class="modal-header">
+            <div>
+                <h2 id="articleModalTitle">Nuevo Articulo</h2>
+                <p>Agrega un nuevo producto al inventario</p>
+            </div>
+            <a href="admin_inventory.html" class="close-link" aria-label="Cerrar"><i class='bx bx-x' style="font-size: 24px; color: #fff;"></i></a>
+        </header>
+
+        <form class="modal-form" action="#" method="get">
+            <div class="form-row two-col">
+                <label>
+                    Nombre del articulo *
+                    <input type="text" id="articleName" placeholder="Ej: Bicicleta de Montana Pro" required>
+                </label>
+                <label>
+                    Precio / dia (€) *
+                    <input type="number" id="articlePrice" min="0" step="1" value="0" required>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    Categoria *
+                    <div class="inline-input">
+                        <select id="articleCategory" required>
+                            <option value="">Selecciona una categoria</option>
+                            <option value="Ciclismo">Ciclismo</option>
+                            <option value="Futbol">Futbol</option>
+                            <option value="Tenis">Tenis</option>
+                            <option value="Boxeo">Boxeo</option>
+                            <option value="Fitness">Fitness</option>
+                        </select>
+                        <button type="button" class="small-add-btn" id="addCategoryBtn"><i class='bx bx-plus'></i></button>
+                    </div>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    Stock disponible *
+                    <input type="number" id="articleStock" min="0" step="1" value="0" required>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    Descripcion *
+                    <textarea id="articleDescription" rows="4" placeholder="Describe el articulo deportivo..." required></textarea>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <p class="section-title">Fotos del producto</p>
+                <div class="upload-tabs">
+                    <button type="button" class="upload-tab active">URL</button>
+                    <button type="button" class="upload-tab">Subir Archivo</button>
+                </div>
+                <div class="inline-input" id="urlInputGroup">
+                    <input type="url" id="articleImageUrl" placeholder="https://ejemplo.com/foto.jpg">
+                    <button type="button" class="small-add-btn" id="addImageBtn"><i class='bx bx-plus'></i></button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="section-header-inline">
+                    <p class="section-title">Especificaciones tecnicas</p>
+                    <button type="button" class="add-link" id="addSpecBtn"><i class='bx bx-plus'></i> Agregar</button>
+                </div>
+                <div class="chip-list specs" id="specList">
+                    <span class="chip-empty">Sin especificaciones</span>
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <a href="admin_inventory.html" class="btn-cancel" style="text-align: center; text-decoration: none;">Cancelar</a>
+                <button type="button" class="btn-create">Crear Articulo</button>
+            </footer>
+        </form>
+    </section>
+</div>
+</body>
+</html>

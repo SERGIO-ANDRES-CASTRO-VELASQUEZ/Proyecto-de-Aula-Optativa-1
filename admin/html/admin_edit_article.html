@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SportRent</title>
+    <meta name="description" content="Vista de ejemplo para editar articulo en SportRent">
+    <meta name="keywords" content="inventario, editar articulo, admin, sportrent">
+    <meta name="author" content="Sergio Andres Casto Velasquez">
+    <link rel="Shortcut icon" href="../../img/icon.png">
+    <link rel="icon" type="image/png" href="../../img/icon.png?v=2">
+    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="../css/admin_inventory.css">
+    <link href="../css/boxicons.min.css" rel='stylesheet'>
+</head>
+<body>
+<div class="modal-overlay static-open">
+        <section class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+            <header class="modal-head">
+                <div>
+                    <h1 id="editTitle">Editar Articulo</h1>
+                    <p>Actualiza la informacion del producto</p>
+                </div>
+                <a href="admin_inventory.html" class="close-link" aria-label="Cerrar"><i class='bx bx-x'></i></a>
+            </header>
+
+            <form class="modal-body" action="#" method="get">
+                <div class="grid-2">
+                    <label>
+                        NOMBRE DEL ARTICULO *
+                        <input type="text" value="Bicicleta de Montana Pro">
+                    </label>
+                    <label>
+                        PRECIO / DIA (€) *
+                        <input type="text" value="18">
+                    </label>
+                </div>
+
+                <label>
+                    CATEGORIA *
+                    <div class="inline-with-btn">
+                        <select>
+                            <option selected>Ciclismo</option>
+                            <option>Futbol</option>
+                            <option>Tenis</option>
+                            <option>Boxeo</option>
+                            <option>Fitness</option>
+                        </select>
+                        <button type="button" class="ghost-btn" disabled>＋</button>
+                    </div>
+                </label>
+
+                <label>
+                    STOCK DISPONIBLE *
+                    <input type="text" value="8">
+                </label>
+
+                <label>
+                    DESCRIPCION *
+                    <textarea rows="3">Disenada para los trails mas exigentes, esta bicicleta combina una geometria agresiva con componentes de alto rendimiento.</textarea>
+                </label>
+
+                <div class="section">
+                    <p class="section-title">FOTOS DEL PRODUCTO</p>
+                    <div class="upload-tabs">
+                        <button type="button" class="tab active" disabled>URL</button>
+                        <button type="button" class="tab" disabled>Subir Archivo</button>
+                    </div>
+
+                    <div class="inline-with-btn">
+                        <input type="text" value="https://ejemplo.com/foto.jpg">
+                        <button type="button" class="ghost-btn" disabled>＋</button>
+                    </div>
+
+                    <div class="thumbs">
+                        <article class="thumb main">
+                            <img src="../../img/bike-mountain.jpg" alt="Bicicleta principal">
+                            <span>Principal</span>
+                        </article>
+                        <article class="thumb">
+                            <img src="../../img/bike-route.jpg" alt="Foto secundaria">
+                        </article>
+                    </div>
+                </div>
+
+                <div class="section specs">
+                    <div class="section-head-inline">
+                        <p class="section-title">ESPECIFICACIONES TECNICAS</p>
+                        <span class="add-static"><i class='bx bx-plus'></i> Agregar</span>
+                    </div>
+
+                    <div class="spec-row">
+                        <span class="spec-icon">⚙</span>
+                        <input type="text" value="Velocidades">
+                        <input type="text" value="21 marchas Shimano Altus">
+                        <span class="trash">🗑</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-icon">⚖</span>
+                        <input type="text" value="Peso">
+                        <input type="text" value="12 kg">
+                        <span class="trash">🗑</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-icon">○</span>
+                        <input type="text" value="Rueda">
+                        <input type="text" value="27.5\"">
+                        <span class="trash">🗑</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-icon">●</span>
+                        <input type="text" value="Frenos">
+                        <input type="text" value="Disco hidraulico">
+                        <span class="trash">🗑</span>
+                    </div>
+                </div>
+
+                <footer class="modal-footer">
+                    <a href="admin_inventory.html" class="btn btn-cancel">Cancelar</a>
+                    <button type="button" class="btn btn-save">Guardar Cambios</button>
+                </footer>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
