@@ -2,6 +2,7 @@ let clients = [];
 let products = [];
 let selectedItems = [];
 let paymentMethod = 'EFECTIVO';
+let selectedClientId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const user = await ensureAdmin();
@@ -11,27 +12,97 @@ document.addEventListener('DOMContentLoaded', async () => {
     wirePaymentChips();
     wireDateInputs();
     wireCreateButton();
-
-    const clientInput = document.getElementById('cliente');
-    clientInput?.addEventListener('input', () => updateSummary());
-
+    wireCatalogSearch();
     updateSummary();
 });
 
-async function loadClients() {
-    const datalist = document.getElementById('clientList');
-    if (!datalist) return;
+// ── CLIENTES ──
 
+async function loadClients() {
     try {
         const data = await apiGet('/api/admin/users?size=200');
         clients = (data?.content || []).filter(u => u.role === 'CLIENT');
-        datalist.innerHTML = clients.map(u => {
-            const label = `${u.fullName} - ${u.email} (id:${u.id})`;
-            return `<option value="${label}"></option>`;
-        }).join('');
+        wireClientSelect();
     } catch (err) {
         console.error('Error loading clients:', err);
     }
+}
+
+function wireClientSelect() {
+    const searchInput = document.getElementById('clienteSearch');
+    const dropdown = document.getElementById('clienteDropdown');
+    const field = document.getElementById('clienteField');
+    if (!searchInput || !dropdown || !field) return;
+
+    renderClientDropdown(clients);
+
+    // Abrir al hacer foco
+    searchInput.addEventListener('focus', () => openDropdown());
+
+    // Filtrar al escribir
+    searchInput.addEventListener('input', () => {
+        const term = searchInput.value.trim().toLowerCase();
+        const filtered = term
+            ? clients.filter(c =>
+                String(c.fullName || '').toLowerCase().includes(term) ||
+                String(c.email || '').toLowerCase().includes(term))
+            : clients;
+        renderClientDropdown(filtered);
+        openDropdown();
+    });
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#clienteSelectWrapper')) closeDropdown();
+    });
+}
+
+function renderClientDropdown(list) {
+    const dropdown = document.getElementById('clienteDropdown');
+    if (!dropdown) return;
+
+    if (!list.length) {
+        dropdown.innerHTML = '<div class="ss-empty">Sin resultados</div>';
+        return;
+    }
+
+    dropdown.innerHTML = list.map(u => `
+        <div class="ss-option ${selectedClientId === u.id ? 'selected' : ''}"
+             data-id="${u.id}" data-name="${u.fullName || ''}" data-email="${u.email || ''}">
+            <span class="ss-opt-name">${u.fullName || 'Sin nombre'}</span>
+            <span class="ss-opt-email">${u.email || ''}</span>
+        </div>
+    `).join('');
+
+    dropdown.querySelectorAll('.ss-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            const id = Number(opt.getAttribute('data-id'));
+            const name = opt.getAttribute('data-name');
+            selectClient(id, name);
+        });
+    });
+}
+
+function selectClient(id, name) {
+    selectedClientId = id;
+    const searchInput = document.getElementById('clienteSearch');
+    const hiddenInput = document.getElementById('clienteSelectedId');
+    const field = document.getElementById('clienteField');
+    if (searchInput) searchInput.value = name;
+    if (hiddenInput) hiddenInput.value = String(id);
+    if (field) field.classList.add('has-value');
+    closeDropdown();
+    updateSummary();
+}
+
+function openDropdown() {
+    const dropdown = document.getElementById('clienteDropdown');
+    if (dropdown) dropdown.classList.add('open');
+}
+
+function closeDropdown() {
+    const dropdown = document.getElementById('clienteDropdown');
+    if (dropdown) dropdown.classList.remove('open');
 }
 
 async function loadProducts() {
@@ -50,16 +121,32 @@ async function loadProducts() {
     }
 }
 
-function renderCatalog() {
+// ── CATÁLOGO ──
+
+function wireCatalogSearch() {
+    const input = document.getElementById('catalogSearch');
+    if (!input) return;
+    input.addEventListener('input', () => {
+        const term = input.value.trim().toLowerCase();
+        const filtered = term
+            ? products.filter(p =>
+                p.name.toLowerCase().includes(term) ||
+                (p.categoryName || '').toLowerCase().includes(term))
+            : products;
+        renderCatalog(filtered);
+    });
+}
+
+function renderCatalog(list = products) {
     const grid = document.getElementById('catalogGrid');
     if (!grid) return;
 
-    if (!products.length) {
+    if (!list.length) {
         grid.innerHTML = '<p style="grid-column:1/-1;color:#94a3b8;">Sin productos disponibles</p>';
         return;
     }
 
-    grid.innerHTML = products.map(p => {
+    grid.innerHTML = list.map(p => {
         const raw = p.mainImageUrl;
         const img = !raw ? '../../img/icon.png'
                   : raw.startsWith('http')    ? raw
@@ -87,6 +174,7 @@ function renderCatalog() {
     });
 }
 
+
 function toggleItem(card) {
     const id = Number(card.getAttribute('data-id'));
     const product = products.find(p => p.id === id);
@@ -99,7 +187,15 @@ function toggleItem(card) {
         selectedItems.push({ productId: id, quantity: 1, pricePerDay: product.pricePerDay });
     }
 
-    renderCatalog();
+    // Re-render respetando el filtro activo del buscador
+    const catalogInput = document.getElementById('catalogSearch');
+    const term = (catalogInput?.value || '').trim().toLowerCase();
+    const filtered = term
+        ? products.filter(p =>
+            p.name.toLowerCase().includes(term) ||
+            (p.categoryName || '').toLowerCase().includes(term))
+        : products;
+    renderCatalog(filtered);
     updateSummary();
 }
 
@@ -157,7 +253,9 @@ function updateButtonState(days, total) {
     if (!btn) return;
 
     const clientId = resolveClientId();
-    btn.disabled = !(clientId && days > 0 && selectedItems.length > 0 && total > 0);
+    const isReady = clientId && days > 0 && selectedItems.length > 0 && total > 0;
+    btn.disabled = !isReady;
+    btn.classList.toggle('is-active', Boolean(isReady));
 }
 
 function wireCreateButton() {
@@ -191,17 +289,7 @@ function wireCreateButton() {
 }
 
 function resolveClientId() {
-    const input = document.getElementById('cliente');
-    if (!input) return null;
-
-    const value = input.value.trim();
-    if (!value) return null;
-
-    const match = value.match(/id:(\d+)/i);
-    if (match) return match[1];
-
-    const direct = clients.find(c => c.fullName === value || c.email === value);
-    return direct ? direct.id : null;
+    return selectedClientId || null;
 }
 
 function calcDays() {

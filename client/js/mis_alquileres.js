@@ -24,6 +24,14 @@ const TAB_ESTADOS = {
 };
 
 let todosLosAlquileres = [];
+let terminoBusqueda = '';
+
+function resolveImg(url) {
+    if (!url) return PLACEHOLDER_IMG;
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/files/')) return `${API_BASE}${url}`;
+    return `../../${url.replace(/^\//, '')}`;
+}
 
 // Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
@@ -37,6 +45,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await cargarPerfil();
     await cargarAlquileres();
+
+    // ── Buscador ─────────────────────────────────────────────────
+    const searchInput = document.querySelector('.rentals-search-box input');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            terminoBusqueda = searchInput.value.trim().toLowerCase();
+            const tabActivo = document.querySelector('.r-tab-btn.active')?.dataset.filter || 'todos';
+            filtrarYRenderizar(tabActivo);
+        });
+    }
 
     // ── Tabs de filtrado ─────────────────────────────────────────
     document.querySelectorAll('.r-tab-btn').forEach(tab => {
@@ -60,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeProfile = () => { profileSidebar?.classList.remove('open'); profileOverlay?.classList.remove('active'); };
     const exitEdit     = (e) => { if(e) e.preventDefault(); profileSidebarEl?.classList.remove('editing'); };
 
-    userProfileBtn?.addEventListener('click', openProfile);
+    userProfileBtn?.addEventListener('click', () => { window.location.href = 'client_index.html'; });
     closeProfileBtn?.addEventListener('click', () => { closeProfile(); setTimeout(exitEdit, 300); });
     profileOverlay?.addEventListener('click',  () => { closeProfile(); setTimeout(exitEdit, 300); });
     editProfileBtn?.addEventListener('click',  (e) => { e.preventDefault(); profileSidebarEl?.classList.add('editing'); });
@@ -103,8 +121,8 @@ async function cargarPerfil() {
 
 async function cargarAlquileres() {
     try {
-        // GET /api/rentals/mine
-        todosLosAlquileres = await apiGet('/api/rentals/mine');
+        const raw = await apiGet('/api/rentals/mine');
+        todosLosAlquileres = Array.isArray(raw) ? raw : (raw?.content || []);
         actualizarStats(todosLosAlquileres);
         actualizarContadoresTabs(todosLosAlquileres);
         filtrarYRenderizar('todos');
@@ -148,9 +166,18 @@ function actualizarContadoresTabs(alquileres) {
 
 function filtrarYRenderizar(filtro) {
     const estados = TAB_ESTADOS[filtro];
-    const filtrados = estados
+    let filtrados = estados
         ? todosLosAlquileres.filter(a => estados.includes(a.status))
         : todosLosAlquileres;
+
+    if (terminoBusqueda) {
+        filtrados = filtrados.filter(a => {
+            const nombre = (a.firstProductName || a.productName || '').toLowerCase();
+            const code   = (a.code || '').toLowerCase();
+            return nombre.includes(terminoBusqueda) || code.includes(terminoBusqueda);
+        });
+    }
+
     renderizarLista(filtrados);
 }
 
@@ -169,9 +196,9 @@ function renderizarLista(alquileres) {
     lista.innerHTML = alquileres.map(a => {
         const cfg     = ESTADO_CLASE[a.status] || ESTADO_CLASE['PENDIENTE'];
         const d       = dias(a);
-        const imgSrc  = a.mainImageUrl
-            ? (a.mainImageUrl.startsWith('http') ? a.mainImageUrl : `../../${a.mainImageUrl.replace(/^\//,'')}`)
-            : PLACEHOLDER_IMG;
+        const rawImg  = a.firstProductImageUrl || a.mainImageUrl;
+        const imgSrc  = resolveImg(rawImg);
+        const nombre  = a.firstProductName || a.productName || 'Alquiler';
 
         // Botones según estado
         let btns = `<a href="detalle_alquiler.html?id=${a.id}" class="r-btn outline" style="text-decoration:none;">
@@ -202,7 +229,7 @@ function renderizarLista(alquileres) {
         return `
         <div class="r-ticket-item" style="border-left:6px solid ${cfg.border}; display:flex;">
             <div class="r-ticket-img-container">
-                <img src="${imgSrc}" alt="${a.productName || 'Producto'}"
+                <img src="${imgSrc}" alt="${nombre}"
                      onerror="this.src='${PLACEHOLDER_IMG}'">
             </div>
             <div class="r-ticket-main">
@@ -211,7 +238,7 @@ function renderizarLista(alquileres) {
                         ${cfg.icono}
                     </svg> ${cfg.label}
                 </div>
-                <div class="r-ticket-title">${a.productName || 'Alquiler'}</div>
+                <div class="r-ticket-title">${nombre}</div>
                 <div class="r-ticket-cat">${a.categoryName || ''}</div>
                 <div class="r-ticket-dates">
                     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -292,9 +319,7 @@ function renderizarCarritoLateral() {
 
     cartBody.innerHTML = cart.map(item => {
         const total  = item.pricePerDay * item.days * (item.quantity || 1);
-        const imgSrc = item.imageUrl
-            ? (item.imageUrl.startsWith('http') ? item.imageUrl : `../../${item.imageUrl.replace(/^\//, '')}`)
-            : PLACEHOLDER_IMG;
+        const imgSrc = resolveImg(item.imageUrl);
         return `
         <div class="cart-item" data-product-id="${item.productId}">
             <img src="${imgSrc}" alt="${item.productName}" class="cart-item-img"

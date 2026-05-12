@@ -1,19 +1,14 @@
-// ═══════════════════════════════════════════════════════════════
-//  product.js — Detalle de producto  (alquilar_producto.html)
-// ═══════════════════════════════════════════════════════════════
+// product.js — Detalle y reserva de un producto (alquilar_producto.html)
+// GET /api/products/{id}  |  POST /api/products/{id}/favorite  |  DELETE /api/products/{id}/favorite
 
 document.addEventListener('DOMContentLoaded', async () => {
 
     const params    = new URLSearchParams(window.location.search);
     const productId = params.get('id');
 
-    if (!productId) {
-        window.location.href = 'client_index.html';
-        return;
-    }
+    if (!productId) { window.location.href = 'client_index.html'; return; }
 
     try {
-        // GET /api/products/{id}
         const p = await apiGet(`/api/products/${productId}`);
         renderizarProducto(p);
         configurarFavorito(p);
@@ -24,7 +19,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
     <rect width="100%" height="100%" fill="#f1f5f9"/>
@@ -32,10 +26,7 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   </svg>
 `);
 
-// ── Renderiza todos los datos del producto ───────────────────────
 function renderizarProducto(p) {
-
-    // Imagen principal
     const imgEl = document.querySelector('.main-image img');
     if (imgEl) {
         if (p.images && p.images.length > 0) {
@@ -50,7 +41,6 @@ function renderizarProducto(p) {
         }
     }
 
-    // Thumbnails
     const thumbsEl = document.querySelector('.thumbnails');
     if (thumbsEl && p.images) {
         thumbsEl.innerHTML = p.images.map((img, i) => {
@@ -62,23 +52,16 @@ function renderizarProducto(p) {
         }).join('');
     }
 
-    // Nombre del producto
     const titleEl = document.querySelector('.product-title');
-    if (titleEl) titleEl.textContent = p.name;
-
-    // Precio
     const priceEl = document.querySelector('.product-price strong');
+    const catEl   = document.querySelector('.category-pill');
+    const descEl  = document.querySelector('.desc-text');
+
+    if (titleEl) titleEl.textContent = p.name;
     if (priceEl) priceEl.textContent = `COP ${p.pricePerDay.toLocaleString('es-CO')}`;
+    if (catEl)   catEl.textContent   = p.categoryName;
+    if (descEl)  descEl.textContent  = p.description;
 
-    // Categoría
-    const catEl = document.querySelector('.category-pill');
-    if (catEl) catEl.textContent = p.categoryName;
-
-    // Descripción
-    const descEl = document.querySelector('.desc-text');
-    if (descEl) descEl.textContent = p.description;
-
-    // Especificaciones
     const specsEl = document.querySelector('.specs-table');
     if (specsEl && p.specs) {
         specsEl.innerHTML = p.specs.map(s => `
@@ -89,18 +72,14 @@ function renderizarProducto(p) {
         `).join('');
     }
 
-    // Stock disponible
     const stockBadge = document.querySelector('.badge-tag');
     if (stockBadge) stockBadge.textContent = `${p.stock} disponibles`;
 }
 
-// ── Botón favorito ───────────────────────────────────────────────
 function configurarFavorito(producto) {
-    // Agregar botón favorito al header de info si no existe
     const metaInfo = document.querySelector('.meta-info');
     if (!metaInfo) return;
 
-    // Quitar favorito existente si hay
     metaInfo.querySelector('.fav-detalle-btn')?.remove();
 
     const isFav = producto.isFavorite || false;
@@ -126,8 +105,10 @@ function configurarFavorito(producto) {
         const svg    = btnFav.querySelector('svg');
         try {
             if (actFav) {
+                // DELETE /api/products/{id}/favorite
                 await apiDelete(`/api/products/${producto.id}/favorite`);
             } else {
+                // POST /api/products/{id}/favorite
                 await apiPost(`/api/products/${producto.id}/favorite`);
             }
             btnFav.dataset.fav = String(!actFav);
@@ -140,35 +121,27 @@ function configurarFavorito(producto) {
     });
 }
 
-// ── Calendario y resumen de alquiler ─────────────────────────────
 function configurarCalendario(producto) {
-    // Reemplazar el widget de calendario estático con inputs de fecha reales
     const calendarWidget = document.querySelector('.calendar-widget');
     if (!calendarWidget) return;
 
-    const hoy       = new Date().toISOString().split('T')[0];
-    const manana    = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    const hoy    = new Date().toISOString().split('T')[0];
+    const manana = new Date(Date.now() + 86400000).toISOString().split('T')[0];
 
     calendarWidget.innerHTML = `
         <div style="display:flex;gap:16px;flex-wrap:wrap;">
             <div style="flex:1;min-width:140px;">
-                <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:6px;">
-                    FECHA INICIO
-                </label>
+                <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:6px;">FECHA INICIO</label>
                 <input type="date" id="startDate" min="${hoy}" value="${hoy}"
                        style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;">
             </div>
             <div style="flex:1;min-width:140px;">
-                <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:6px;">
-                    FECHA DEVOLUCIÓN
-                </label>
+                <label style="display:block;font-size:12px;font-weight:600;color:#64748b;margin-bottom:6px;">FECHA DEVOLUCIÓN</label>
                 <input type="date" id="endDate" min="${manana}" value="${manana}"
                        style="width:100%;padding:10px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;">
             </div>
         </div>
-        <div id="calFooterNote" style="margin-top:10px;font-size:13px;color:#64748b;">
-            1 día seleccionado
-        </div>
+        <div id="calFooterNote" style="margin-top:10px;font-size:13px;color:#64748b;">1 día seleccionado</div>
     `;
 
     const startInput = document.getElementById('startDate');
@@ -179,10 +152,8 @@ function configurarCalendario(producto) {
         const start = new Date(startInput.value);
         const end   = new Date(endInput.value);
 
-        // Asegurar endDate > startDate
         if (end <= start) {
-            const nextDay = new Date(start.getTime() + 86400000);
-            endInput.value = nextDay.toISOString().split('T')[0];
+            endInput.value = new Date(start.getTime() + 86400000).toISOString().split('T')[0];
         }
         endInput.min = new Date(start.getTime() + 86400000).toISOString().split('T')[0];
 
@@ -192,7 +163,6 @@ function configurarCalendario(producto) {
 
         if (footerNote) footerNote.textContent = `${dias} día${dias>1?'s':''} · ${fmtDate(startInput.value)} → ${fmtDate(endInput.value)}`;
 
-        // Actualizar resumen de precio
         actualizarResumenPrecio(dias, total, producto.pricePerDay);
     }
 
@@ -200,7 +170,6 @@ function configurarCalendario(producto) {
     endInput.addEventListener('change',   actualizarResumen);
     actualizarResumen();
 
-    // Botón "Añadir al carrito"
     const btnConfirm = document.querySelector('.btn-confirm-rent');
     if (btnConfirm) {
         btnConfirm.removeAttribute('href');
@@ -212,7 +181,7 @@ function configurarCalendario(producto) {
             const dias   = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / 86400000));
             const imgUrl = producto.images?.[0]?.url || '';
 
-            // Agregar al carrito multi-item en localStorage
+            // Agrega al carrito multi-item en localStorage (api.js → addToCart)
             addToCart({
                 productId:    producto.id,
                 productName:  producto.name,
@@ -225,12 +194,10 @@ function configurarCalendario(producto) {
                 imageUrl:     imgUrl
             });
 
-            // Feedback visual
             const original = btnConfirm.textContent;
             btnConfirm.textContent = '✓ Añadido al carrito';
             btnConfirm.style.background = '#22c55e';
 
-            // Mostrar opciones post-añadir
             mostrarOpcionesCarrito(btnConfirm);
 
             setTimeout(() => {
@@ -242,7 +209,6 @@ function configurarCalendario(producto) {
 }
 
 function mostrarOpcionesCarrito(btnRef) {
-    // Evitar duplicados
     if (document.getElementById('cartActionBtns')) return;
 
     const wrapper = document.createElement('div');
@@ -252,22 +218,12 @@ function mostrarOpcionesCarrito(btnRef) {
     const btnIr = document.createElement('a');
     btnIr.href = 'checkout.html';
     btnIr.textContent = 'Ir al checkout →';
-    btnIr.style.cssText = [
-        'flex:1','text-align:center','padding:10px 16px',
-        'background:#df2be4','color:#fff','border-radius:10px',
-        'text-decoration:none','font-size:14px','font-weight:600'
-    ].join(';');
+    btnIr.style.cssText = 'flex:1;text-align:center;padding:10px 16px;background:#df2be4;color:#fff;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600';
 
     const btnSeguir = document.createElement('button');
     btnSeguir.textContent = 'Seguir comprando';
-    btnSeguir.style.cssText = [
-        'flex:1','padding:10px 16px','background:#f1f5f9',
-        'border:1px solid #e2e8f0','border-radius:10px',
-        'cursor:pointer','font-size:14px','color:#475569'
-    ].join(';');
-    btnSeguir.addEventListener('click', () => {
-        window.location.href = 'client_index.html';
-    });
+    btnSeguir.style.cssText = 'flex:1;padding:10px 16px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:14px;color:#475569';
+    btnSeguir.addEventListener('click', () => { window.location.href = 'client_index.html'; });
 
     wrapper.appendChild(btnIr);
     wrapper.appendChild(btnSeguir);
@@ -283,14 +239,8 @@ function actualizarResumenPrecio(dias, total, precio) {
             <span>COP ${precio.toLocaleString('es-CO')} × ${dias} día${dias>1?'s':''}</span>
             <span>COP ${total.toLocaleString('es-CO')}</span>
         </li>
-        <li>
-            <span>Depósito reembolsable</span>
-            <span>COP 0</span>
-        </li>
-        <li>
-            <span>Seguro incluido</span>
-            <span class="color-green">Gratis</span>
-        </li>
+        <li><span>Depósito reembolsable</span><span>COP 0</span></li>
+        <li><span>Seguro incluido</span><span class="color-green">Gratis</span></li>
         <li class="summary-total">
             <span>Total</span>
             <span class="color-purple">COP ${total.toLocaleString('es-CO')}</span>

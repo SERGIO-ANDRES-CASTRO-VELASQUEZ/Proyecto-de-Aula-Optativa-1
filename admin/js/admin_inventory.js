@@ -57,7 +57,6 @@ async function loadProducts(page = 0) {
     if (categoryId) params.set('category', categoryId);
 
     try {
-        console.log('Loading products page:', page);
         const data = await apiGet(`/api/admin/products?${params.toString()}`);
         inventoryProducts = data?.content || [];
         totalPages = data?.totalPages ?? 1;

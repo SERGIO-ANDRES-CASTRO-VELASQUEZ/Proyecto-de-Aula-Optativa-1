@@ -1,9 +1,8 @@
 let categoryChart = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Verificar que Chart.js está cargado
     if (typeof Chart === 'undefined') {
-        console.error('Chart.js is not loaded. Please check script order.');
+        console.error('Chart.js no está cargado — revisa el orden de scripts en admin_dashboard.html');
         return;
     }
 
@@ -15,51 +14,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadDashboard() {
     try {
-        // Cargar todos los datos en paralelo
+        // GET /api/admin/dashboard  |  /api/admin/products  |  /api/admin/rentals
         const [dashboard, productsPage, rentalsPage] = await Promise.all([
             apiGet('/api/admin/dashboard'),
             apiGet('/api/admin/products?page=0&size=1'),
-            apiGet('/api/admin/rentals?size=5&status=VENCIDO')
+            apiGet('/api/admin/rentals?page=0&size=1&status=VENCIDO')
         ]);
 
-        console.log('Dashboard data:', dashboard);
-        console.log('Products page:', productsPage);
-        console.log('Rentals:', rentalsPage);
-
-        // Cargar KPIs
         if (dashboard) {
-            // Total de productos desde la paginación
-            const totalProducts = productsPage?.totalElements ?? 0;
-            setText('metricTotalProducts', totalProducts);
-
-            // Rentas activas hoy
+            setText('metricTotalProducts', productsPage?.totalElements ?? 0);
             setText('metricActiveRentals', dashboard.activeRentalsToday ?? 0);
-
-            // Rentas vencidas
-            const overdueRentals = dashboard.overdueRentals ?? 0;
-            setText('metricOverdueRentals', overdueRentals);
-
-            // Ingresos mensuales
+            setText('metricOverdueRentals', rentalsPage?.totalElements ?? dashboard.overdueRentals ?? 0);
             setText('metricRevenue', formatCurrency(dashboard.revenueThisMonth ?? 0));
 
-            // Gráfica de ocupación
             if (dashboard.categoryOccupation && dashboard.categoryOccupation.length > 0) {
                 initCategoryChart(dashboard.categoryOccupation);
             }
         }
 
-        // Cargar actividad reciente - obtener rentas por estado
         try {
             const allRentals = await apiGet('/api/admin/rentals?page=0&size=5&sort=createdAt,desc');
-            if (allRentals?.content) {
-                renderRecentActivity(allRentals.content);
-            }
+            if (allRentals?.content) renderRecentActivity(allRentals.content);
         } catch (err) {
-            console.error('Error loading recent activity:', err);
+            console.error('Error cargando actividad reciente:', err);
         }
 
     } catch (err) {
-        console.error('Error loading dashboard:', err);
+        console.error('Error cargando dashboard:', err);
     }
 }
 
@@ -74,14 +55,10 @@ function renderRecentActivity(rentals) {
 
     list.innerHTML = rentals.map((r) => {
         if (!r) return '';
-        
-        const status = mapDashboardStatus(r.status);
-        
-        // Obtener nombre del primer artículo
-        let itemName = 'Sin artículo';
-        if (r.items && r.items.length > 0) {
-            itemName = r.items[0].productName || 'Sin artículo';
-        }
+
+        const status   = mapDashboardStatus(r.status);
+        let itemName   = 'Sin artículo';
+        if (r.items && r.items.length > 0) itemName = r.items[0].productName || 'Sin artículo';
         
         return `
             <div class="activity-item">
@@ -120,14 +97,9 @@ function mapDashboardStatus(status) {
 
 function initCategoryChart(categoryData) {
     const canvas = document.getElementById('categoryChart');
-    if (!canvas) {
-        console.warn('Canvas element not found');
-        return;
-    }
+    if (!canvas) return;
 
     if (!categoryData || categoryData.length === 0) {
-        console.warn('No category data available');
-        // Mostrar mensaje en canvas
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#94a3b8';
         ctx.font = '14px Inter, sans-serif';
@@ -136,15 +108,11 @@ function initCategoryChart(categoryData) {
         return;
     }
 
-    // Validar que los datos tengan la estructura correcta
-    const hasValidData = categoryData.every(c => 
-        c && typeof c === 'object' && 
-        'categoryName' in c && 
-        ('activeUnits' in c || 'occupancyPercentage' in c)
+    const hasValidData = categoryData.every(c =>
+        c && typeof c === 'object' && 'categoryName' in c && ('activeUnits' in c || 'occupancyPercentage' in c)
     );
 
     if (!hasValidData) {
-        console.error('Invalid category data structure:', categoryData);
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ef4444';
         ctx.font = '14px Inter, sans-serif';
@@ -153,7 +121,7 @@ function initCategoryChart(categoryData) {
         return;
     }
 
-    // Ordenar por activeUnits desc y tomar top 5
+    // Top 5 categorías por unidades activas
     const top5 = [...categoryData]
         .sort((a, b) => {
             const va = Number(a.activeUnits !== undefined ? a.activeUnits : a.occupancyPercentage) || 0;
@@ -162,31 +130,18 @@ function initCategoryChart(categoryData) {
         })
         .slice(0, 5);
 
-    // Preparar datos para Chart.js
-    const labels = top5.map(c => c.categoryName || 'Sin nombre');
+    const labels    = top5.map(c => c.categoryName || 'Sin nombre');
     const occupancy = top5.map(c => {
-        // Usar activeUnits si existe, sino occupancyPercentage
         const val = Number(c.activeUnits !== undefined ? c.activeUnits : c.occupancyPercentage);
         return isNaN(val) ? 0 : Math.max(0, val);
     });
 
-    console.log('Chart labels:', labels);
-    console.log('Chart occupancy:', occupancy);
+    if (categoryChart) { categoryChart.destroy(); categoryChart = null; }
 
-    // Destruir gráfica anterior si existe
-    if (categoryChart) {
-        categoryChart.destroy();
-        categoryChart = null;
-    }
-
-    // Dar un poco de tiempo para que el DOM esté listo
     setTimeout(() => {
         try {
             const ctx = canvas.getContext('2d');
-            if (!ctx) {
-                console.error('Could not get 2D context from canvas');
-                return;
-            }
+            if (!ctx) return;
 
             categoryChart = new Chart(ctx, {
                 type: 'bar',
@@ -314,9 +269,8 @@ function initCategoryChart(categoryData) {
                 }
             });
 
-            console.log('Chart initialized successfully');
         } catch (err) {
-            console.error('Error initializing chart:', err);
+            console.error('Error inicializando gráfica:', err);
         }
     }, 100);
 }

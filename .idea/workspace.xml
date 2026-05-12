@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="c343b6bf-b641-44e6-9318-2ad12a8626db" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/admin/css/admin_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/admin/css/admin_dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/html/admin_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin/html/admin_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/js/admin_dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/admin/js/admin_dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,26 +53,26 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "SERGIO-ANDRES-CASTRO-VELASQUEZ"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;SERGIO-ANDRES-CASTRO-VELASQUEZ&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/SERGIO-ANDRES-CASTRO-VELASQUEZ/Proyecto-de-Aula-Optativa-1.git",
-    "accountId": "c51bee33-e21e-417c-8a1f-03cd310f0666"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/SERGIO-ANDRES-CASTRO-VELASQUEZ/Proyecto-de-Aula-Optativa-1.git&quot;,
+    &quot;accountId&quot;: &quot;c51bee33-e21e-417c-8a1f-03cd310f0666&quot;
   }
-}]]></component>
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3Dbe9c0F7GDKpNfb0tJ6OELrssz" />
   <component name="ProjectSessionTemplates">
     <option name="panelTemplate">
@@ -96,6 +97,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
@@ -104,10 +106,27 @@
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/sergi/OneDrive/Escritorio/sergio/Optativa/Proyecto de Aula/Proyecto-de-Aula-Optativa-1",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Proyecto-de-Aula-Optativa-1" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Proyecto-de-Aula-Optativa-1" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c343b6bf-b641-44e6-9318-2ad12a8626db" name="Changes" comment="" />
@@ -116,6 +135,7 @@
       <option name="presentableId" value="Default" />
       <updated>1778555046365</updated>
       <workItem from="1778555047659" duration="249000" />
+      <workItem from="1778592530519" duration="1437000" />
     </task>
     <servers />
   </component>

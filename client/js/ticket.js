@@ -1,12 +1,11 @@
-// ═══════════════════════════════════════════════════════════════
-//  ticket.js — Confirmación de alquiler  (ticket_confirmacion.html)
-// ═══════════════════════════════════════════════════════════════
+// ticket.js — Confirmación de alquiler (ticket_confirmacion.html)
+// Lee parámetros ?code=&email=&total= de la URL tras el checkout
 
 document.addEventListener('DOMContentLoaded', () => {
 
     const params = new URLSearchParams(window.location.search);
 
-    // Soporta ?code= (flujo real) y ?ticket= (flujo legacy)
+    // Soporta ?code= (flujo actual) y ?ticket= (legado)
     const code  = params.get('code')  || params.get('ticket') || 'SR-00000';
     const email = params.get('email') || getUser()?.email     || '—';
     const total = parseFloat(params.get('total') || '0');
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ticketNumberEl) ticketNumberEl.textContent = code;
     if (ticketEmailEl)  ticketEmailEl.textContent  = email;
 
-    // Insertar total si viene en la URL
     if (total > 0) {
         const box = document.querySelector('.ticket-number-box');
         if (box) {

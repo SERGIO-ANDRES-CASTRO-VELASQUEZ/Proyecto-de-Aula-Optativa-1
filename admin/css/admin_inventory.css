@@ -542,6 +542,13 @@ td span {
     background: #fdf2ff;
 }
 
+.small-add-btn:disabled {
+    background: #f1f5f9;
+    border-color: #cbd5f5;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
 .section-title {
     font-size: 0.8rem;
     font-weight: 700;
@@ -572,6 +579,34 @@ td span {
 .upload-tab.active {
     background: #ffffff;
     color: #df2be4;
+}
+
+.file-input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.55rem;
+    align-items: center;
+}
+
+.file-input-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 42px;
+    padding: 0 0.9rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    gap: 0.5rem;
+}
+
+.file-input-label input {
+    display: none;
 }
 
 .chip-list {

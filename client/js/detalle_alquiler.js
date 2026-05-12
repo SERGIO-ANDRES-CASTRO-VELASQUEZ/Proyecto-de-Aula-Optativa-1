@@ -1,6 +1,5 @@
-// ═══════════════════════════════════════════════════════════════
-//  detalle_alquiler.js  (detalle_alquiler.html)
-// ═══════════════════════════════════════════════════════════════
+// detalle_alquiler.js — Detalle de un alquiler (detalle_alquiler.html)
+// GET /api/rentals/{id}
 
 if (!isLoggedIn()) { window.location.href = 'index.html'; }
 
@@ -12,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!rentalId) { window.location.href = 'mis_alquileres.html'; return; }
 
     try {
-        // GET /api/rentals/{id}
         const alquiler = await apiGet(`/api/rentals/${rentalId}`);
         renderizarDetalle(alquiler);
     } catch (err) {
@@ -25,13 +23,11 @@ function renderizarDetalle(a) {
     const fmtDate = d => new Date(d).toLocaleDateString('es-CO', { day:'2-digit', month:'long', year:'numeric' });
     const dias    = Math.ceil((new Date(a.endDate) - new Date(a.startDate)) / 86400000);
 
-    // ── Header ────────────────────────────────────────────────────
     const ticketIdEl  = document.querySelector('.ticket-id');
     const ticketTitle = document.querySelector('.ticket-title');
     if (ticketIdEl)  ticketIdEl.textContent  = `TICKET DE ALQUILER • ${a.code}`;
     if (ticketTitle) ticketTitle.textContent  = a.items?.[0]?.productName || 'Producto';
 
-    // ── Imagen ────────────────────────────────────────────────────
     const imgEl = document.querySelector('.product-img');
     if (imgEl && a.items?.[0]?.imageUrl) {
         const url = a.items[0].imageUrl;
@@ -39,7 +35,6 @@ function renderizarDetalle(a) {
         imgEl.alt = a.items[0].productName;
     }
 
-    // ── Badge de estado ───────────────────────────────────────────
     const statusBadge = document.querySelector('.status-badge');
     const statusMap = {
         ACTIVO:     { cls: 'status-active',    txt: 'Activo'     },
@@ -50,24 +45,20 @@ function renderizarDetalle(a) {
     };
     if (statusBadge) {
         const s = statusMap[a.status] || { cls: '', txt: a.status };
-        statusBadge.className  = `status-badge ${s.cls}`;
-        statusBadge.querySelector('svg + *') // limpiar texto anterior
+        statusBadge.className = `status-badge ${s.cls}`;
         statusBadge.lastChild.textContent = ` ${s.txt}`;
     }
 
-    // ── Categoría y nombre ────────────────────────────────────────
     const catEl  = document.querySelector('.product-category');
     const nameEl = document.querySelector('.product-name');
     if (catEl)  catEl.textContent  = a.items?.[0]?.categoryName || '';
     if (nameEl) nameEl.textContent = a.items?.[0]?.productName  || '';
 
-    // ── Fechas ────────────────────────────────────────────────────
     const dateBoxes = document.querySelectorAll('.date-box .value');
     if (dateBoxes[0]) dateBoxes[0].textContent = fmtDate(a.startDate);
     if (dateBoxes[1]) dateBoxes[1].textContent = fmtDate(a.endDate);
     if (dateBoxes[2]) dateBoxes[2].textContent = `${dias} día${dias>1?'s':''}`;
 
-    // ── Desglose de pago ──────────────────────────────────────────
     const paymentList = document.querySelector('.payment-list');
     if (paymentList && a.items) {
         const item = a.items[0];
@@ -76,10 +67,7 @@ function renderizarDetalle(a) {
                 <span>COP ${(item?.unitPrice||0).toLocaleString('es-CO')}/día × ${item?.days||dias} días</span>
                 <span>COP ${(item?.lineTotal||a.subtotal).toLocaleString('es-CO')}</span>
             </li>
-            <li>
-                <span>Seguro incluido</span>
-                <span class="color-green">Gratis</span>
-            </li>
+            <li><span>Seguro incluido</span><span class="color-green">Gratis</span></li>
             <li>
                 <span>Depósito reembolsable</span>
                 <span>COP ${(a.deposit||0).toLocaleString('es-CO')}</span>
@@ -91,7 +79,6 @@ function renderizarDetalle(a) {
         `;
     }
 
-    // ── Timeline según estado ─────────────────────────────────────
     const timeline = document.querySelector('.timeline');
     if (timeline) {
         const steps = [
@@ -113,7 +100,6 @@ function renderizarDetalle(a) {
         `).join('');
     }
 
-    // ── Footer: mostrar/ocultar botón de extensión ────────────────
     const btnExtender = document.querySelector('.ticket-footer .btn-primary');
     if (btnExtender) {
         if (['ACTIVO','PENDIENTE'].includes(a.status)) {

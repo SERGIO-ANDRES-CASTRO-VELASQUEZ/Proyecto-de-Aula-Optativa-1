@@ -116,11 +116,9 @@
 <div class="footer-logo">
 <div class="logo-mark">SR</div>
 <span class="logo-text">SportRent</span>
-<span class="copyright">© 2026</span>
+<span class="copyright">© 2026 Sergio Castro</span>
 </div>
-<div class="footer-slogan">
-                El mejor equipo deportivo de alquiler en España
-            </div>
+<div class="footer-slogan">El mejor alquiler de Neiva</div>
 </div>
 </footer>
 <!-- Profile Sidebar -->
@@ -236,14 +234,6 @@
 </div>
 <svg class="plink-chevron" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 </a>
-<a class="profile-link-item" href="#">
-<div class="plink-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg></div>
-<div class="plink-texts">
-<span class="plink-title">Configuración</span>
-<span class="plink-desc">Privacidad y notificaciones</span>
-</div>
-<svg class="plink-chevron" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
-</a>
 <div class="profile-divider"></div>
 <a class="profile-link-item logout" href="#" onclick="clearSession(); window.location.href='index.html'; return false;">
 <div class="plink-icon logout-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg></div>
@@ -275,65 +265,5 @@
 </div>
 <script src="../js/api.js"></script>
 <script src="../js/mis_alquileres.js"></script>
-<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.r-tab-btn');
-            const items = document.querySelectorAll('.r-ticket-item');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-                    // Add active to clicked tab
-                    tab.classList.add('active');
-                    
-                    const filter = tab.getAttribute('data-filter');
-
-                    // Filter items
-                    items.forEach(item => {
-                        if (filter === 'todos') {
-                            item.style.display = 'flex';
-                        } else {
-                            if (item.getAttribute('data-status') === filter) {
-                                item.style.display = 'flex';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.r-tab-btn');
-            const items = document.querySelectorAll('.r-ticket-item');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-                    // Add active to clicked tab
-                    tab.classList.add('active');
-                    
-                    const filter = tab.getAttribute('data-filter');
-
-                    // Filter items
-                    items.forEach(item => {
-                        if (filter === 'todos') {
-                            item.style.display = 'flex';
-                        } else {
-                            if (item.getAttribute('data-status') === filter) {
-                                item.style.display = 'flex';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            });
-        });
-    </script>
 </body>
 </html>

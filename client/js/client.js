@@ -1,16 +1,14 @@
-// ═══════════════════════════════════════════════════════════════
-//  client.js — Catálogo + Perfil + Carrito  (conectado al backend)
-// ═══════════════════════════════════════════════════════════════
+// client.js — Catálogo de productos, perfil y carrito (client_index.html)
+// GET /api/auth/me  |  GET /api/categories  |  GET /api/products
+// POST/DELETE /api/products/{id}/favorite  |  PUT /api/me
 
-// ── Estado global ────────────────────────────────────────────────
 let currentPage       = 0;
 let currentCategory   = null;
 let currentQuery      = '';
 let currentMaxPrice   = null;
 let totalPages        = 1;
-let favoritosIds      = new Set();   // IDs de favoritos del usuario actual
+let favoritosIds      = new Set();
 
-// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
     <rect width="100%" height="100%" fill="#f1f5f9"/>
@@ -18,30 +16,20 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   </svg>
 `);
 
-// ── Protección de ruta ───────────────────────────────────────────
-if (!isLoggedIn()) {
-    window.location.href = 'index.html';
-}
+if (!isLoggedIn()) { window.location.href = 'index.html'; }
 
-// ════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
 
-    // Cargar perfil del usuario en el sidebar
     await cargarPerfil();
 
-    // Cargar IDs de favoritos del usuario para marcar corazones en el catálogo
     try {
         const favs = await apiGet('/api/me/favorites');
         favoritosIds = new Set((favs || []).map(f => f.id));
-    } catch (_) { /* no bloquear si falla */ }
+    } catch (_) {}
 
-    // Cargar categorías del backend
     await cargarCategorias();
-
-    // Cargar productos del backend
     await cargarProductos();
 
-    // ── Buscador (navbar) ────────────────────────────────────────
     const searchInput = document.querySelector('.search-bar input');
     if (searchInput) {
         searchInput.addEventListener('input', debounce(() => {
@@ -51,21 +39,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 400));
     }
 
-    // ── Slider de precio ─────────────────────────────────────────
     const priceSlider = document.getElementById('priceRange');
     if (priceSlider) {
         priceSlider.addEventListener('input', debounce(() => {
             const val = parseInt(priceSlider.value);
             currentMaxPrice = val < parseInt(priceSlider.max) ? val * 1000 : null;
             currentPage     = 0;
-            // Actualizar etiqueta
             const maxLabel = priceSlider.parentElement.querySelector('.price-max');
             if (maxLabel) maxLabel.textContent = `COP ${val}.000`;
             cargarProductos();
         }, 400));
     }
 
-    // ── Botón Resetear ───────────────────────────────────────────
     const resetBtn = document.querySelector('.reset-btn');
     if (resetBtn) {
         resetBtn.addEventListener('click', () => {
@@ -75,7 +60,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentPage     = 0;
             if (priceSlider) priceSlider.value = priceSlider.max;
             if (searchInput) searchInput.value = '';
-            // Desmarcar todas las categorías
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             const todos = document.querySelector('.cat-btn[data-id=""]');
             if (todos) todos.classList.add('active');
@@ -83,17 +67,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // ── Select de ordenamiento ───────────────────────────────────
     const sortSelect = document.getElementById('sort');
     if (sortSelect) {
-        sortSelect.addEventListener('change', () => {
-            currentPage = 0;
-            cargarProductos();
-        });
+        sortSelect.addEventListener('change', () => { currentPage = 0; cargarProductos(); });
     }
 
-    // ── Cart sidebar ─────────────────────────────────────────────
-    const cartBtn     = document.querySelector('.cart-btn');
+    const cartBtn      = document.querySelector('.cart-btn');
     const closeCartBtn = document.getElementById('closeCart');
     const cartSidebar  = document.getElementById('cartSidebar');
     const cartOverlay  = document.getElementById('cartOverlay');
@@ -105,10 +84,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     closeCartBtn?.addEventListener('click', closeCart);
     cartOverlay?.addEventListener('click', closeCart);
 
-    // Renderizar indicador de carrito al cargar
     actualizarIndicadorCarrito();
 
-    // ── Profile sidebar ──────────────────────────────────────────
     const userProfileBtn  = document.querySelector('.user-profile');
     const profileSidebar  = document.getElementById('profileSidebar');
     const profileOverlay  = document.getElementById('profileOverlay');
@@ -121,11 +98,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     closeProfileBtn?.addEventListener('click', () => { closeProfile(); setTimeout(salirModoEdicion, 300); });
     profileOverlay?.addEventListener('click',  () => { closeProfile(); setTimeout(salirModoEdicion, 300); });
 
-    // ── Edit profile ─────────────────────────────────────────────
-    const editProfileBtn      = document.getElementById('editProfileBtn');
+    const editProfileBtn       = document.getElementById('editProfileBtn');
     const cancelSidebarEditBtn = document.getElementById('cancelSidebarEditBtn');
-    const sidebarEditForm     = document.getElementById('sidebarEditForm');
-    const profileSidebarEl    = document.getElementById('profileSidebar');
+    const sidebarEditForm      = document.getElementById('sidebarEditForm');
+    const profileSidebarEl     = document.getElementById('profileSidebar');
 
     function entrarModoEdicion(e) { if (e) e.preventDefault(); profileSidebarEl?.classList.add('editing'); }
     function salirModoEdicion(e)  { if (e) e.preventDefault(); profileSidebarEl?.classList.remove('editing'); }
@@ -153,10 +129,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// ════════════════════════════════════════════════════════════════
-//  Funciones del backend
-// ════════════════════════════════════════════════════════════════
-
 async function cargarPerfil() {
     try {
         // GET /api/auth/me
@@ -164,7 +136,6 @@ async function cargarPerfil() {
         setUser(user);
         actualizarUIperfil(user);
     } catch (err) {
-        // Si falla (token expirado) api.js ya redirige
         console.error('Error cargando perfil:', err);
     }
 }
@@ -172,26 +143,23 @@ async function cargarPerfil() {
 function actualizarUIperfil(user) {
     const iniciales = (user.fullName || '??').split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
 
-    // Navbar avatar
     const navAvatar = document.querySelector('.user-actions .avatar');
     const navName   = document.querySelector('.user-actions .user-name');
     if (navAvatar) navAvatar.textContent = iniciales;
     if (navName)   navName.textContent   = (user.fullName || '').split(' ')[0];
 
-    // Sidebar perfil
-    const sidebarAvatar  = document.querySelector('.avatar-circle');
-    const sidebarName    = document.querySelector('.profile-name-info h3');
-    const sidebarEmail   = document.querySelector('.profile-name-info p');
-    const displayPhone   = document.getElementById('displayPhone');
-    const displayDoc     = document.getElementById('displayDocument');
+    const sidebarAvatar = document.querySelector('.avatar-circle');
+    const sidebarName   = document.querySelector('.profile-name-info h3');
+    const sidebarEmail  = document.querySelector('.profile-name-info p');
+    const displayPhone  = document.getElementById('displayPhone');
+    const displayDoc    = document.getElementById('displayDocument');
 
-    if (sidebarAvatar)  sidebarAvatar.textContent  = iniciales;
-    if (sidebarName)    sidebarName.textContent     = user.fullName   || '—';
-    if (sidebarEmail)   sidebarEmail.textContent    = user.email      || '—';
-    if (displayPhone)   displayPhone.textContent    = user.phone      || '—';
-    if (displayDoc)     displayDoc.textContent      = user.idDocument || '—';
+    if (sidebarAvatar) sidebarAvatar.textContent = iniciales;
+    if (sidebarName)   sidebarName.textContent   = user.fullName   || '—';
+    if (sidebarEmail)  sidebarEmail.textContent  = user.email      || '—';
+    if (displayPhone)  displayPhone.textContent  = user.phone      || '—';
+    if (displayDoc)    displayDoc.textContent    = user.idDocument || '—';
 
-    // Pre-rellenar formulario de edición
     const inputs = document.querySelectorAll('#sidebarEditForm input');
     if (inputs[0]) inputs[0].value = user.fullName    || '';
     if (inputs[1]) inputs[1].value = user.email       || '';
@@ -211,7 +179,6 @@ async function cargarCategorias() {
 }
 
 function renderizarCategorias(cats) {
-    // Apunta al contenedor de la sección CATEGORÍAS del sidebar
     const seccion = document.querySelector('.filter-section');
     if (!seccion) return;
 
@@ -223,7 +190,6 @@ function renderizarCategorias(cats) {
         </div>
     `;
 
-    // Estilos inline para los botones de categoría
     const style = document.createElement('style');
     style.textContent = `
         .cat-filter-list { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
@@ -246,13 +212,12 @@ function renderizarCategorias(cats) {
 
 async function cargarProductos() {
     const params = new URLSearchParams();
-    if (currentCategory)             params.set('category', currentCategory);
-    if (currentQuery)                params.set('q', currentQuery);
-    if (currentMaxPrice)             params.set('maxPrice', currentMaxPrice);
+    if (currentCategory) params.set('category', currentCategory);
+    if (currentQuery)    params.set('q', currentQuery);
+    if (currentMaxPrice) params.set('maxPrice', currentMaxPrice);
     params.set('page', currentPage);
     params.set('size', 9);
 
-    // Ordenamiento
     const sortSelect = document.getElementById('sort');
     if (sortSelect) {
         const val = sortSelect.value;
@@ -261,12 +226,11 @@ async function cargarProductos() {
         else params.set('sort', 'name,asc');
     }
 
-    // Mostrar loading
     const grid = document.querySelector('.product-grid');
     if (grid) grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#94a3b8;padding:40px">Cargando productos...</p>';
 
     try {
-        // GET /api/products?...
+        // GET /api/products?category=&q=&maxPrice=&page=&size=&sort=
         const data = await apiGet(`/api/products?${params.toString()}`);
         totalPages = data.totalPages;
         renderizarProductos(data.content);
@@ -288,17 +252,12 @@ function renderizarProductos(productos) {
     }
 
     grid.innerHTML = productos.map(p => {
-        // Resolver URL de imagen
+        // Resolución de imagen: externa (http), upload backend (/files/), o asset local
         let imgSrc;
-        if (!p.mainImageUrl) {
-            imgSrc = PLACEHOLDER_IMG;
-        } else if (p.mainImageUrl.startsWith('http')) {
-            imgSrc = p.mainImageUrl;                          // URL externa
-        } else if (p.mainImageUrl.startsWith('/files/')) {
-            imgSrc = `${API_BASE}${p.mainImageUrl}`;         // upload del backend
-        } else {
-            imgSrc = `../../${p.mainImageUrl.replace(/^\//, '')}`; // asset estático del frontend
-        }
+        if (!p.mainImageUrl)                        imgSrc = PLACEHOLDER_IMG;
+        else if (p.mainImageUrl.startsWith('http')) imgSrc = p.mainImageUrl;
+        else if (p.mainImageUrl.startsWith('/files/')) imgSrc = `${API_BASE}${p.mainImageUrl}`;
+        else                                        imgSrc = `../../${p.mainImageUrl.replace(/^\//, '')}`;
 
         const estrellas = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
         const isFav     = favoritosIds.has(p.id);
@@ -309,10 +268,8 @@ function renderizarProductos(productos) {
                  <img src="${imgSrc}" alt="${p.name}" class="product-image"
                       onerror="this.src='${PLACEHOLDER_IMG}'">
                 <button class="favorite-btn ${isFav ? 'fav-active' : ''}"
-                        data-product-id="${p.id}"
-                        data-is-fav="${isFav}"
-                        title="Favorito">
-                    <svg viewBox="0 0 24 24" fill="${isFav ? '#ef4444' : 'none'}" stroke="${isFav ? '#ef4444' : 'currentColor'}">
+                        data-product-id="${p.id}" data-is-fav="${isFav}" title="Favorito">
+                    <svg viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
@@ -342,7 +299,6 @@ function renderizarProductos(productos) {
         </div>`;
     }).join('');
 
-    // Registrar eventos de favoritos en los botones recién creados
     grid.querySelectorAll('.favorite-btn').forEach(btn => {
         btn.addEventListener('click', toggleFavorito);
     });
@@ -355,14 +311,10 @@ async function toggleFavorito(e) {
     const btn       = e.currentTarget;
     const productId = btn.dataset.productId;
     const isFav     = btn.dataset.isFav === 'true';
-    const svg       = btn.querySelector('svg');
 
-    // Actualización optimista de UI
+    // Actualización optimista — la clase fav-active controla el relleno vía CSS
     btn.dataset.isFav = String(!isFav);
-    if (svg) {
-        svg.setAttribute('fill',   !isFav ? '#ef4444' : 'none');
-        svg.setAttribute('stroke', !isFav ? '#ef4444' : 'currentColor');
-    }
+    btn.classList.toggle('fav-active', !isFav);
 
     try {
         if (isFav) {
@@ -375,17 +327,11 @@ async function toggleFavorito(e) {
             favoritosIds.add(Number(productId));
         }
     } catch (err) {
-        // Revertir si falla
+        // Revertir en caso de error
         btn.dataset.isFav = String(isFav);
-        if (svg) {
-            svg.setAttribute('fill',   isFav ? '#ef4444' : 'none');
-            svg.setAttribute('stroke', isFav ? '#ef4444' : 'currentColor');
-        }
-        if (err.status === 401) {
-            alert('Debes iniciar sesión para guardar favoritos.');
-        } else {
-            console.error('Error favorito:', err);
-        }
+        btn.classList.toggle('fav-active', isFav);
+        if (err.status === 401) alert('Debes iniciar sesión para guardar favoritos.');
+        else console.error('Error favorito:', err);
     }
 }
 
@@ -397,7 +343,6 @@ function actualizarContadorProductos(total) {
 }
 
 function renderizarPaginacion(data) {
-    // Buscar o crear contenedor de paginación
     let paginacion = document.querySelector('.pagination-container');
     if (!paginacion) {
         paginacion = document.createElement('div');
@@ -406,10 +351,7 @@ function renderizarPaginacion(data) {
         document.querySelector('.products-area')?.appendChild(paginacion);
     }
 
-    if (data.totalPages <= 1) {
-        paginacion.innerHTML = '';
-        return;
-    }
+    if (data.totalPages <= 1) { paginacion.innerHTML = ''; return; }
 
     paginacion.innerHTML = `
         <button onclick="cambiarPagina(${data.number - 1})"
@@ -417,9 +359,7 @@ function renderizarPaginacion(data) {
                 ${data.number === 0 ? 'disabled style="opacity:.4;cursor:not-allowed;"' : ''}>
             ◀ Anterior
         </button>
-        <span style="font-size:14px;color:#64748b;">
-            Página ${data.number + 1} de ${data.totalPages}
-        </span>
+        <span style="font-size:14px;color:#64748b;">Página ${data.number + 1} de ${data.totalPages}</span>
         <button onclick="cambiarPagina(${data.number + 1})"
                 style="padding:8px 16px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;background:#fff;"
                 ${data.number >= data.totalPages - 1 ? 'disabled style="opacity:.4;cursor:not-allowed;"' : ''}>
@@ -435,16 +375,11 @@ function cambiarPagina(page) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── Carrito ──────────────────────────────────────────────────────
-
 function actualizarIndicadorCarrito() {
-    const count = cartCount();
+    const count     = cartCount();
     const indicator = document.getElementById('cartIndicator');
     const headerCount = document.getElementById('cartCount');
-    if (indicator) {
-        indicator.textContent = count;
-        indicator.style.display = count > 0 ? 'flex' : 'none';
-    }
+    if (indicator) { indicator.textContent = count; indicator.style.display = count > 0 ? 'flex' : 'none'; }
     if (headerCount) headerCount.textContent = count;
 }
 
@@ -456,7 +391,6 @@ function renderizarCarrito() {
     const cartFooter = document.querySelector('.cart-footer');
     if (!cartBody) return;
 
-    // ── Carrito vacío ─────────────────────────────────────────────
     if (cart.length === 0) {
         cartBody.innerHTML = `
             <div style="text-align:center;padding:48px 20px;color:#94a3b8;">
@@ -469,21 +403,18 @@ function renderizarCarrito() {
                 <p style="font-size:15px;font-weight:500;color:#64748b;margin:0;">Tu carrito está vacío</p>
                 <p style="font-size:13px;margin-top:6px;">Agrega productos desde el catálogo</p>
             </div>`;
-
         if (cartFooter) {
-            cartFooter.innerHTML = `
-                <a href="client_index.html" class="btn-checkout"
-                   style="text-align:center;text-decoration:none;">Ver catálogo</a>`;
+            cartFooter.innerHTML = `<a href="client_index.html" class="btn-checkout" style="text-align:center;text-decoration:none;">Ver catálogo</a>`;
         }
         return;
     }
 
-    // ── Renderizar items ──────────────────────────────────────────
     const fmtDate  = d => new Date(d).toLocaleDateString('es-CO', { day:'2-digit', month:'short' });
     const fmtPrice = n => n.toLocaleString('es-CO');
 
     cartBody.innerHTML = cart.map(item => {
         const total  = item.pricePerDay * item.days * (item.quantity || 1);
+        // Resolución de imagen: externa (http), upload backend (/files/), o asset local
         const imgSrc = !item.imageUrl ? PLACEHOLDER_IMG
             : item.imageUrl.startsWith('http')    ? item.imageUrl
             : item.imageUrl.startsWith('/files/') ? `${API_BASE}${item.imageUrl}`
@@ -509,9 +440,7 @@ function renderizarCarrito() {
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
                     <div class="cart-item-price">COP ${fmtPrice(total)}</div>
                     <button class="remove-cart-btn" data-product-id="${item.productId}"
-                            style="background:none;border:none;cursor:pointer;color:#ef4444;
-                                   font-size:12px;padding:2px 6px;border-radius:4px;
-                                   transition:.15s;" title="Eliminar">
+                            style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:12px;padding:2px 6px;border-radius:4px;transition:.15s;" title="Eliminar">
                         ✕ Quitar
                     </button>
                 </div>
@@ -519,48 +448,30 @@ function renderizarCarrito() {
         </div>`;
     }).join('');
 
-    // Eventos de "quitar"
     cartBody.querySelectorAll('.remove-cart-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            removeFromCart(btn.dataset.productId);
-            renderizarCarrito();
-        });
+        btn.addEventListener('click', () => { removeFromCart(btn.dataset.productId); renderizarCarrito(); });
     });
 
-    // ── Footer con totales ────────────────────────────────────────
     const totalGeneral = cart.reduce((acc, item) => acc + item.pricePerDay * item.days * (item.quantity || 1), 0);
 
     if (cartFooter) {
         cartFooter.innerHTML = `
-            <div class="cart-summary-line">
-                <span>Subtotal alquiler</span>
-                <span>COP ${fmtPrice(totalGeneral)}</span>
-            </div>
-            <div class="cart-summary-line">
-                <span>Seguro incluido</span>
-                <span style="color:#22c55e;font-weight:600;">Gratis</span>
-            </div>
-            <div class="cart-total">
-                <span>Total estimado</span>
-                <span>COP ${fmtPrice(totalGeneral)}</span>
-            </div>
-            <a href="checkout.html" class="btn-checkout" style="text-decoration:none;">
-                Proceder al pago &rarr;
-            </a>
+            <div class="cart-summary-line"><span>Subtotal alquiler</span><span>COP ${fmtPrice(totalGeneral)}</span></div>
+            <div class="cart-summary-line"><span>Seguro incluido</span><span style="color:#22c55e;font-weight:600;">Gratis</span></div>
+            <div class="cart-total"><span>Total estimado</span><span>COP ${fmtPrice(totalGeneral)}</span></div>
+            <a href="checkout.html" class="btn-checkout" style="text-decoration:none;">Proceder al pago &rarr;</a>
             <button class="btn-continue" id="continueShopping">Seguir comprando</button>`;
 
-        // Bind botón "Seguir comprando" (se regenera con innerHTML)
+        // Se regenera con innerHTML, por eso se enlaza de nuevo aquí
         document.getElementById('continueShopping')?.addEventListener('click', closeCartFn);
     }
 }
 
-// Referencia a la función closeCart accesible desde el footer dinámico
 function closeCartFn() {
     document.getElementById('cartSidebar')?.classList.remove('open');
     document.getElementById('cartOverlay')?.classList.remove('active');
 }
 
-// ── Utilidad debounce ────────────────────────────────────────────
 function debounce(fn, ms) {
     let timer;
     return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };

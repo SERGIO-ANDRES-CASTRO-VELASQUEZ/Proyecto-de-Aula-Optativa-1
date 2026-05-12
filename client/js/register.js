@@ -1,5 +1,7 @@
+// register.js — Registro de nuevos clientes (register.html)
+// Envía datos a POST /api/auth/register y guarda el JWT devuelto
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Toggle de contraseñas (mantener lógica visual existente)
     const togglePasswords = document.querySelectorAll('.toggle-password');
     togglePasswords.forEach(toggle => {
         toggle.addEventListener('click', () => {
@@ -38,28 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Creando cuenta...';
 
         try {
-            // POST /api/auth/register
+            // POST /api/auth/register → { token, user }
             const data = await apiPost('/api/auth/register', { fullName, email, username, password });
 
-            // Guardar sesión automáticamente (el backend devuelve JWT)
             setToken(data.token);
-            const authUser = data.user || {
-                id: data.id,
-                email: data.email,
-                fullName: data.fullName,
-                role: data.role,
-                username: data.username
-            };
+            const authUser = data.user || { id: data.id, email: data.email, fullName: data.fullName, role: data.role, username: data.username };
             setUser(authUser);
 
-            // Ir directo al catálogo
             window.location.href = 'client_index.html';
 
         } catch (err) {
-            // Mostrar errores de campo si existen
             if (err.fieldErrors && err.fieldErrors.length > 0) {
-                const msgs = err.fieldErrors.map(fe => `• ${fe.field}: ${fe.message}`).join('\n');
-                mostrarError(errorDiv, msgs);
+                mostrarError(errorDiv, err.fieldErrors.map(fe => `• ${fe.field}: ${fe.message}`).join('\n'));
             } else {
                 mostrarError(errorDiv, err.message || 'Error al crear la cuenta.');
             }

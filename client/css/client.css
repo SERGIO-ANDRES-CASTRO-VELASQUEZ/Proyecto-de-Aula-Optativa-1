@@ -88,8 +88,10 @@
 .badge-pink { background-color: #df2be4; }
 .badge-green { background-color: #22c55e; }
 .badge-orange { background-color: #f59e0b; }
-.favorite-btn { position: absolute; top: 1rem; right: 1rem; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #94a3b8; transition: color 0.2s; }
-.favorite-btn:hover { color: #ef4444; }
+.favorite-btn { position: absolute; top: 1rem; right: 1rem; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.15s; }
+.favorite-btn svg { fill: none; stroke: #94a3b8; transition: fill 0.2s, stroke 0.2s; }
+.favorite-btn:hover svg { fill: #ef4444; stroke: #ef4444; }
+.favorite-btn.fav-active svg { fill: #ef4444; stroke: #ef4444; }
 .card-body { padding: 1.2rem; display: flex; flex-direction: column; flex: 1; }
 .category-tag { display: inline-block; background: #fae8ff; color: #df2be4; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.8rem; width: max-content; }
 .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #1e293b; }

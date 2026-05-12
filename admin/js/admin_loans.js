@@ -1,6 +1,5 @@
-// ═══════════════════════════════════════════════════════════════
-//  admin_loans.js — Gestión de prestamos/alquileres (admin)
-// ═══════════════════════════════════════════════════════════════
+// admin_loans.js — Gestión de alquileres en el panel admin (admin_loans.html)
+// GET/PATCH /api/admin/rentals  |  stats por estado vía ?status=
 
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="48"><rect width="100%" height="100%" fill="#f1f5f9"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="#94a3b8" font-family="Arial" font-size="8">Sin imagen</text></svg>'
@@ -41,7 +40,6 @@ async function loadLoanStats() {
         const total = data?.totalElements ?? 0;
         setText('totalTicketsCount', total);
 
-        // Obtener conteos por estado
         const [pendData, actData, finData] = await Promise.all([
             apiGet('/api/admin/rentals?page=0&size=1&status=PENDIENTE'),
             apiGet('/api/admin/rentals?page=0&size=1&status=ACTIVO'),
@@ -278,8 +276,9 @@ async function openDetailModal(rentalId) {
 function renderDetailModal(rental) {
     const content = document.getElementById('detailModalContent');
     const title = document.getElementById('detailModalTitle');
+    const statusBadge = mapLoanStatus(rental.status);
 
-    title.textContent = `Ticket ${rental.code || 'N/A'}`;
+    title.innerHTML = `Ticket &nbsp;<span class="modal-ticket-code">${rental.code || 'N/A'}</span>`;
 
     const itemsHtml = (rental.items || []).map(item => `
         <div class="item-row">
@@ -290,76 +289,94 @@ function renderDetailModal(rental) {
         </div>
     `).join('');
 
-    const statusBadge = mapLoanStatus(rental.status);
-
     content.innerHTML = `
-        <div class="detail-section">
-            <h3>Información del Cliente</h3>
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Cliente</label>
-                    <div class="value">${rental.userFullName || 'Sin nombre'}</div>
+        <div class="modal-top-row">
+            <div class="detail-section">
+                <div class="detail-section-title">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Cliente
                 </div>
-                <div class="info-item">
-                    <label>Email</label>
-                    <div class="value">${rental.userEmail || '-'}</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Nombre</label>
+                        <div class="value">${rental.userFullName || 'Sin nombre'}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Email</label>
+                        <div class="value" style="font-size:0.88rem;word-break:break-all;">${rental.userEmail || '-'}</div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <label>Estado</label>
-                    <div class="value status ${statusBadge.className}">${statusBadge.label}</div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-section-title">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    Estado del Ticket
                 </div>
-                <div class="info-item">
-                    <label>Método Pago</label>
-                    <div class="value">${formatPayment(rental.paymentMethod)}</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Estado</label>
+                        <div class="value"><span class="status-badge ${statusBadge.className}">${statusBadge.label}</span></div>
+                    </div>
+                    <div class="info-item">
+                        <label>Método de Pago</label>
+                        <div class="value">${formatPayment(rental.paymentMethod)}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section dates-section">
+            <div class="detail-section-title">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Fechas
+            </div>
+            <div class="dates-strip">
+                <div class="date-chip">
+                    <span class="date-chip-label">Creado</span>
+                    <span class="date-chip-value">${formatDate(rental.createdAt)}</span>
+                </div>
+                <span class="date-arrow">›</span>
+                <div class="date-chip">
+                    <span class="date-chip-label">Inicio</span>
+                    <span class="date-chip-value">${formatDate(rental.startDate)}</span>
+                </div>
+                <span class="date-arrow">›</span>
+                <div class="date-chip accent">
+                    <span class="date-chip-label">Devolución</span>
+                    <span class="date-chip-value">${formatDate(rental.endDate)}</span>
                 </div>
             </div>
         </div>
 
         <div class="detail-section">
-            <h3>Fechas del Rental</h3>
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Creado</label>
-                    <div class="value">${formatDate(rental.createdAt)}</div>
-                </div>
-                <div class="info-item">
-                    <label>Inicio</label>
-                    <div class="value">${formatDate(rental.startDate)}</div>
-                </div>
-                <div class="info-item">
-                    <label>Fin</label>
-                    <div class="value">${formatDate(rental.endDate)}</div>
-                </div>
+            <div class="detail-section-title">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                Artículos Rentados
+                <span class="items-count-badge">${rental.items?.length || 0}</span>
             </div>
-        </div>
-
-        <div class="detail-section">
-            <h3>Artículos Rentados (${rental.items?.length || 0})</h3>
             <div class="items-list-header">
                 <div class="item-name-header">Producto</div>
                 <div class="item-qty-header">Qty</div>
-                <div class="item-unitprice-header">Unit.</div>
+                <div class="item-unitprice-header">Precio/u</div>
                 <div class="item-amount-header">Total</div>
             </div>
             <div class="items-list">
-                ${itemsHtml || '<div style="padding: 1rem; text-align: center; color: #94a3b8;">Sin artículos</div>'}
+                ${itemsHtml || '<div class="items-empty">Sin artículos registrados</div>'}
             </div>
         </div>
 
-        <div class="detail-section detail-summary">
+        <div class="detail-summary">
             <div class="summary-row">
                 <label>Subtotal</label>
-                <div class="value">${formatCurrency(rental.subtotal || 0)}</div>
+                <span>${formatCurrency(rental.subtotal || 0)}</span>
             </div>
-            
             <div class="summary-row">
                 <label>Depósito</label>
-                <div class="value">${formatCurrency(rental.deposit || 0)}</div>
+                <span>${formatCurrency(rental.deposit || 0)}</span>
             </div>
-            
             <div class="summary-row total">
-                <label>Total</label>
-                <div class="value amount">${formatCurrency(rental.total || 0)}</div>
+                <label>Total a Cobrar</label>
+                <span class="summary-total-value">${formatCurrency(rental.total || 0)}</span>
             </div>
         </div>
     `;

@@ -251,16 +251,24 @@ a {
     flex-direction: column;
     line-height: 1.2;
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .admin-name {
     font-weight: 700;
     color: #1f2a44;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .admin-email {
     font-size: 0.78rem;
     color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .logout-btn {
@@ -268,6 +276,15 @@ a {
     text-decoration: none;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+    padding: 4px;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.logout-btn:hover {
+    color: #ef4444;
+    background: #fee2e2;
 }
 
 /* Responsive Breakpoints */

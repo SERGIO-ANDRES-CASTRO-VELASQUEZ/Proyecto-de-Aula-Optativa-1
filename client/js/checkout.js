@@ -1,10 +1,8 @@
-// ═══════════════════════════════════════════════════════════════
-//  checkout.js — Checkout + Pago  (checkout.html)
-// ═══════════════════════════════════════════════════════════════
+// checkout.js — Resumen de pedido y pago (checkout.html)
+// POST /api/rentals — crea un alquiler por cada grupo de fechas del carrito
 
 document.addEventListener('DOMContentLoaded', () => {
 
-// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
 const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
     <rect width="100%" height="100%" fill="#f1f5f9"/>
@@ -12,10 +10,8 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   </svg>
 `);
 
-    // ── Redirigir si no hay sesión ───────────────────────────────
     if (!isLoggedIn()) { window.location.href = 'index.html'; return; }
 
-    // ── Leer carrito desde localStorage ─────────────────────────
     const cart = getCart();
 
     if (cart.length === 0) {
@@ -24,7 +20,6 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
         return;
     }
 
-    // ── Actualizar navbar con datos reales ───────────────────────
     const user = getUser();
     if (user) {
         const iniciales = (user.fullName || '??').split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
@@ -36,22 +31,17 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
         if (cartInd)   cartInd.textContent   = cart.length;
     }
 
-    // ── Poblar resumen del pedido ────────────────────────────────
-    const summaryTop  = document.querySelector('.summary-top p');
+    const summaryTop = document.querySelector('.summary-top p');
     if (summaryTop) summaryTop.textContent = `${cart.length} artículo${cart.length > 1 ? 's' : ''} en tu carrito`;
 
     const fmtDate  = d => new Date(d).toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' });
     const fmtPrice = n => n.toLocaleString('es-CO');
 
-    // Contenedor de items (reemplazar el item estático)
-    const summaryItemContainer = document.querySelector('.order-summary');
-    const summaryLinesEl       = document.querySelector('.summary-lines');
-    const summaryTotalEl       = document.querySelector('.summary-total span:last-child');
-    const confirmBtn           = document.getElementById('confirmOrder');
+    const summaryLinesEl  = document.querySelector('.summary-lines');
+    const summaryTotalEl  = document.querySelector('.summary-total span:last-child');
+    const confirmBtn      = document.getElementById('confirmOrder');
 
-    // Renderizar todos los items del carrito encima de .summary-lines
     if (summaryLinesEl) {
-        // Insertar items antes de las líneas de resumen
         cart.forEach(item => {
             const total  = item.pricePerDay * item.days * (item.quantity || 1);
             const imgSrc = !item.imageUrl ? PLACEHOLDER_IMG
@@ -62,8 +52,7 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
             const div = document.createElement('div');
             div.className = 'summary-item';
             div.innerHTML = `
-                <img src="${imgSrc}" alt="${item.productName}"
-                     onerror="this.src='${PLACEHOLDER_IMG}'">
+                <img src="${imgSrc}" alt="${item.productName}" onerror="this.src='${PLACEHOLDER_IMG}'">
                 <div class="summary-item-info">
                     <h3>${item.productName}</h3>
                     <p>${fmtDate(item.startDate)} → ${fmtDate(item.endDate)}</p>
@@ -74,7 +63,6 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
             summaryLinesEl.parentElement.insertBefore(div, summaryLinesEl);
         });
 
-        // Calcular total general
         const totalGeneral = cart.reduce((acc, item) => acc + item.pricePerDay * item.days * (item.quantity || 1), 0);
 
         summaryLinesEl.innerHTML = `
@@ -85,7 +73,6 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
         if (summaryTotalEl) summaryTotalEl.textContent = `COP ${fmtPrice(totalGeneral)}`;
     }
 
-    // ── Pre-rellenar datos de contacto ───────────────────────────
     if (user) {
         const fullNameEl     = document.getElementById('fullName');
         const contactEmailEl = document.getElementById('contactEmail');
@@ -93,12 +80,10 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
         if (contactEmailEl) contactEmailEl.value = user.email    || '';
     }
 
-    // ── Lógica de tabs de pago ───────────────────────────────────
     const tabCard      = document.getElementById('tabCard');
     const tabPaypal    = document.getElementById('tabPaypal');
     const cardFields   = document.getElementById('cardFields');
     const paypalFields = document.getElementById('paypalFields');
-
     const cardName     = document.getElementById('cardName');
     const cardNumber   = document.getElementById('cardNumber');
     const cardExpiry   = document.getElementById('cardExpiry');
@@ -107,18 +92,14 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
 
     let currentMethod = 'card';
 
-    function cleanDigits(v) { return v.replace(/\D/g, ''); }
+    function cleanDigits(v)    { return v.replace(/\D/g, ''); }
     function formatCardNumber(v) { return cleanDigits(v).slice(0, 16).replace(/(.{4})/g, '$1 ').trim(); }
-    function formatExpiry(v) {
-        const d = cleanDigits(v).slice(0, 4);
-        return d.length <= 2 ? d : `${d.slice(0,2)}/${d.slice(2)}`;
-    }
-    function isCardValid() {
-        const nameOk = cardName.value.trim().length >= 4;
-        const numOk  = cleanDigits(cardNumber.value).length === 16;
-        const expOk  = /^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry.value.trim());
-        const cvcOk  = /^\d{3,4}$/.test(cardCvc.value.trim());
-        return nameOk && numOk && expOk && cvcOk;
+    function formatExpiry(v)   { const d = cleanDigits(v).slice(0, 4); return d.length <= 2 ? d : `${d.slice(0,2)}/${d.slice(2)}`; }
+    function isCardValid()     {
+        return cardName.value.trim().length >= 4
+            && cleanDigits(cardNumber.value).length === 16
+            && /^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry.value.trim())
+            && /^\d{3,4}$/.test(cardCvc.value.trim());
     }
     function updateConfirmState() {
         if (currentMethod === 'paypal') { confirmBtn.disabled = false; return; }
@@ -142,7 +123,6 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
     cardCvc.addEventListener('input',    () => { cardCvc.value    = cleanDigits(cardCvc.value).slice(0, 4); updateConfirmState(); });
     cardName.addEventListener('input', updateConfirmState);
 
-    // ── Confirmar pedido → llamar al backend ─────────────────────
     confirmBtn.addEventListener('click', async () => {
         if (confirmBtn.disabled) return;
 
@@ -151,22 +131,14 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
         confirmBtn.textContent = 'Procesando pago...';
 
         try {
-            // Agrupar items del carrito por rango de fechas
-            // (items con las mismas fechas van en un solo rental)
+            // Agrupar items por rango de fechas; cada grupo = un POST /api/rentals
             const grupos = {};
             cart.forEach(item => {
                 const key = `${item.startDate}|${item.endDate}`;
-                if (!grupos[key]) {
-                    grupos[key] = {
-                        startDate: item.startDate,
-                        endDate:   item.endDate,
-                        items:     []
-                    };
-                }
+                if (!grupos[key]) grupos[key] = { startDate: item.startDate, endDate: item.endDate, items: [] };
                 grupos[key].items.push({ productId: item.productId, quantity: item.quantity || 1 });
             });
 
-            // POST /api/rentals por cada grupo de fechas
             const rentals = [];
             for (const grupo of Object.values(grupos)) {
                 const alquiler = await apiPost('/api/rentals', {
@@ -178,18 +150,12 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
                 rentals.push(alquiler);
             }
 
-            // Limpiar carrito
             clearCart();
 
-            // Calcular total general
-            const totalGeneral = cart.reduce(
-                (acc, item) => acc + item.pricePerDay * item.days * (item.quantity || 1), 0
-            );
-
+            const totalGeneral = cart.reduce((acc, item) => acc + item.pricePerDay * item.days * (item.quantity || 1), 0);
             const email = contactEmail.value.trim() || user?.email || '';
-
-            // Redirigir al ticket con el primer rental (o el único)
             const primero = rentals[0];
+
             window.location.href =
                 `ticket_confirmacion.html?code=${encodeURIComponent(primero.code)}`
                 + `&email=${encodeURIComponent(email)}`

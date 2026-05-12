@@ -1,5 +1,7 @@
+// login.js — Autenticación de usuarios (index.html)
+// Envía credenciales a POST /api/auth/login y guarda el JWT en localStorage
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Toggle de mostrar/ocultar contraseña (mantener la lógica visual existente)
     const togglePassword = document.querySelector('.toggle-password');
     const passwordInput  = document.getElementById('password');
 
@@ -13,20 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Si ya hay sesión activa, redirigir según el rol
     if (isLoggedIn()) {
         const user = getUser();
-        if (user && user.role === 'ADMIN') {
-            window.location.href = '../../admin/html/admin_dashboard.html';
-        } else {
-            window.location.href = 'client_index.html';
-        }
+        window.location.href = (user && user.role === 'ADMIN')
+            ? '../../admin/html/admin_dashboard.html'
+            : 'client_index.html';
         return;
     }
 
-    const loginForm  = document.getElementById('loginForm');
-    const submitBtn  = loginForm.querySelector('button[type="submit"]');
-    const errorDiv   = crearDivError();
+    const loginForm = document.getElementById('loginForm');
+    const submitBtn = loginForm.querySelector('button[type="submit"]');
+    const errorDiv  = crearDivError();
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -39,26 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Iniciando sesión...';
 
         try {
-            // POST /api/auth/login
+            // POST /api/auth/login → { token, user }
             const data = await apiPost('/api/auth/login', { email, password });
 
-            // Guardar token y datos del usuario en localStorage
             setToken(data.token);
-            const authUser = data.user || {
-                id: data.id,
-                email: data.email,
-                fullName: data.fullName,
-                role: data.role,
-                username: data.username
-            };
+            const authUser = data.user || { id: data.id, email: data.email, fullName: data.fullName, role: data.role, username: data.username };
             setUser(authUser);
 
-            // Redirigir según el rol
-            if (authUser && authUser.role === 'ADMIN') {
-                window.location.href = '../../admin/html/admin_dashboard.html';
-            } else {
-                window.location.href = 'client_index.html';
-            }
+            window.location.href = (authUser && authUser.role === 'ADMIN')
+                ? '../../admin/html/admin_dashboard.html'
+                : 'client_index.html';
 
         } catch (err) {
             mostrarError(errorDiv, err.message || 'Credenciales incorrectas');
@@ -67,8 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ── Funciones auxiliares de UI ────────────────────────────────────────────
-
     function crearDivError() {
         const div = document.createElement('div');
         div.style.cssText = 'color:#ef4444;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:none;font-size:14px;';
@@ -76,12 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return div;
     }
 
-    function mostrarError(div, msg) {
-        div.textContent = msg;
-        div.style.display = 'block';
-    }
-
-    function ocultarError(div) {
-        div.style.display = 'none';
-    }
+    function mostrarError(div, msg) { div.textContent = msg; div.style.display = 'block'; }
+    function ocultarError(div)      { div.style.display = 'none'; }
 });

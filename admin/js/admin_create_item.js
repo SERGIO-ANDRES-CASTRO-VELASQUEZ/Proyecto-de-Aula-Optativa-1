@@ -19,35 +19,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // ── VALIDACIONES ──
-        const name = getValue('articleName');
+        const name        = getValue('articleName');
         const description = getValue('articleDescription');
-        const categoryId = getValue('articleCategory');
-        const priceStr = getValue('articlePrice');
-        const stockStr = getValue('articleStock');
+        const categoryId  = getValue('articleCategory');
+        const priceStr    = getValue('articlePrice');
+        const stockStr    = getValue('articleStock');
 
-        // Validar nombre
         if (!name || name.length < 3) {
             alert('❌ El nombre debe tener al menos 3 caracteres');
             document.getElementById('articleName').focus();
             return;
         }
-
-        // Validar descripción
         if (!description || description.length < 10) {
             alert('❌ La descripción debe tener al menos 10 caracteres');
             document.getElementById('articleDescription').focus();
             return;
         }
-
-        // Validar categoría
         if (!categoryId || categoryId === '') {
             alert('❌ Debes seleccionar una categoría');
             document.getElementById('articleCategory').focus();
             return;
         }
 
-        // Validar precio (debe ser número positivo)
+        // Validar precio (número positivo)
         const price = Number(priceStr);
         if (isNaN(price) || price <= 0) {
             alert('❌ El precio debe ser un número mayor a 0');
@@ -55,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Validar stock (debe ser número entero positivo)
+        // Validar stock (entero positivo)
         const stock = Number(stockStr);
         if (isNaN(stock) || stock < 0 || !Number.isInteger(stock)) {
             alert('❌ El stock debe ser un número entero mayor o igual a 0');
@@ -221,46 +215,61 @@ function setupInputValidation() {
 
 // ─── IMÁGENES ───
 function wireImageControls() {
-    // URL
+    // URL: agregar con botón o con Enter
     const addUrlBtn = document.getElementById('addImageBtn');
     const urlInput = document.getElementById('articleImageUrl');
     if (addUrlBtn && urlInput) {
         addUrlBtn.addEventListener('click', () => {
             const url = urlInput.value.trim();
             if (!url) return;
-            imageUrls.push(url);
+            setSingleImage({ url });
             urlInput.value = '';
-            renderImageList();
+        });
+        urlInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const url = urlInput.value.trim();
+                if (!url) return;
+                setSingleImage({ url });
+                urlInput.value = '';
+            }
         });
     }
 
-    // Archivo
-    const addFileBtn = document.getElementById('addImageFileBtn');
+    // Archivo: auto-carga al seleccionar
     const fileInput = document.getElementById('articleImageFile');
-    if (addFileBtn && fileInput) {
-        addFileBtn.addEventListener('click', () => {
-            if (!fileInput.files.length) {
-                alert('Por favor selecciona un archivo');
-                return;
-            }
+    if (fileInput) {
+        fileInput.addEventListener('change', () => {
+            if (!fileInput.files.length) return;
             const file = fileInput.files[0];
-            // Validar tipo
             if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
                 alert('❌ Solo se aceptan JPEG, PNG o WEBP');
+                fileInput.value = '';
                 return;
             }
-            // Validar tamaño (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 alert('❌ La imagen no puede superar 5MB');
+                fileInput.value = '';
                 return;
             }
-            pendingFiles.push(file);
+            setSingleImage({ file });
             fileInput.value = '';
-            renderImageList();
         });
     }
 
     renderImageList();
+    updateImageControls();
+}
+
+function setSingleImage({ url, file }) {
+    imageUrls = [];
+    pendingFiles = [];
+
+    if (url) imageUrls = [url];
+    if (file) pendingFiles = [file];
+
+    renderImageList();
+    updateImageControls();
 }
 
 function renderImageList() {
@@ -289,6 +298,7 @@ function renderImageList() {
         chip.addEventListener('click', () => {
             imageUrls.splice(Number(chip.getAttribute('data-url-index')), 1);
             renderImageList();
+            updateImageControls();
         });
     });
 
@@ -296,8 +306,22 @@ function renderImageList() {
         chip.addEventListener('click', () => {
             pendingFiles.splice(Number(chip.getAttribute('data-file-index')), 1);
             renderImageList();
+            updateImageControls();
         });
     });
+}
+
+function updateImageControls() {
+    const addUrlBtn = document.getElementById('addImageBtn');
+    const fileLabel = document.getElementById('fileInputLabel');
+    const fileText = document.getElementById('fileInputText');
+    const hasImage = imageUrls.length > 0 || pendingFiles.length > 0;
+
+    if (addUrlBtn) addUrlBtn.disabled = hasImage;
+    if (fileLabel) fileLabel.style.opacity = hasImage ? '0.5' : '1';
+    if (fileLabel) fileLabel.style.pointerEvents = hasImage ? 'none' : 'auto';
+    if (fileText && hasImage) fileText.textContent = '✅ Imagen cargada — quítala para cambiarla';
+    if (fileText && !hasImage) fileText.textContent = '📁 Selecciona un archivo de imagen';
 }
 
 // ─── ESPECIFICACIONES ───

@@ -183,13 +183,10 @@
 
                 <!-- Tab 2: Subir Archivo -->
                 <div id="file-tab" class="upload-tab-content">
-                    <div class="file-input-wrapper">
-                        <label class="file-input-label">
-                            📁 Selecciona archivo
-                            <input type="file" id="articleImageFile" accept="image/jpeg,image/png,image/webp">
-                        </label>
-                    </div>
-                    <button type="button" class="small-add-btn" id="addImageFileBtn" style="margin-left: 8px;"><i class='bx bx-plus'></i></button>
+                    <label class="file-input-label" id="fileInputLabel">
+                        <span id="fileInputText">📁 Selecciona un archivo de imagen</span>
+                        <input type="file" id="articleImageFile" accept="image/jpeg,image/png,image/webp">
+                    </label>
                 </div>
 
                 <!-- Lista de imágenes cargadas -->

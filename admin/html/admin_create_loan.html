@@ -32,11 +32,15 @@
             <div class="loan-modal-content">
                 <article class="loan-left-panel">
                     <div class="block-title"><span><i class='bx bx-user'></i></span> DATOS DEL CLIENTE</div>
-                    <div class="input-with-icon">
-                        <i class='bx bx-search'></i>
-                        <input id="cliente" type="text" list="clientList" placeholder="Buscar por nombre o email...">
+                    <div class="searchable-select" id="clienteSelectWrapper">
+                        <div class="ss-field" id="clienteField">
+                            <i class='bx bx-search ss-icon'></i>
+                            <input type="text" id="clienteSearch" class="ss-input" placeholder="Buscar cliente por nombre o email...">
+                            <i class='bx bx-chevron-down ss-arrow' id="ssArrow"></i>
+                        </div>
+                        <div class="ss-dropdown" id="clienteDropdown"></div>
+                        <input type="hidden" id="clienteSelectedId">
                     </div>
-                    <datalist id="clientList"></datalist>
 
                     <div class="block-title"><span><i class='bx bx-calendar'></i></span> FECHAS DEL PRESTAMO</div>
                     <label for="inicio">Fecha de Salida</label>
@@ -56,7 +60,7 @@
                     <div class="block-title"><span><i class='bx bx-package'></i></span> CATALOGO RAPIDO</div>
                     <div class="input-with-icon catalog-search">
                         <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Buscar articulo...">
+                        <input type="text" id="catalogSearch" placeholder="Buscar articulo...">
                     </div>
 
                     <div class="catalog-grid" id="catalogGrid"></div>
