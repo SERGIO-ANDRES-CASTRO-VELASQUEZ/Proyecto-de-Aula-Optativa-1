@@ -138,21 +138,22 @@ function renderLoans(rentals) {
                     <span>${formatPayment(r.paymentMethod)}</span>
                 </td>
                 <td><span class="status-badge ${status.className}">${status.label}</span></td>
-                <td>
-                    <div class="actions-cell">
-                        <div class="dropdown-wrapper">
-                            <button type="button" class="icon-btn status-drop-btn" data-id="${r.id}" title="Cambiar estado">⚙</button>
-                            <div class="status-dropdown" id="dropdown-${r.id}" style="display:none;">
-                                ${['PENDIENTE','ACTIVO','FINALIZADO','CANCELADO','VENCIDO'].map(s =>
-                                    `<button type="button" class="drop-item ${r.status === s ? 'current' : ''}"
-                                             data-rental="${r.id}" data-status="${s}">
-                                         ${mapLoanStatus(s).label}
-                                     </button>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                 <td>
+                     <div class="actions-cell">
+                         <button type="button" class="icon-btn view-detail-btn" data-id="${r.id}" title="Ver detalles">👁</button>
+                         <div class="dropdown-wrapper">
+                             <button type="button" class="icon-btn status-drop-btn" data-id="${r.id}" title="Cambiar estado">⚙</button>
+                             <div class="status-dropdown" id="dropdown-${r.id}" style="display:none;">
+                                 ${['PENDIENTE','ACTIVO','FINALIZADO','CANCELADO','VENCIDO'].map(s =>
+                                     `<button type="button" class="drop-item ${r.status === s ? 'current' : ''}"
+                                              data-rental="${r.id}" data-status="${s}">
+                                          ${mapLoanStatus(s).label}
+                                      </button>`
+                                 ).join('')}
+                             </div>
+                         </div>
+                     </div>
+                 </td>
             </tr>
         `;
     }).join('');
@@ -172,9 +173,12 @@ function renderLoans(rentals) {
     });
 
     // Cerrar dropdowns al hacer clic fuera
-    document.addEventListener('click', () => {
-        tbody.querySelectorAll('.status-dropdown').forEach(d => d.style.display = 'none');
-    }, { once: true });
+    document.addEventListener('click', (e) => {
+        // Solo cerrar si el clic no es en un dropdown
+        if (!e.target.closest('.dropdown-wrapper')) {
+            tbody.querySelectorAll('.status-dropdown').forEach(d => d.style.display = 'none');
+        }
+    });
 
     // Acción de cambio de estado
     tbody.querySelectorAll('.drop-item').forEach(item => {
@@ -189,6 +193,15 @@ function renderLoans(rentals) {
             } catch (err) {
                 alert(err.message || 'No se pudo cambiar el estado.');
             }
+        });
+    });
+
+    // Detail modal buttons
+    tbody.querySelectorAll('.view-detail-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const rentalId = btn.getAttribute('data-id');
+            await openDetailModal(rentalId);
         });
     });
 }
@@ -249,3 +262,122 @@ function setText(id, value) {
     const el = document.getElementById(id);
     if (el) el.textContent = String(value ?? '0');
 }
+
+async function openDetailModal(rentalId) {
+    try {
+        const rental = await apiGet(`/api/admin/rentals/${rentalId}`);
+        renderDetailModal(rental);
+        const overlay = document.getElementById('detailModalOverlay');
+        if (overlay) overlay.classList.add('active');
+    } catch (err) {
+        console.error('Error loading rental detail:', err);
+        alert('No se pudo cargar el detalle del rental.');
+    }
+}
+
+function renderDetailModal(rental) {
+    const content = document.getElementById('detailModalContent');
+    const title = document.getElementById('detailModalTitle');
+
+    title.textContent = `Ticket ${rental.code || 'N/A'}`;
+
+    const itemsHtml = (rental.items || []).map(item => `
+        <div class="item-row">
+            <div class="item-name">${item.productName || 'Producto'}</div>
+            <div class="item-qty">${item.quantity}x</div>
+            <div class="item-unitprice">${formatCurrency(item.unitPrice || 0)}</div>
+            <div class="item-amount">${formatCurrency(item.lineTotal || 0)}</div>
+        </div>
+    `).join('');
+
+    const statusBadge = mapLoanStatus(rental.status);
+
+    content.innerHTML = `
+        <div class="detail-section">
+            <h3>Información del Cliente</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Cliente</label>
+                    <div class="value">${rental.userFullName || 'Sin nombre'}</div>
+                </div>
+                <div class="info-item">
+                    <label>Email</label>
+                    <div class="value">${rental.userEmail || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <label>Estado</label>
+                    <div class="value status ${statusBadge.className}">${statusBadge.label}</div>
+                </div>
+                <div class="info-item">
+                    <label>Método Pago</label>
+                    <div class="value">${formatPayment(rental.paymentMethod)}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3>Fechas del Rental</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Creado</label>
+                    <div class="value">${formatDate(rental.createdAt)}</div>
+                </div>
+                <div class="info-item">
+                    <label>Inicio</label>
+                    <div class="value">${formatDate(rental.startDate)}</div>
+                </div>
+                <div class="info-item">
+                    <label>Fin</label>
+                    <div class="value">${formatDate(rental.endDate)}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3>Artículos Rentados (${rental.items?.length || 0})</h3>
+            <div class="items-list-header">
+                <div class="item-name-header">Producto</div>
+                <div class="item-qty-header">Qty</div>
+                <div class="item-unitprice-header">Unit.</div>
+                <div class="item-amount-header">Total</div>
+            </div>
+            <div class="items-list">
+                ${itemsHtml || '<div style="padding: 1rem; text-align: center; color: #94a3b8;">Sin artículos</div>'}
+            </div>
+        </div>
+
+        <div class="detail-section detail-summary">
+            <div class="summary-row">
+                <label>Subtotal</label>
+                <div class="value">${formatCurrency(rental.subtotal || 0)}</div>
+            </div>
+            
+            <div class="summary-row">
+                <label>Depósito</label>
+                <div class="value">${formatCurrency(rental.deposit || 0)}</div>
+            </div>
+            
+            <div class="summary-row total">
+                <label>Total</label>
+                <div class="value amount">${formatCurrency(rental.total || 0)}</div>
+            </div>
+        </div>
+    `;
+}
+
+function closeDetailModal() {
+    const overlay = document.getElementById('detailModalOverlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
+// Cerrar modal al presionar ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeDetailModal();
+});
+
+// Cerrar modal al hacer clic fuera
+document.addEventListener('click', (e) => {
+    const overlay = document.getElementById('detailModalOverlay');
+    if (overlay && e.target === overlay) closeDetailModal();
+});
+
