@@ -113,22 +113,24 @@
         </header>
 
         <section class="loans-stats">
-            <article class="stat-card stat-purple"><h3>5</h3><p>Total Tickets</p></article>
-            <article class="stat-card stat-orange"><h3>1</h3><p>Pendientes</p></article>
-            <article class="stat-card stat-blue"><h3>2</h3><p>En Progreso</p></article>
-            <article class="stat-card stat-green"><h3>2</h3><p>Devueltos</p></article>
+            <article class="stat-card stat-purple"><h3 id="totalTicketsCount">0</h3><p>Total Tickets</p></article>
+            <article class="stat-card stat-orange"><h3 id="pendingTicketsCount">0</h3><p>Pendientes</p></article>
+            <article class="stat-card stat-blue"><h3 id="activeTicketsCount">0</h3><p>En Progreso</p></article>
+            <article class="stat-card stat-green"><h3 id="finishedTicketsCount">0</h3><p>Devueltos</p></article>
         </section>
 
         <section class="loans-controls">
             <div class="search-wrapper">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Buscar por cliente, cedula o ID Ticket...">
+                <input type="text" id="loansSearch" placeholder="Buscar por cliente, email o codigo...">
             </div>
-            <select>
-                <option>Todos los estados</option>
-                <option>Pendiente</option>
-                <option>En Progreso</option>
-                <option>Devuelto</option>
+            <select id="statusFilter">
+                <option value="">Todos los estados</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="ACTIVO">En Progreso</option>
+                <option value="FINALIZADO">Devuelto</option>
+                <option value="CANCELADO">Cancelado</option>
+                <option value="VENCIDO">Vencido</option>
             </select>
         </section>
 
@@ -147,70 +149,7 @@
                         <th>ACCIONES</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td><span class="ticket-id">TK-001</span></td>
-                        <td>
-                            <div class="client-cell">
-                                <div class="client-avatar">CG</div>
-                                <div><strong>Carlos García</strong><span>12345678A</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/bike-mountain.jpg" alt="Bicicleta">
-                                <div><strong>Bicicleta de Montana Pro</strong><span>4 dias</span></div>
-                            </div>
-                        </td>
-                        <td>28 feb 2026</td>
-                        <td>04 mar 2026</td>
-                        <td><strong class="total">€72</strong><span>Tarjeta</span></td>
-                        <td><span class="status-badge returned">Devuelto</span></td>
-                        <td><span class="more-actions">•••</span></td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="ticket-id">TK-002</span></td>
-                        <td>
-                            <div class="client-cell">
-                                <div class="client-avatar">MR</div>
-                                <div><strong>María Rodríguez</strong><span>87654321B</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/bike-route.jpg" alt="Raqueta">
-                                <div><strong>Raqueta de Tenis Wilson</strong><span>3 dias</span></div>
-                            </div>
-                        </td>
-                        <td>03 mar 2026</td>
-                        <td>06 mar 2026</td>
-                        <td><strong class="total">€36</strong><span>Efectivo</span></td>
-                        <td><span class="status-badge progress">En Progreso</span></td>
-                        <td><span class="more-actions">•••</span></td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="ticket-id">TK-003</span></td>
-                        <td>
-                            <div class="client-cell">
-                                <div class="client-avatar">JM</div>
-                                <div><strong>Juan Martínez</strong><span>11223344C</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/weights-2.jpg" alt="Guantes">
-                                <div><strong>Guantes de Boxeo Premium</strong><span>2 dias</span></div>
-                            </div>
-                        </td>
-                        <td>05 mar 2026</td>
-                        <td>07 mar 2026</td>
-                        <td><strong class="total">€20</strong><span>Efectivo</span></td>
-                        <td><span class="status-badge pending">Pendiente</span></td>
-                        <td><span class="more-actions">•••</span></td>
-                    </tr>
-
+                    <tbody id="loansRows"></tbody>
                     <tr>
                         <td><span class="ticket-id">TK-004</span></td>
                         <td>
@@ -275,5 +214,8 @@
         </section>
     </main>
 </div>
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_loans.js"></script>
 </body>
 </html>

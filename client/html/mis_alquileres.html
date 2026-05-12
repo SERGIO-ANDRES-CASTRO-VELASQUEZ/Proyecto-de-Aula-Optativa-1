@@ -1,432 +1,281 @@
 ﻿<!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SportRent</title>
-    <meta name="description" content="Sistema de alquiler de artículos deportivos SportRent">
-    <meta name="keywords" content="alquiler, deportes, sportrent, sistema, tickets">
-    <meta name="author" content="Sergio Andres Casto Velasquez">
-    <link rel="Shortcut icon" href="../../img/icon.png">
-    <link rel="icon" type="image/png" href="../../img/icon.png?v=2">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/default.css">
-    <link rel="stylesheet" href="../css/client.css?v=1776661016?v=1776661010">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../css/mis_alquileres.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<title>SportRent</title>
+<meta content="Sistema de alquiler de artículos deportivos SportRent" name="description"/>
+<meta content="alquiler, deportes, sportrent, sistema, tickets" name="keywords"/>
+<meta content="Sergio Andres Casto Velasquez" name="author"/>
+<link href="../../img/icon.png" rel="Shortcut icon"/>
+<link href="../../img/icon.png?v=2" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="../css/default.css" rel="stylesheet"/>
+<link href="../css/client.css?v=1776661016?v=1776661010" rel="stylesheet"/>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+<link href="../css/mis_alquileres.css" rel="stylesheet"/>
 </head>
 <body>
+<!-- Header Navbar -->
+<header class="navbar">
+<div class="navbar-container">
+<a class="logo" href="client_index.html" style="text-decoration:none; color:inherit;">
+<svg fill="none" height="32" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" fill="#df2be4" r="10"></circle>
+<path d="M8 12L11 15L16 9" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>SportRent</span>
+</a>
+<div class="search-bar">
+<svg class="search-icon" fill="none" height="20" stroke="currentColor" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input placeholder="Busca bicicletas, raquetas, pesas..." type="text"/>
+</div>
+<div class="user-actions">
+<button class="cart-btn">
+<svg fill="none" height="24" stroke="currentColor" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="cart-indicator" id="cartIndicator" style="display:none;">0</span>
+</button>
+<div class="user-profile">
+<div class="avatar">—</div>
+<div class="user-info">
+<span class="user-name">...</span>
+<span class="user-role">Mi cuenta</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="main-container rentals-container">
+<!-- Rentals Header -->
+<div class="rentals-header-section">
+<div class="rentals-header-text">
+<span class="rentals-subtitle">MI CUENTA</span>
+<h1 class="rentals-title">Mis Alquileres</h1>
+<p class="rentals-desc">Gestiona y consulta todos tus alquileres deportivos</p>
+</div>
+<div class="rentals-search-box">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+<input placeholder="Buscar por nombre o ref..." type="text"/>
+</div>
+</div>
+<!-- Summary Stats Grid -->
+<div class="rentals-stats-grid">
+<div class="r-stat-card">
+<div class="r-stat-icon purple"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" x2="12" y1="22.08" y2="12"></line></svg></div>
+<div class="r-stat-value"></div>
+<div class="r-stat-label">Total alquileres</div>
+</div>
+<div class="r-stat-card">
+<div class="r-stat-icon green"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+<div class="r-stat-value"></div>
+<div class="r-stat-label">Activos ahora</div>
+</div>
+<div class="r-stat-card">
+<div class="r-stat-icon blue"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+<div class="r-stat-value"></div>
+<div class="r-stat-label">Completados</div>
+</div>
+<div class="r-stat-card">
+<div class="r-stat-icon orange"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></div>
+<div class="r-stat-value"></div>
+<div class="r-stat-label">Total gastado</div>
+</div>
+</div>
+<!-- Filter Tabs -->
+<div class="rentals-tabs">
+<button class="r-tab-btn active" data-filter="todos">Todos <span class="r-tab-badge"></span></button>
+<button class="r-tab-btn" data-filter="activos">Activos <span class="r-tab-badge bg-gray"></span></button>
+<button class="r-tab-btn" data-filter="pendientes">Pendientes <span class="r-tab-badge bg-gray"></span></button>
+<button class="r-tab-btn" data-filter="completados">Completados <span class="r-tab-badge bg-gray"></span></button>
+<button class="r-tab-btn" data-filter="cancelados">Cancelados <span class="r-tab-badge bg-gray"></span></button>
+</div>
+<!-- List -->
+<div class="rentals-list">
+<!-- Row 1: Activo -->
 
-    <!-- Header Navbar -->
-    <header class="navbar">
-        <div class="navbar-container">
-            <a href="client_index.html" class="logo" style="text-decoration:none; color:inherit;">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" fill="#df2be4"/>
-                    <path d="M8 12L11 15L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>SportRent</span>
-            </a>
-            
-            <div class="search-bar">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input type="text" placeholder="Busca bicicletas, raquetas, pesas...">
-            </div>
+<!-- Row 2: Pendiente -->
 
-            <div class="user-actions">
-                <button class="cart-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span class="cart-indicator" id="cartIndicator" style="display:none;">0</span>
-                </button>
-                <div class="user-profile">
-                    <div class="avatar">—</div>
-                    <div class="user-info">
-                        <span class="user-name">...</span>
-                        <span class="user-role">Mi cuenta</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+<!-- Row 3: Completado -->
 
-    
-    <!-- Main Content -->
-    <main class="main-container rentals-container">
-        <!-- Rentals Header -->
-        <div class="rentals-header-section">
-            <div class="rentals-header-text">
-                <span class="rentals-subtitle">MI CUENTA</span>
-                <h1 class="rentals-title">Mis Alquileres</h1>
-                <p class="rentals-desc">Gestiona y consulta todos tus alquileres deportivos</p>
-            </div>
-            <div class="rentals-search-box">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" placeholder="Buscar por nombre o ref...">
-            </div>
-        </div>
+<!-- Row 4: Cancelado -->
 
-        <!-- Summary Stats Grid -->
-        <div class="rentals-stats-grid">
-            <div class="r-stat-card">
-                <div class="r-stat-icon purple"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
-                <div class="r-stat-value">5</div>
-                <div class="r-stat-label">Total alquileres</div>
-            </div>
-            <div class="r-stat-card">
-                <div class="r-stat-icon green"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
-                <div class="r-stat-value">2</div>
-                <div class="r-stat-label">Activos ahora</div>
-            </div>
-            <div class="r-stat-card">
-                <div class="r-stat-icon blue"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
-                <div class="r-stat-value">1</div>
-                <div class="r-stat-label">Completados</div>
-            </div>
-            <div class="r-stat-card">
-                <div class="r-stat-icon orange"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></div>
-                <div class="r-stat-value">COP 1.010.000</div>
-                <div class="r-stat-label">Total gastado</div>
-            </div>
-        </div>
+<!-- Row 5: Activo -->
 
-        <!-- Filter Tabs -->
-        <div class="rentals-tabs">
-            <button class="r-tab-btn active" data-filter="todos">Todos <span class="r-tab-badge">5</span></button>
-            <button class="r-tab-btn" data-filter="activos">Activos <span class="r-tab-badge bg-gray">2</span></button>
-            <button class="r-tab-btn" data-filter="pendientes">Pendientes <span class="r-tab-badge bg-gray">1</span></button>
-            <button class="r-tab-btn" data-filter="completados">Completados <span class="r-tab-badge bg-gray">1</span></button>
-            <button class="r-tab-btn" data-filter="cancelados">Cancelados <span class="r-tab-badge bg-gray">1</span></button>
-        </div>
-
-        <!-- List -->
-        <div class="rentals-list">
-            <!-- Row 1: Activo -->
-            <div class="r-ticket-item border-green" data-status="activos">
-                <div class="r-ticket-img-container">
-                    <img src="../../img/bike-trek.jpg" alt="Bicicleta Trek">
-                </div>
-                <div class="r-ticket-main">
-                    <div class="r-ticket-status badge-green">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Activo
-                    </div>
-                    <div class="r-ticket-title">Bicicleta Trek Marlin 7</div>
-                    <div class="r-ticket-cat">Ciclismo</div>
-                    <div class="r-ticket-dates">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        08 mar 2026 &rarr; 13 mar 2026
-                        <span class="r-days-badge badge-purple">5 días</span>
-                    </div>
-                </div>
-                <div class="r-ticket-actions">
-                    <div class="r-ticket-ref">SR-482910</div>
-                    <div class="r-ticket-price-box">TOTAL <br><span class="r-t-price">COP 225.000</span><span class="r-t-per-day">COP 45.000/día</span></div>
-                    <div class="r-ticket-btns">
-                        <a href="detalle_alquiler.html" class="r-btn outline" style="text-decoration:none"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles</a>
-                        <a href="extender_alquiler.html" class="r-btn purple-outline" style="text-decoration:none"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Extensión</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Row 2: Pendiente -->
-            <div class="r-ticket-item border-orange" data-status="pendientes" style="border-left: 6px solid #f59e0b;">
-                <div class="r-ticket-img-container">
-                    <img src="../../img/camping-tent.jpg" alt="Carpa Coleman">
-                </div>
-                <div class="r-ticket-main">
-                    <div class="r-ticket-status badge-orange" style="background: rgba(245, 158, 11, 0.1); color: #b45309;">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Pendiente
-                    </div>
-                    <div class="r-ticket-title">Carpa Coleman 4 Personas</div>
-                    <div class="r-ticket-cat">Outdoor</div>
-                    <div class="r-ticket-dates">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        22 may 2026 &rarr; 29 may 2026
-                        <span class="r-days-badge badge-purple">7 días</span>
-                    </div>
-                </div>
-                <div class="r-ticket-actions">
-                    <div class="r-ticket-ref">SR-492110</div>
-                    <div class="r-ticket-price-box">TOTAL <br><span class="r-t-price">COP 175.000</span><span class="r-t-per-day">COP 25.000/día</span></div>
-                    <div class="r-ticket-btns">
-                        <a href="detalle_alquiler.html" class="r-btn outline" style="text-decoration:none"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles</a>
-                        <button class="r-btn outline" style="color:#ef4444; border-color:#ef4444"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Cancelar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Row 3: Completado -->
-            <div class="r-ticket-item border-blue" data-status="completados">
-                <div class="r-ticket-img-container">
-                    <img src="../../img/tennis-wilson.jpg" alt="Raqueta Wilson">
-                </div>
-                <div class="r-ticket-main">
-                    <div class="r-ticket-status badge-blue">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Completado
-                    </div>
-                    <div class="r-ticket-title">Raqueta Wilson Pro Staff</div>
-                    <div class="r-ticket-cat">Raquetas</div>
-                    <div class="r-ticket-dates">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        20 feb 2026 &rarr; 22 feb 2026
-                        <span class="r-days-badge badge-purple">2 días</span>
-                    </div>
-                    <div class="r-stars-box">
-                        <svg width="16" height="16" fill="#fbbf24" stroke="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="16" height="16" fill="#fbbf24" stroke="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="16" height="16" fill="#fbbf24" stroke="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="16" height="16" fill="#fbbf24" stroke="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg width="16" height="16" fill="none" stroke="#fbbf24" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <span>Tu valoración</span>
-                    </div>
-                </div>
-                <div class="r-ticket-actions">
-                    <div class="r-ticket-ref">SR-471844</div>
-                    <div class="r-ticket-price-box">TOTAL <br><span class="r-t-price">COP 30.000</span><span class="r-t-per-day">COP 15.000/día</span></div>
-                    <div class="r-ticket-btns">
-                        <a href="detalle_alquiler.html" class="r-btn outline" style="text-decoration:none"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles</a>
-                        <button class="r-btn blue-outline"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Repetir alquiler</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Row 4: Cancelado -->
-            <div class="r-ticket-item border-red" data-status="cancelados">
-                <div class="r-ticket-img-container">
-                    <img src="../../img/kayak.jpg" alt="Kayak Inflable">
-                </div>
-                <div class="r-ticket-main">
-                    <div class="r-ticket-status badge-red">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Cancelado
-                    </div>
-                    <div class="r-ticket-title">Kayak Inflable 2 Personas</div>
-                    <div class="r-ticket-cat">Acuáticos</div>
-                    <div class="r-ticket-dates" style="visibility:hidden"> . </div>
-                </div>
-                <div class="r-ticket-actions">
-                    <div class="r-ticket-ref">SR-461033</div>
-                    <div class="r-ticket-price-box">TOTAL <br><span class="r-t-price">COP 160.000</span><span class="r-t-per-day">COP 80.000/día</span></div>
-                    <div class="r-ticket-btns">
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Row 5: Activo -->
-            <div class="r-ticket-item border-green" data-status="activos">
-                <div class="r-ticket-img-container">
-                    <img src="../../img/surfboard.jpg" alt="Tabla Surf">
-                </div>
-                <div class="r-ticket-main">
-                    <div class="r-ticket-status badge-green">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Activo
-                    </div>
-                    <div class="r-ticket-title">Tabla de Surf Al Merrick</div>
-                    <div class="r-ticket-cat">Acuáticos</div>
-                    <div class="r-ticket-dates">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        18 abr 2026 &rarr; 25 abr 2026
-                        <span class="r-days-badge badge-purple">7 días</span>
-                    </div>
-                </div>
-                <div class="r-ticket-actions">
-                    <div class="r-ticket-ref">SR-483099</div>
-                    <div class="r-ticket-price-box">TOTAL <br><span class="r-t-price">COP 420.000</span><span class="r-t-per-day">COP 60.000/día</span></div>
-                    <div class="r-ticket-btns">
-                        <a href="detalle_alquiler.html" class="r-btn outline" style="text-decoration:none"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+<p style="padding:40px;text-align:center;color:#94a3b8;">Cargando alquileres...</p></div>
+</main>
 <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <div class="logo-mark">SR</div>
-                <span class="logo-text">SportRent</span>
-                <span class="copyright">© 2026</span>
-            </div>
-            <div class="footer-slogan">
+<footer class="main-footer">
+<div class="footer-content">
+<div class="footer-logo">
+<div class="logo-mark">SR</div>
+<span class="logo-text">SportRent</span>
+<span class="copyright">© 2026</span>
+</div>
+<div class="footer-slogan">
                 El mejor equipo deportivo de alquiler en España
             </div>
-        </div>
-    </footer>
-
-        
-    <!-- Profile Sidebar -->
-    <div class="profile-overlay" id="profileOverlay"></div>
-    <div class="profile-sidebar" id="profileSidebar">
-        <div class="profile-header">
-            <div class="profile-header-title">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <h2>Mi Perfil</h2>
-            </div>
-            <button class="close-profile" id="closeProfile"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-        </div>
-
-        <div class="profile-body">
-            <!-- Avatar Section -->
-            <div class="profile-avatar-section">
-                <div class="avatar-wrapper">
-                    <div class="avatar-circle">—</div>
-                    <div class="online-indicator"></div>
-                </div>
-                <div class="profile-name-info">
-                    <h3>Cargando...</h3>
-                    <p>—</p>
-                </div>
-                <div class="member-badge">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <span>Miembro SportRent</span>
-                </div>
-            </div>
-
-            
-            <!-- Edit Profile Section (Hidden by default, shown when editing) -->
-            <div class="profile-edit-section" id="profileEditSection">
-                <div class="edit-section-header">EDITAR INFORMACIÓN</div>
-                <form id="sidebarEditForm">
-                    <div class="edit-form-group">
-                        <label>Nombre completo</label>
-                        <div class="input-with-icon">
-                            <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" placeholder="Tu nombre completo" />
-                        </div>
-                    </div>
-                    <div class="edit-form-group">
-                        <label>Email</label>
-                        <div class="input-with-icon">
-                            <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <input type="email" placeholder="correo@ejemplo.com" />
-                        </div>
-                    </div>
-                    <div class="edit-form-group">
-                        <label>Teléfono</label>
-                        <div class="input-with-icon">
-                            <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-                            <input type="tel" placeholder="+57 300 000 0000" />
-                        </div>
-                    </div>
-                    <div class="edit-form-group">
-                        <label>Ciudad</label>
-                        <div class="input-with-icon">
-                            <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <input type="text" placeholder="Tu ciudad" />
-                        </div>
-                    </div>
-                    <div class="edit-form-group">
-                        <label>Bio</label>
-                        <textarea rows="3" placeholder="Cuéntanos algo sobre ti..."></textarea>
-                    </div>
-                    
-                    <div class="edit-sidebar-actions">
-                        <button type="submit" class="btn-sidebar-save">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+</div>
+</footer>
+<!-- Profile Sidebar -->
+<div class="profile-overlay" id="profileOverlay"></div>
+<div class="profile-sidebar" id="profileSidebar">
+<div class="profile-header">
+<div class="profile-header-title">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<h2>Mi Perfil</h2>
+</div>
+<button class="close-profile" id="closeProfile"><svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg></button>
+</div>
+<div class="profile-body">
+<!-- Avatar Section -->
+<div class="profile-avatar-section">
+<div class="avatar-wrapper">
+<div class="avatar-circle">—</div>
+<div class="online-indicator"></div>
+</div>
+<div class="profile-name-info">
+<h3>Cargando...</h3>
+<p>—</p>
+</div>
+<div class="member-badge">
+<svg fill="currentColor" height="16" viewbox="0 0 24 24" width="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+<span>Miembro SportRent</span>
+</div>
+</div>
+<!-- Edit Profile Section (Hidden by default, shown when editing) -->
+<div class="profile-edit-section" id="profileEditSection">
+<div class="edit-section-header">EDITAR INFORMACIÓN</div>
+<form id="sidebarEditForm">
+<div class="edit-form-group">
+<label>Nombre completo</label>
+<div class="input-with-icon">
+<svg fill="none" height="18" stroke="#94a3b8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<input placeholder="Tu nombre completo" type="text">
+</input></div>
+</div>
+<div class="edit-form-group">
+<label>Email</label>
+<div class="input-with-icon">
+<svg fill="none" height="18" stroke="#94a3b8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+<input placeholder="correo@ejemplo.com" type="email">
+</input></div>
+</div>
+<div class="edit-form-group">
+<label>Teléfono</label>
+<div class="input-with-icon">
+<svg fill="none" height="18" stroke="#94a3b8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
+<input placeholder="+57 300 000 0000" type="tel"/>
+</div>
+</div>
+<div class="edit-form-group">
+<label>Ciudad</label>
+<div class="input-with-icon">
+<svg fill="none" height="18" stroke="#94a3b8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<input placeholder="Tu ciudad" type="text"/>
+</div>
+</div>
+<div class="edit-form-group">
+<label>Bio</label>
+<textarea placeholder="Cuéntanos algo sobre ti..." rows="3"></textarea>
+</div>
+<div class="edit-sidebar-actions">
+<button class="btn-sidebar-save" type="submit">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                             Guardar cambios
                         </button>
-                        <button type="button" class="btn-sidebar-cancel" id="cancelSidebarEditBtn">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- User Info display -->
-            <div class="profile-info-display">
-                <div class="info-row">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-                    <div class="info-texts">
-                        <span class="info-label">Teléfono</span>
-                        <span class="info-value">—</span>
-                    </div>
-                </div>
-                <div class="info-row">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <div class="info-texts">
-                        <span class="info-label">Ciudad</span>
-                        <span class="info-value">—</span>
-                    </div>
-                </div>
-                <div class="info-row bio-row">
-                    <div class="info-texts">
-                        <span class="info-label">Bio</span>
-                        <span class="info-value">Apasionado del deporte al aire libre, ciclismo de montaña y pádel.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="profile-divider"></div>
-
-            <!-- Menu items -->
-            <div class="profile-menu-links">
-                <a href="mis_alquileres.html" class="profile-link-item">
-                    <div class="plink-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-                    <div class="plink-texts">
-                        <span class="plink-title">Mis Alquileres</span>
-                        <span class="plink-desc">Historial y activos</span>
-                    </div>
-                    <svg class="plink-chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
-
-                <a href="#" class="profile-link-item" id="editProfileBtn">
-                    <div class="plink-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                    <div class="plink-texts">
-                        <span class="plink-title">Editar perfil</span>
-                        <span class="plink-desc">Actualiza tus datos</span>
-                    </div>
-                    <svg class="plink-chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
-
-                <a href="#" class="profile-link-item">
-                    <div class="plink-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
-                    <div class="plink-texts">
-                        <span class="plink-title">Configuración</span>
-                        <span class="plink-desc">Privacidad y notificaciones</span>
-                    </div>
-                    <svg class="plink-chevron" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </a>
-
-                <div class="profile-divider"></div>
-
-                <a href="#" onclick="clearSession(); window.location.href='index.html'; return false;" class="profile-link-item logout">
-                    <div class="plink-icon logout-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
-                    <div class="plink-texts">
-                        <span class="plink-title">Cerrar sesión</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Sidebar -->
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3>
-                <span class="cart-title-icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                </span>
+<button class="btn-sidebar-cancel" id="cancelSidebarEditBtn" type="button">Cancelar</button>
+</div>
+</form>
+</div>
+<!-- User Info display -->
+<div class="profile-info-display">
+<div class="info-row">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
+<div class="info-texts">
+<span class="info-label">Teléfono</span>
+<span class="info-value">—</span>
+</div>
+</div>
+<div class="info-row">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<div class="info-texts">
+<span class="info-label">Ciudad</span>
+<span class="info-value">—</span>
+</div>
+</div>
+<div class="info-row bio-row">
+<div class="info-texts">
+<span class="info-label">Bio</span>
+<span class="info-value">Apasionado del deporte al aire libre, ciclismo de montaña y pádel.</span>
+</div>
+</div>
+</div>
+<div class="profile-divider"></div>
+<!-- Menu items -->
+<div class="profile-menu-links">
+<a class="profile-link-item" href="mis_alquileres.html">
+<div class="plink-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg></div>
+<div class="plink-texts">
+<span class="plink-title">Mis Alquileres</span>
+<span class="plink-desc">Historial y activos</span>
+</div>
+<svg class="plink-chevron" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</a>
+<a class="profile-link-item" href="#" id="editProfileBtn">
+<div class="plink-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+<div class="plink-texts">
+<span class="plink-title">Editar perfil</span>
+<span class="plink-desc">Actualiza tus datos</span>
+</div>
+<svg class="plink-chevron" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</a>
+<a class="profile-link-item" href="#">
+<div class="plink-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg></div>
+<div class="plink-texts">
+<span class="plink-title">Configuración</span>
+<span class="plink-desc">Privacidad y notificaciones</span>
+</div>
+<svg class="plink-chevron" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</a>
+<div class="profile-divider"></div>
+<a class="profile-link-item logout" href="#" onclick="clearSession(); window.location.href='index.html'; return false;">
+<div class="plink-icon logout-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg></div>
+<div class="plink-texts">
+<span class="plink-title">Cerrar sesión</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+<div class="cart-header">
+<h3>
+<span aria-hidden="true" class="cart-title-icon">
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
                 Tu Carrito
                 <span class="cart-count" id="cartCount">0</span>
-            </h3>
-            <button class="close-cart" id="closeCart">&times;</button>
-        </div>
-        <!-- Contenido del carrito — poblado dinámicamente por mis_alquileres.js -->
-        <div class="cart-body"></div>
-        <div class="cart-footer"></div>
-    </div>
-    <script src="../js/api.js"></script>
-    <script src="../js/mis_alquileres.js"></script>
-
-
-    
-
-    <script>
+</h3>
+<button class="close-cart" id="closeCart">×</button>
+</div>
+<!-- Contenido del carrito — poblado dinámicamente por mis_alquileres.js -->
+<div class="cart-body"></div>
+<div class="cart-footer"></div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/mis_alquileres.js"></script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('.r-tab-btn');
             const items = document.querySelectorAll('.r-ticket-item');
@@ -456,8 +305,7 @@
             });
         });
     </script>
-
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('.r-tab-btn');
             const items = document.querySelectorAll('.r-ticket-item');
@@ -488,6 +336,4 @@
         });
     </script>
 </body>
-
-
 </html>

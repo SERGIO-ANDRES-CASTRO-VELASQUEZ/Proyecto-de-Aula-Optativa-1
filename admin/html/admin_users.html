@@ -144,7 +144,7 @@
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-                <input type="text" id="usersSearch" placeholder="Buscar por nombre, email o ciudad...">
+                <input type="text" id="usersSearch" placeholder="Buscar por nombre, email o username...">
             </div>
         </section>
 
@@ -155,188 +155,13 @@
                     <tr>
                         <th>USUARIO</th>
                         <th>CONTACTO</th>
-                        <th>CIUDAD</th>
-                        <th>BIO</th>
-                        <th>ROL ADMIN</th>
+                        <th>DOCUMENTO</th>
+                        <th>ROL</th>
+                        <th>ACTIVO</th>
                         <th>ACCIONES</th>
                     </tr>
                     </thead>
-                    <tbody id="usersRows">
-                    <tr data-id="#001" data-name="Carlos Garcia" data-email="carlos.garcia@email.com" data-phone="+34 612 345 678" data-city="Madrid" data-bio="Apasionado del deporte al aire libre, ciclismo de montana y padel." data-admin="true">
-                        <td>
-                            <div class="user-cell">
-                                <div class="user-avatar avatar-purple">CG</div>
-                                <div>
-                                    <h4>Carlos Garcia</h4>
-                                    <p>#001</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="contact-cell">
-                                <strong>carlos.garcia@email.com</strong>
-                                <span>+34 612 345 678</span>
-                            </div>
-                        </td>
-                        <td><span class="city-pill">Madrid</span></td>
-                        <td><span class="bio-text">Apasionado del deporte...</span></td>
-                        <td>
-                            <div class="role-cell">
-                                <label class="switch row-role-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="role-label admin">Admin</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_user.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-id="#002" data-name="Maria Rodriguez" data-email="maria.rodriguez@email.com" data-phone="+34 623 456 789" data-city="Barcelona" data-bio="Entusiasta del running y el fitness funcional." data-admin="false">
-                        <td>
-                            <div class="user-cell">
-                                <div class="user-avatar avatar-blue">MR</div>
-                                <div>
-                                    <h4>Maria Rodriguez</h4>
-                                    <p>#002</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="contact-cell">
-                                <strong>maria.rodriguez@email.com</strong>
-                                <span>+34 623 456 789</span>
-                            </div>
-                        </td>
-                        <td><span class="city-pill">Barcelona</span></td>
-                        <td><span class="bio-text">Entusiasta del running y...</span></td>
-                        <td>
-                            <div class="role-cell">
-                                <label class="switch row-role-switch">
-                                    <input type="checkbox">
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="role-label user">Usuario</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_user.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-id="#003" data-name="Juan Martinez" data-email="juan.martinez@email.com" data-phone="+34 634 567 890" data-city="Valencia" data-bio="Amante del futbol y el baloncesto recreativo." data-admin="false">
-                        <td>
-                            <div class="user-cell">
-                                <div class="user-avatar avatar-green">JM</div>
-                                <div>
-                                    <h4>Juan Martinez</h4>
-                                    <p>#003</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="contact-cell">
-                                <strong>juan.martinez@email.com</strong>
-                                <span>+34 634 567 890</span>
-                            </div>
-                        </td>
-                        <td><span class="city-pill">Valencia</span></td>
-                        <td><span class="bio-text">Amante del futbol y el b...</span></td>
-                        <td>
-                            <div class="role-cell">
-                                <label class="switch row-role-switch">
-                                    <input type="checkbox">
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="role-label user">Usuario</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_user.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-id="#004" data-name="Ana Lopez" data-email="ana.lopez@email.com" data-phone="+34 645 678 901" data-city="Sevilla" data-bio="Fanatica del tenis y la natacion." data-admin="false">
-                        <td>
-                            <div class="user-cell">
-                                <div class="user-avatar avatar-orange">AL</div>
-                                <div>
-                                    <h4>Ana Lopez</h4>
-                                    <p>#004</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="contact-cell">
-                                <strong>ana.lopez@email.com</strong>
-                                <span>+34 645 678 901</span>
-                            </div>
-                        </td>
-                        <td><span class="city-pill">Sevilla</span></td>
-                        <td><span class="bio-text">Fanatica del tenis y la...</span></td>
-                        <td>
-                            <div class="role-cell">
-                                <label class="switch row-role-switch">
-                                    <input type="checkbox">
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="role-label user">Usuario</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_user.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-id="#005" data-name="Pedro Sanchez" data-email="pedro.sanchez@email.com" data-phone="+34 656 789 012" data-city="Bilbao" data-bio="Escalador y ciclista. Siempre activo los fines de semana." data-admin="true">
-                        <td>
-                            <div class="user-cell">
-                                <div class="user-avatar avatar-pink">PS</div>
-                                <div>
-                                    <h4>Pedro Sanchez</h4>
-                                    <p>#005</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="contact-cell">
-                                <strong>pedro.sanchez@email.com</strong>
-                                <span>+34 656 789 012</span>
-                            </div>
-                        </td>
-                        <td><span class="city-pill">Bilbao</span></td>
-                        <td><span class="bio-text">Escalador y ciclista. Sie...</span></td>
-                        <td>
-                            <div class="role-cell">
-                                <label class="switch row-role-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="role-label admin">Admin</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_user.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
+                    <tbody id="usersRows"></tbody>
                 </table>
             </div>
             <div class="table-footer">
@@ -360,5 +185,8 @@
     </main>
 </div>
 
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_users.js"></script>
 </body>
 </html>

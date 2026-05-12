@@ -26,40 +26,56 @@
                 <a href="admin_users.html" class="close-link" aria-label="Cerrar"><i class='bx bx-x'></i></a>
             </header>
 
-            <form class="modal-form" action="#" method="get">
+            <form class="modal-form" id="createUserForm">
                 <label>Nombre Completo *
-                    <input type="text" value="Carlos Garcia">
+                    <input type="text" id="createFullName" required>
+                </label>
+                <label>Username *
+                    <input type="text" id="createUsername" required>
                 </label>
                 <label>Email *
-                    <input type="email" value="carlos.garcia@email.com">
+                    <input type="email" id="createEmail" required>
+                </label>
+                <label>Contrasena *
+                    <input type="password" id="createPassword" required>
                 </label>
                 <div class="form-grid-2">
-                    <label>Telefono *
-                        <input type="text" value="+34 612 345 678">
+                    <label>Telefono
+                        <input type="text" id="createPhone">
                     </label>
-                    <label>Ciudad *
-                        <input type="text" value="Madrid">
+                    <label>Documento
+                        <input type="text" id="createDocument">
                     </label>
                 </div>
-                <label>Bio
-                    <textarea rows="3">Apasionado del deporte al aire libre...</textarea>
-                </label>
                 <div class="admin-role-box">
                     <div>
                         <strong>Rol Administrador</strong>
-                        <p>Acceso estandar de cliente</p>
+                        <p>Activa el acceso completo al panel</p>
                     </div>
                     <label class="switch">
-                        <input type="checkbox">
+                        <input type="checkbox" id="createRoleAdmin">
+                        <span class="slider-switch"></span>
+                    </label>
+                </div>
+                <div class="admin-role-box">
+                    <div>
+                        <strong>Cuenta Activa</strong>
+                        <p>Permite iniciar sesion</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="createActive" checked>
                         <span class="slider-switch"></span>
                     </label>
                 </div>
                 <footer class="modal-footer">
                     <a href="admin_users.html" class="btn btn-cancel">Cancelar</a>
-                    <button type="button" class="btn btn-primary">Crear Usuario</button>
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
                 </footer>
             </form>
         </section>
     </div>
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_create_user.js"></script>
 </body>
 </html>

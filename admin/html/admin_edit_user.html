@@ -26,40 +26,46 @@
                 <a href="admin_users.html" class="close-link" aria-label="Cerrar"><i class='bx bx-x'></i></a>
             </header>
 
-            <form class="modal-form" action="#" method="get">
+            <form class="modal-form" id="editUserForm">
                 <label>Nombre Completo *
-                    <input type="text" value="Carlos Garcia">
+                    <input type="text" id="editFullName" required>
+                </label>
+                <label>Username *
+                    <input type="text" id="editUsername" required>
                 </label>
                 <label>Email *
-                    <input type="email" value="carlos.garcia@email.com">
+                    <input type="email" id="editEmail" required>
+                </label>
+                <label>Nueva contrasena
+                    <input type="password" id="editPassword" placeholder="Dejar vacio para no cambiar">
                 </label>
                 <div class="form-grid-2">
-                    <label>Telefono *
-                        <input type="text" value="+34 612 345 678">
+                    <label>Telefono
+                        <input type="text" id="editPhone">
                     </label>
-                    <label>Ciudad *
-                        <input type="text" value="Madrid">
+                    <label>Documento
+                        <input type="text" id="editDocument">
                     </label>
                 </div>
-                <label>Bio
-                    <textarea rows="3">Apasionado del deporte al aire libre, ciclismo de montana y padel.</textarea>
-                </label>
-                <div class="admin-role-box admin">
+                <div class="admin-role-box">
                     <div>
-                        <strong>Rol Administrador</strong>
-                        <p>Tiene acceso completo al panel</p>
+                        <strong>Cuenta Activa</strong>
+                        <p>Permite iniciar sesion</p>
                     </div>
                     <label class="switch">
-                        <input type="checkbox" checked>
+                        <input type="checkbox" id="editActive">
                         <span class="slider-switch"></span>
                     </label>
                 </div>
                 <footer class="modal-footer">
                     <a href="admin_users.html" class="btn btn-cancel">Cancelar</a>
-                    <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </footer>
             </form>
         </section>
     </div>
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_edit_user.js"></script>
 </body>
 </html>

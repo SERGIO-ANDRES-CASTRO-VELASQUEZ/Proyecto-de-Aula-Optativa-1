@@ -126,15 +126,15 @@
 
         <section class="inventory-stats">
             <article class="stat-card stat-purple">
-                <h3>4</h3>
+                <h3 id="totalProductsCount">0</h3>
                 <p>Total Articulos</p>
             </article>
             <article class="stat-card stat-green">
-                <h3>3</h3>
+                <h3 id="activeProductsCount">0</h3>
                 <p>Articulos Activos</p>
             </article>
             <article class="stat-card stat-blue">
-                <h3 id="stockUnits">60</h3>
+                <h3 id="stockUnits">0</h3>
                 <p>Unidades en Stock</p>
             </article>
         </section>
@@ -147,11 +147,7 @@
                 <input type="text" id="inventorySearch" placeholder="Buscar por nombre o categoria...">
             </div>
             <select id="categoryFilter">
-                <option value="all">Todas las categorias</option>
-                <option value="Ciclismo">Ciclismo</option>
-                <option value="Futbol">Futbol</option>
-                <option value="Tenis">Tenis</option>
-                <option value="Boxeo">Boxeo</option>
+                <option value="">Todas las categorias</option>
             </select>
         </section>
 
@@ -179,127 +175,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td><span class="category-pill">Ciclismo</span></td>
-                        <td><strong>€18</strong><span>/dia</span></td>
-                        <td><strong class="stock-low">8</strong><span> uds.</span></td>
-                        <td>
-                            <div class="status-cell">
-                                <label class="switch row-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="status-text public">Publico</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_article.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-name="Pelota de Futbol Profesional" data-category="Futbol" data-stock="25" data-description="Balon de competicion con costuras reforzadas, ideal para entrenamientos y torneos de alto nivel.">
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/scooter.jpg" alt="Pelota de Futbol Profesional">
-                                <div>
-                                    <h4>Pelota de Futbol Profesional</h4>
-                                    <p>#002 <span>★ 4.7</span></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="category-pill">Futbol</span></td>
-                        <td><strong>€5</strong><span>/dia</span></td>
-                        <td><strong class="stock-high">25</strong><span> uds.</span></td>
-                        <td>
-                            <div class="status-cell">
-                                <label class="switch row-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="status-text public">Publico</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_article.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-name="Raqueta de Tenis Wilson" data-category="Tenis" data-stock="12" data-description="Raqueta ligera y resistente para jugadores intermedios y avanzados que buscan mayor control.">
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/bike-route.jpg" alt="Raqueta de Tenis Wilson">
-                                <div>
-                                    <h4>Raqueta de Tenis Wilson</h4>
-                                    <p>#003 <span>★ 4.8</span></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="category-pill">Tenis</span></td>
-                        <td><strong>€12</strong><span>/dia</span></td>
-                        <td><strong class="stock-mid">12</strong><span> uds.</span></td>
-                        <td>
-                            <div class="status-cell">
-                                <label class="switch row-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="status-text public">Publico</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_article.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr data-name="Guantes de Boxeo Premium" data-category="Boxeo" data-stock="15" data-description="Guantes ergonomicos con amortiguacion avanzada para sesiones intensas de sparring y entrenamiento.">
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/weights-2.jpg" alt="Guantes de Boxeo Premium">
-                                <div>
-                                    <h4>Guantes de Boxeo Premium</h4>
-                                    <p>#004 <span>★ 4.6</span></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="category-pill">Boxeo</span></td>
-                        <td><strong>€10</strong><span>/dia</span></td>
-                        <td><strong class="stock-high">15</strong><span> uds.</span></td>
-                        <td>
-                            <div class="status-cell">
-                                <label class="switch row-switch">
-                                    <input type="checkbox">
-                                    <span class="slider-switch"></span>
-                                </label>
-                                <span class="status-text private">Privado</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <a class="icon-btn" href="admin_edit_article.html" title="Editar">✎</a>
-                                <span class="icon-btn icon-disabled" title="Solo vista">🗑</span>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="table-footer">
-                <span class="table-count" id="inventoryCounter">4 de 4 articulos</span>
-                <div class="table-pagination">
-                    <label>
-                        Filas
-                        <select>
-                            <option selected>5</option>
-                            <option>10</option>
-                            <option>20</option>
+                        <tbody id="inventoryRows"></tbody>
                         </select>
                     </label>
                     <button type="button" class="page-btn" aria-label="Pagina anterior">‹</button>
@@ -312,5 +188,8 @@
     </main>
 </div>
 
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_inventory.js"></script>
 </body>
 </html>

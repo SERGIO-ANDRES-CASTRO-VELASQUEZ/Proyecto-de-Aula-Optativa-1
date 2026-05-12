@@ -140,7 +140,7 @@
                     </div>
                     <span class="trend trend-up">↗ +12</span>
                 </div>
-                <div class="card-value">248</div>
+                <div class="card-value" id="metricTotalProducts">0</div>
                 <div class="card-label">Total Artículos</div>
                 <div class="card-sublabel">En inventario</div>
             </div>
@@ -153,7 +153,7 @@
                     </div>
                     <span class="trend trend-up">↗ +8</span>
                 </div>
-                <div class="card-value">42</div>
+                <div class="card-value" id="metricActiveRentals">0</div>
                 <div class="card-label">Alquileres Activos</div>
                 <div class="card-sublabel">En curso hoy</div>
             </div>
@@ -166,7 +166,7 @@
                     </div>
                     <span class="trend trend-down">↘ -3</span>
                 </div>
-                <div class="card-value">8</div>
+                <div class="card-value" id="metricOverdueRentals">0</div>
                 <div class="card-label">Tickets en Mora</div>
                 <div class="card-sublabel">Requieren atención</div>
             </div>
@@ -179,7 +179,7 @@
                     </div>
                     <span class="trend trend-up">↗ +18%</span>
                 </div>
-                <div class="card-value">$12,450</div>
+                <div class="card-value" id="metricRevenue">$0</div>
                 <div class="card-label">Ingresos Mensuales</div>
                 <div class="card-sublabel">Marzo 2026</div>
             </div>
@@ -295,7 +295,7 @@
                 <a href="admin_loans.html" class="view-all">Ver todos →</a>
             </div>
 
-            <div class="activity-list">
+            <div class="activity-list" id="activityList">
                 
                 <!-- Ticket 1 -->
                 <div class="activity-item">
@@ -363,5 +363,8 @@
     </main>
 </div>
 
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_dashboard.js"></script>
 </body>
 </html>

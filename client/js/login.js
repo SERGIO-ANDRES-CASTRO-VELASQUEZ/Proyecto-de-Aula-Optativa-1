@@ -44,15 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Guardar token y datos del usuario en localStorage
             setToken(data.token);
-            setUser({
-                id:       data.id,
-                email:    data.email,
+            const authUser = data.user || {
+                id: data.id,
+                email: data.email,
                 fullName: data.fullName,
-                role:     data.role
-            });
+                role: data.role,
+                username: data.username
+            };
+            setUser(authUser);
 
             // Redirigir según el rol
-            if (data.role === 'ADMIN') {
+            if (authUser && authUser.role === 'ADMIN') {
                 window.location.href = '../../admin/html/admin_dashboard.html';
             } else {
                 window.location.href = 'client_index.html';

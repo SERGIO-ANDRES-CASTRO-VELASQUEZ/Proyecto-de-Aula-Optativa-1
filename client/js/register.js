@@ -43,7 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Guardar sesión automáticamente (el backend devuelve JWT)
             setToken(data.token);
-            setUser({ id: data.id, email: data.email, fullName: data.fullName, role: data.role });
+            const authUser = data.user || {
+                id: data.id,
+                email: data.email,
+                fullName: data.fullName,
+                role: data.role,
+                username: data.username
+            };
+            setUser(authUser);
 
             // Ir directo al catálogo
             window.location.href = 'client_index.html';

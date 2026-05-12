@@ -34,20 +34,21 @@
                     <div class="block-title"><span><i class='bx bx-user'></i></span> DATOS DEL CLIENTE</div>
                     <div class="input-with-icon">
                         <i class='bx bx-search'></i>
-                        <input id="cliente" type="text" placeholder="Buscar por cedula o nombre..." value="Carlos Garcia - 12345678A">
+                        <input id="cliente" type="text" list="clientList" placeholder="Buscar por nombre o email...">
                     </div>
+                    <datalist id="clientList"></datalist>
 
                     <div class="block-title"><span><i class='bx bx-calendar'></i></span> FECHAS DEL PRESTAMO</div>
                     <label for="inicio">Fecha de Salida</label>
-                    <input id="inicio" type="text" value="19/04/2026">
+                    <input id="inicio" type="date">
 
                     <label for="fin">Fecha de Devolucion</label>
-                    <input id="fin" type="text" value="dd/mm/aaaa">
+                    <input id="fin" type="date">
 
                     <div class="block-title"><span><i class='bx bx-credit-card'></i></span> METODO DE PAGO</div>
                     <div class="payment-grid">
-                        <button type="button" class="pay-chip active">Efectivo</button>
-                        <button type="button" class="pay-chip">Tarjeta</button>
+                        <button type="button" class="pay-chip active" data-method="EFECTIVO">Efectivo</button>
+                        <button type="button" class="pay-chip" data-method="TARJETA">Tarjeta</button>
                     </div>
                 </article>
 
@@ -58,95 +59,26 @@
                         <input type="text" placeholder="Buscar articulo...">
                     </div>
 
-                    <div class="catalog-grid">
-                        <article class="item-card selected">
-                            <img src="../../img/bike-mountain.jpg" alt="Bicicleta de montana">
-                            <div class="item-info">
-                                <h4 class="item-name">Bicicleta de Montana Pro</h4>
-                                <div class="item-meta">
-                                    <span class="item-category">Ciclismo</span>
-                                    <strong class="item-price">€18/día</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="item-btn">Agregar al Ticket</button>
-                        </article>
-
-                        <article class="item-card">
-                            <img src="../../img/scooter.jpg" alt="Pelota de futbol">
-                            <div class="item-info">
-                                <h4 class="item-name">Pelota de Futbol Profesional</h4>
-                                <div class="item-meta">
-                                    <span class="item-category">Futbol</span>
-                                    <strong class="item-price">€5/día</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="item-btn">Agregar al Ticket</button>
-                        </article>
-
-                        <article class="item-card">
-                            <img src="../../img/bike-route.jpg" alt="Raqueta de tenis">
-                            <div class="item-info">
-                                <h4 class="item-name">Raqueta de Tenis Wilson</h4>
-                                <div class="item-meta">
-                                    <span class="item-category">Tenis</span>
-                                    <strong class="item-price">€12/día</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="item-btn">Agregar al Ticket</button>
-                        </article>
-
-                        <article class="item-card unavailable">
-                            <img src="../../img/weights-2.jpg" alt="Guantes de boxeo">
-                            <div class="item-info">
-                                <h4 class="item-name">Guantes de Boxeo Premium</h4>
-                                <div class="item-meta">
-                                    <span class="item-category">Boxeo</span>
-                                    <strong class="item-price">€10/día</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="item-btn" disabled>Sin stock</button>
-                        </article>
-
-                        <article class="item-card">
-                            <img src="../../img/weights-1.jpg" alt="Tabla de surf">
-                            <div class="item-info">
-                                <h4 class="item-name">Tabla de Surf Pro</h4>
-                                <div class="item-meta">
-                                    <span class="item-category">Acuatico</span>
-                                    <strong class="item-price">€25/día</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="item-btn">Agregar al Ticket</button>
-                        </article>
-
-                        <article class="item-card">
-                            <img src="../../img/bike-route.jpg" alt="Casco de ciclismo">
-                            <div class="item-info">
-                                <h4 class="item-name">Casco de Ciclismo</h4>
-                                <div class="item-meta">
-                                    <span class="item-category">Ciclismo</span>
-                                    <strong class="item-price">€8/día</strong>
-                                </div>
-                            </div>
-                            <button type="button" class="item-btn">Agregar al Ticket</button>
-                        </article>
-                    </div>
+                    <div class="catalog-grid" id="catalogGrid"></div>
                 </article>
             </div>
 
             <footer class="loan-modal-footer">
                 <div class="footer-summary">
-                    <div><span>Dias</span><strong>2</strong></div>
-                    <div><span>Pago</span><strong>Efectivo</strong></div>
-                    <div><span>Total a Cobrar</span><strong class="total-amount">€0.00</strong></div>
+                    <div><span>Dias</span><strong id="loanDays">0</strong></div>
+                    <div><span>Pago</span><strong id="loanPayment">Efectivo</strong></div>
+                    <div><span>Total a Cobrar</span><strong class="total-amount" id="loanTotal">$0</strong></div>
                 </div>
                 <div class="footer-actions">
                     <a href="admin_loans.html" class="btn-cancel">Cancelar</a>
-                    <button type="button" class="btn-submit" disabled>Generar Ticket y Entregar Articulo</button>
+                    <button type="button" class="btn-submit" id="createLoanBtn" disabled>Generar Ticket y Entregar Articulo</button>
                 </div>
             </footer>
         </section>
     </main>
 </div>
+<script src="../../client/js/api.js"></script>
+<script src="../js/admin_common.js"></script>
+<script src="../js/admin_create_loan.js"></script>
 </body>
 </html>
