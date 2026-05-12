@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     await loadCategories();
+    setupEditValidation();
 
     try {
         const product = await apiGet(`/api/admin/products/${productId}`);
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!validateEditForm()) return;
         await saveProduct();
     });
 });
@@ -265,6 +267,107 @@ function getIdFromQuery() {
 function getValue(id) {
     const el = document.getElementById(id);
     return el ? el.value.trim() : '';
+}
+
+// ─── Validación de inputs ─────────────────────────────────────────────────────
+function setupEditValidation() {
+    // Precio: solo dígitos y un punto decimal
+    const priceInput = document.getElementById('editPrice');
+    if (priceInput) {
+        priceInput.addEventListener('keydown', (e) => {
+            const nav = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (nav.includes(e.key) || e.ctrlKey || e.metaKey) return;
+            if (!/^[0-9.]$/.test(e.key)) e.preventDefault();
+        });
+        priceInput.addEventListener('input', () => {
+            let v = priceInput.value.replace(/[^0-9.]/g, '');
+            const parts = v.split('.');
+            if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+            if (parts[1]?.length > 2) v = parts[0] + '.' + parts[1].slice(0, 2);
+            priceInput.value = v;
+            clearEditError(priceInput);
+        });
+        priceInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+            const num = parseFloat(pasted.replace(/[^0-9.]/g, ''));
+            priceInput.value = isNaN(num) ? '' : String(num);
+        });
+    }
+
+    // Stock: solo enteros positivos
+    const stockInput = document.getElementById('editStock');
+    if (stockInput) {
+        stockInput.addEventListener('keydown', (e) => {
+            const nav = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (nav.includes(e.key) || e.ctrlKey || e.metaKey) return;
+            if (!/^[0-9]$/.test(e.key)) e.preventDefault();
+        });
+        stockInput.addEventListener('input', () => {
+            stockInput.value = stockInput.value.replace(/[^0-9]/g, '');
+            clearEditError(stockInput);
+        });
+        stockInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            stockInput.value = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+        });
+    }
+
+    // Descripción: feedback visual
+    const descInput = document.getElementById('editDescription');
+    if (descInput) {
+        descInput.addEventListener('input', () => {
+            descInput.style.borderColor = descInput.value.trim().length < 10 ? '#ef4444' : '';
+        });
+    }
+}
+
+function validateEditForm() {
+    const name  = getValue('editName');
+    const desc  = getValue('editDescription');
+    const price = getValue('editPrice');
+    const stock = getValue('editStock');
+
+    if (!name || name.length < 3) {
+        showEditError('editName', 'El nombre debe tener al menos 3 caracteres');
+        return false;
+    }
+    if (!desc || desc.length < 10) {
+        showEditError('editDescription', 'La descripción debe tener al menos 10 caracteres');
+        return false;
+    }
+    const priceNum = Number(price);
+    if (!price || isNaN(priceNum) || priceNum <= 0) {
+        showEditError('editPrice', 'El precio debe ser mayor a 0');
+        return false;
+    }
+    const stockNum = Number(stock);
+    if (stock === '' || isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
+        showEditError('editStock', 'El stock debe ser un entero mayor o igual a 0');
+        return false;
+    }
+    return true;
+}
+
+function showEditError(id, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.borderColor = '#ef4444';
+    el.focus();
+    let hint = el.parentElement.querySelector('.field-error');
+    if (!hint) {
+        hint = document.createElement('span');
+        hint.className = 'field-error';
+        hint.style.cssText = 'color:#ef4444;font-size:0.78rem;margin-top:3px;display:block;';
+        el.parentElement.appendChild(hint);
+    }
+    hint.textContent = msg;
+}
+
+function clearEditError(el) {
+    if (!el) return;
+    el.style.borderColor = '';
+    el.parentElement?.querySelector('.field-error')?.remove();
 }
 
 function setValue(id, value) {
