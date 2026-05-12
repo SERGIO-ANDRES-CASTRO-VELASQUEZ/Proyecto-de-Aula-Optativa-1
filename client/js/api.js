@@ -1,0 +1,153 @@
+// URL base del backend
+const API_BASE = 'http://localhost:8080';
+
+// Clave del token en localStorage
+const TOKEN_KEY = 'sportrent_token';
+const USER_KEY  = 'sportrent_user';
+
+// ── Funciones de sesión ──────────────────────────────────────────────────────
+
+function getToken() {
+    return localStorage.getItem(TOKEN_KEY);
+}
+
+function setToken(token) {
+    localStorage.setItem(TOKEN_KEY, token);
+}
+
+function getUser() {
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+}
+
+function setUser(userObj) {
+    localStorage.setItem(USER_KEY, JSON.stringify(userObj));
+}
+
+function clearSession() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+}
+
+function isLoggedIn() {
+    return !!getToken();
+}
+
+// ── Función central de fetch ─────────────────────────────────────────────────
+
+async function apiFetch(path, options = {}) {
+    const token = getToken();
+
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        ...(options.headers || {})
+    };
+
+    const response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers
+    });
+
+    // Sin contenido (204)
+    if (response.status === 204) {
+        return null;
+    }
+
+    // Sesión expirada → redirigir al login
+    if (response.status === 401) {
+        clearSession();
+        window.location.href = getLoginPath();
+        return;
+    }
+
+    const data = await response.json();
+
+    // Si el backend devolvió un error (4xx / 5xx), lanzar con el mensaje
+    if (!response.ok) {
+        const msg = data.message || data.error || 'Error desconocido';
+        throw new ApiError(response.status, msg, data.fieldErrors || []);
+    }
+
+    return data;
+}
+
+// ── Clase de error personalizado ─────────────────────────────────────────────
+
+class ApiError extends Error {
+    constructor(status, message, fieldErrors = []) {
+        super(message);
+        this.status      = status;
+        this.fieldErrors = fieldErrors; // [{field, message}, ...]
+    }
+}
+
+// ── Detecta la ruta relativa al login según desde dónde se llame ─────────────
+
+function getLoginPath() {
+    // Si estamos en admin/html/ → volver a client/html/index.html
+    if (window.location.pathname.includes('/admin/')) {
+        return '../../client/html/index.html';
+    }
+    return 'index.html';
+}
+
+// ── Atajos HTTP ──────────────────────────────────────────────────────────────
+
+function apiGet(path) {
+    return apiFetch(path, { method: 'GET' });
+}
+
+function apiPost(path, body) {
+    return apiFetch(path, { method: 'POST', body: JSON.stringify(body) });
+}
+
+function apiPut(path, body) {
+    return apiFetch(path, { method: 'PUT', body: JSON.stringify(body) });
+}
+
+function apiDelete(path) {
+    return apiFetch(path, { method: 'DELETE' });
+}
+
+// ── Helpers del carrito (localStorage) ──────────────────────────────────────
+// El carrito es un array de objetos:
+// { productId, productName, pricePerDay, categoryName,
+//   startDate, endDate, days, quantity, imageUrl }
+
+const CART_KEY = 'sportrent_cart';
+
+function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch { return []; }
+}
+
+function setCart(items) {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+}
+
+function clearCart() {
+    localStorage.removeItem(CART_KEY);
+}
+
+/** Agrega o reemplaza un item en el carrito (match por productId). */
+function addToCart(item) {
+    const cart = getCart();
+    const idx  = cart.findIndex(i => i.productId === item.productId);
+    if (idx >= 0) {
+        cart[idx] = item;   // reemplaza si ya existía
+    } else {
+        cart.push(item);
+    }
+    setCart(cart);
+}
+
+/** Elimina un item del carrito por productId. */
+function removeFromCart(productId) {
+    setCart(getCart().filter(i => String(i.productId) !== String(productId)));
+}
+
+/** Cuenta items en el carrito. */
+function cartCount() {
+    return getCart().length;
+}

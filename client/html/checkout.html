@@ -29,12 +29,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <span class="cart-indicator">1</span>
+                    <span class="cart-indicator" id="cartIndicator">0</span>
                 </button>
                 <div class="user-profile">
-                    <div class="avatar">CG</div>
+                    <div class="avatar">—</div>
                     <div class="user-info">
-                        <span class="user-name">Carlos</span>
+                        <span class="user-name">...</span>
                         <span class="user-role">Mi cuenta</span>
                     </div>
                 </div>
@@ -78,22 +78,22 @@
                         <div id="cardFields" class="payment-content active">
                             <div class="input-group">
                                 <label for="cardName">Nombre en la tarjeta</label>
-                                <input id="cardName" type="text" placeholder="CARLOS GARCÍA" value="CARLOS GARCÍA">
+                                <input id="cardName" type="text" placeholder="NOMBRE APELLIDO">
                             </div>
 
                             <div class="input-group">
                                 <label for="cardNumber">Número de tarjeta</label>
-                                <input id="cardNumber" type="text" maxlength="19" placeholder="1234 5678 9012 3456" value="1234 5678 9012 3456">
+                                <input id="cardNumber" type="text" maxlength="19" placeholder="1234 5678 9012 3456">
                             </div>
 
                             <div class="input-row">
                                 <div class="input-group">
                                     <label for="cardExpiry">Expiración</label>
-                                    <input id="cardExpiry" type="text" maxlength="5" placeholder="MM/AA" value="12/27">
+                                    <input id="cardExpiry" type="text" maxlength="5" placeholder="MM/AA">
                                 </div>
                                 <div class="input-group">
                                     <label for="cardCvc">CVC</label>
-                                    <input id="cardCvc" type="text" maxlength="4" placeholder="123" value="123">
+                                    <input id="cardCvc" type="text" maxlength="4" placeholder="123">
                                 </div>
                             </div>
                         </div>
@@ -117,16 +117,16 @@
                         <div class="input-row">
                             <div class="input-group">
                                 <label for="fullName">Nombre completo</label>
-                                <input id="fullName" type="text" value="Carlos García">
+                                <input id="fullName" type="text" placeholder="Tu nombre completo">
                             </div>
                             <div class="input-group">
                                 <label for="phone">Teléfono</label>
-                                <input id="phone" type="text" value="+34 612 345 678">
+                                <input id="phone" type="text" placeholder="+57 300 000 0000">
                             </div>
                         </div>
                         <div class="input-group">
                             <label for="contactEmail">Email</label>
-                            <input id="contactEmail" type="email" value="carlos.garcia@email.com">
+                            <input id="contactEmail" type="email" placeholder="correo@ejemplo.com">
                         </div>
                     </article>
 
@@ -152,32 +152,21 @@
                     <article class="order-summary">
                         <div class="summary-top">
                             <h2>Resumen del pedido</h2>
-                            <p>1 artículo en tu carrito</p>
+                            <p>Cargando carrito...</p>
                         </div>
 
-                        <div class="summary-item">
-                            <img src="../../img/bike-route.jpg" alt="Bicicleta de Ruta Elite">
-                            <div class="summary-item-info">
-                                <h3>Bicicleta de Ruta Elite</h3>
-                                <p>15 abr 2026 → 23 abr 2026</p>
-                                <span>€22/día × 8d</span>
-                            </div>
-                            <strong>€176</strong>
-                        </div>
+                        <!-- Los items se insertan aquí dinámicamente por checkout.js -->
 
                         <div class="summary-lines">
-                            <div><span>Subtotal alquiler</span><span>€176.00</span></div>
-                            <div><span>IVA (21%)</span><span>€36.96</span></div>
-                            <div><span>Seguro incluido</span><span class="free">Gratis</span></div>
-                            <div><span>Depósito reembolsable</span><span>€66.00</span></div>
+                            <!-- Poblado dinámicamente -->
                         </div>
 
                         <div class="summary-total">
                             <div>
                                 <strong>Total a pagar</strong>
-                                <small>incl. depósito reembolsable</small>
+                                <small>incl. seguro deportivo</small>
                             </div>
-                            <span>€278.96</span>
+                            <span>COP 0</span>
                         </div>
 
                         <button id="confirmOrder" class="confirm-btn" type="button" disabled>
@@ -207,6 +196,7 @@
         </div>
     </footer>
 
+    <script src="../js/api.js"></script>
     <script src="../js/checkout.js"></script>
 </body>
 </html>

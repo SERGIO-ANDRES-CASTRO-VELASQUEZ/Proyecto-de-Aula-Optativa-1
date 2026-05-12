@@ -40,12 +40,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <span class="cart-indicator" id="cartIndicator">1</span>
+                    <span class="cart-indicator" id="cartIndicator" style="display:none;">0</span>
                 </button>
                 <div class="user-profile">
-                    <div class="avatar">CG</div>
+                    <div class="avatar">—</div>
                     <div class="user-info">
-                        <span class="user-name">Carlos</span>
+                        <span class="user-name">...</span>
                         <span class="user-role">Mi cuenta</span>
                     </div>
                 </div>
@@ -93,27 +93,9 @@
                     </button>
                 </div>
 
-                <!-- Categorías -->
+                <!-- Categorías — pobladas dinámicamente por client.js -->
                 <div class="filter-section">
                     <h3>CATEGORÍAS</h3>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" checked>
-                        <span class="checkmark"></span>
-                        <span class="filter-label">🚲 Ciclismo</span>
-                        <span class="filter-count">3</span>
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                        <span class="filter-label">🏋️ Pesas</span>
-                        <span class="filter-count">3</span>
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                        <span class="filter-label">🎾 Deportes de raqueta</span>
-                        <span class="filter-count">3</span>
-                    </label>
                 </div>
 
                 <!-- Precio por día -->
@@ -165,144 +147,8 @@
                     </div>
                 </div>
 
-                <div class="product-grid">
-                    
-                    <!-- Producto 1 -->
-                    <div class="product-card">
-                        <div class="card-image-wrapper">
-                            <img src="../../img/bike-trek.jpg" alt="Bicicleta de Montaña Trek" class="product-image">
-                            <span class="badge badge-pink">Más alquilado</span>
-                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
-                        </div>
-                        <div class="card-body">
-                            <span class="category-tag">Ciclismo</span>
-                            <h3 class="product-title">Bicicleta Trek Marlin 7</h3>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span> <span class="rating-value">4.9 (128)</span>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price"><strong>COP 45.000</strong><span>/día</span></div>
-                                <a href="alquilar_producto.html" class="btn-rent" style="text-decoration:none;">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    Alquilar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Producto 2 -->
-                    <div class="product-card">
-                        <div class="card-image-wrapper">
-                            <img src="../../img/tennis-wilson.jpg" alt="Raqueta Wilson" class="product-image">
-                            <span class="badge badge-green">Nuevo</span>
-                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
-                        </div>
-                        <div class="card-body">
-                            <span class="category-tag">Raquetas</span>
-                            <h3 class="product-title">Raqueta Wilson Pro Staff</h3>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span> <span class="rating-value">4.7 (94)</span>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price"><strong>COP 15.000</strong><span>/día</span></div>
-                                <a href="alquilar_producto.html" class="btn-rent" style="text-decoration:none;">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    Alquilar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Producto 3 -->
-                    <div class="product-card">
-                        <div class="card-image-wrapper">
-                            <img src="../../img/surfboard.jpg" alt="Tabla de Surf" class="product-image">
-                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
-                        </div>
-                        <div class="card-body">
-                            <span class="category-tag">Acuáticos</span>
-                            <h3 class="product-title">Tabla de Surf Al Merrick</h3>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span> <span class="rating-value">4.8 (67)</span>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price"><strong>COP 60.000</strong><span>/día</span></div>
-                                <a href="alquilar_producto.html" class="btn-rent" style="text-decoration:none;">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    Alquilar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Producto 4 -->
-                    <div class="product-card">
-                        <div class="card-image-wrapper">
-                            <img src="../../img/camping-tent.jpg" alt="Carpa Camping" class="product-image">
-                            <span class="badge badge-orange">Oferta</span>
-                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
-                        </div>
-                        <div class="card-body">
-                            <span class="category-tag">Outdoor</span>
-                            <h3 class="product-title">Carpa Coleman 4 Personas</h3>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span> <span class="rating-value">4.6 (45)</span>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price"><strong>COP 25.000</strong><span>/día</span></div>
-                                <a href="alquilar_producto.html" class="btn-rent" style="text-decoration:none;">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    Alquilar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Producto 5 -->
-                    <div class="product-card">
-                        <div class="card-image-wrapper">
-                            <img src="../../img/weights-20kg.jpg" alt="Mancuernas ajustables" class="product-image">
-                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
-                        </div>
-                        <div class="card-body">
-                            <span class="category-tag">Pesas</span>
-                            <h3 class="product-title">Set Mancuernas Ajustables 20kg</h3>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span> <span class="rating-value">4.5 (32)</span>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price"><strong>COP 12.000</strong><span>/día</span></div>
-                                <a href="alquilar_producto.html" class="btn-rent" style="text-decoration:none;">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    Alquilar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Producto 6 -->
-                    <div class="product-card">
-                        <div class="card-image-wrapper">
-                            <img src="../../img/kayak.jpg" alt="Kayak Inflable" class="product-image">
-                            <span class="badge badge-green">Premium</span>
-                            <button class="favorite-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
-                        </div>
-                        <div class="card-body">
-                            <span class="category-tag">Acuáticos</span>
-                            <h3 class="product-title">Kayak Inflable 2 Personas</h3>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span> <span class="rating-value">4.9 (210)</span>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price"><strong>COP 80.000</strong><span>/día</span></div>
-                                <a href="alquilar_producto.html" class="btn-rent" style="text-decoration:none;">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                    Alquilar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Grilla de productos — poblada dinámicamente por client.js -->
+                <div class="product-grid"></div>
             </section>
         </div>
     </main>
@@ -337,16 +183,16 @@
             <!-- Avatar Section -->
             <div class="profile-avatar-section">
                 <div class="avatar-wrapper">
-                    <div class="avatar-circle">CG</div>
+                    <div class="avatar-circle">—</div>
                     <div class="online-indicator"></div>
                 </div>
                 <div class="profile-name-info">
-                    <h3>Carlos Garcia</h3>
-                    <p>carlos.garcia@email.com</p>
+                    <h3>Cargando...</h3>
+                    <p>—</p>
                 </div>
                 <div class="member-badge">
                     <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <span>Miembro Premium &bull; desde Enero 2024</span>
+                    <span>Miembro SportRent</span>
                 </div>
             </div>
 
@@ -359,33 +205,33 @@
                         <label>Nombre completo</label>
                         <div class="input-with-icon">
                             <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" value="Carlos García" />
+                            <input type="text" placeholder="Tu nombre completo" />
                         </div>
                     </div>
                     <div class="edit-form-group">
                         <label>Email</label>
                         <div class="input-with-icon">
                             <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <input type="email" value="carlos.garcia@email.com" />
+                            <input type="email" placeholder="correo@ejemplo.com" />
                         </div>
                     </div>
                     <div class="edit-form-group">
                         <label>Teléfono</label>
                         <div class="input-with-icon">
                             <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-                            <input type="tel" value="+34 612 345 678" />
+                            <input type="tel" placeholder="+57 300 000 0000" />
                         </div>
                     </div>
                     <div class="edit-form-group">
                         <label>Ciudad</label>
                         <div class="input-with-icon">
                             <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <input type="text" value="Madrid" />
+                            <input type="text" placeholder="Tu ciudad" />
                         </div>
                     </div>
                     <div class="edit-form-group">
                         <label>Bio</label>
-                        <textarea rows="3">Apasionado del deporte al aire libre, ciclismo de montaña y pádel.</textarea>
+                        <textarea rows="3" placeholder="Cuéntanos algo sobre ti..."></textarea>
                     </div>
                     
                     <div class="edit-sidebar-actions">
@@ -404,20 +250,20 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
                     <div class="info-texts">
                         <span class="info-label">Teléfono</span>
-                        <span class="info-value">+34 612 345 678</span>
+                        <span class="info-value">—</span>
                     </div>
                 </div>
                 <div class="info-row">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     <div class="info-texts">
                         <span class="info-label">Ciudad</span>
-                        <span class="info-value">Madrid</span>
+                        <span class="info-value">—</span>
                     </div>
                 </div>
                 <div class="info-row bio-row">
                     <div class="info-texts">
                         <span class="info-label">Bio</span>
-                        <span class="info-value">Apasionado del deporte al aire libre, ciclismo de montaña y pádel.</span>
+                        <span class="info-value">—</span>
                     </div>
                 </div>
             </div>
@@ -455,7 +301,7 @@
 
                 <div class="profile-divider"></div>
 
-                <a href="index.html" class="profile-link-item logout">
+                <a href="#" onclick="clearSession(); window.location.href='index.html'; return false;" class="profile-link-item logout">
                     <div class="plink-icon logout-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
                     <div class="plink-texts">
                         <span class="plink-title">Cerrar sesión</span>
@@ -476,41 +322,15 @@
                     </svg>
                 </span>
                 Tu Carrito
-                <span class="cart-count" id="cartCount">1</span>
+                <span class="cart-count" id="cartCount">0</span>
             </h3>
             <button class="close-cart" id="closeCart">&times;</button>
         </div>
-        <div class="cart-body">
-            <div class="cart-item">
-                <img src="../../img/bike-mountain.jpg" alt="Bicicleta de Ruta Elite" class="cart-item-img">
-                <div class="cart-item-info">
-                    <h4>Bicicleta de Ruta Elite</h4>
-                    <span class="category-pill">Ciclismo</span>
-                    <p class="rent-dates">
-                        <span class="date-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
-                            </svg>
-                        </span>
-                        15 abr &rarr; 23 abr &middot; 8 días
-                    </p>
-                    <div class="cart-item-price">&euro;176</div>
-                </div>
-            </div>
-            
-        </div>
-        <div class="cart-footer">
-            <div class="cart-summary-line"><span>Subtotal alquiler</span><span>&euro;176.00</span></div>
-            <div class="cart-summary-line"><span>IVA (21%)</span><span>&euro;36.96</span></div>
-            <div class="cart-summary-line"><span>Depósito reembolsable</span><span>&euro;66.00</span></div>
-            <div class="cart-total"><span>Total</span><span>&euro;278.96</span></div>
-            <a href="checkout.html" class="btn-checkout">Proceder al pago &rarr;</a>
-            <button class="btn-continue" id="continueShopping">Seguir comprando</button>
-        </div>
+        <!-- Contenido del carrito — poblado dinámicamente por client.js -->
+        <div class="cart-body"></div>
+        <div class="cart-footer"></div>
     </div>
-    <script src="../js/client.js?v=1776661016?v=1776661010"></script>
-
-
-    
+    <script src="../js/api.js"></script>
+    <script src="../js/client.js"></script>
 </body>
 </html>
