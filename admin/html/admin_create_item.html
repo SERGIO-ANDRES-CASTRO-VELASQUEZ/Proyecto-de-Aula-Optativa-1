@@ -11,42 +11,129 @@
     <link href="../css/boxicons.min.css" rel='stylesheet'>
     <link rel="stylesheet" href="../css/default.css">
     <link rel="stylesheet" href="../css/admin_inventory.css">
+    <style>
+        .upload-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .upload-tab {
+            padding: 8px 16px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .upload-tab.active {
+            background: #df2be4;
+            color: white;
+            border-color: #df2be4;
+        }
+        .upload-tab-content {
+            display: none;
+        }
+        .upload-tab-content.active {
+            display: block;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-input-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .file-input-label:hover {
+            background: #e2e8f0;
+        }
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+        .specs-table tr {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .specs-table td {
+            padding: 8px;
+        }
+        .specs-table input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .specs-table button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .specs-table button:hover {
+            background: #dc2626;
+        }
+        .form-row.inline {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: end;
+        }
+    </style>
 </head>
 <body>
 <div class="modal-overlay static-open">
     <section class="article-modal" role="dialog" aria-modal="true" aria-labelledby="articleModalTitle">
         <header class="modal-header">
             <div>
-                <h2 id="articleModalTitle">Nuevo Articulo</h2>
+                <h2 id="articleModalTitle">Nuevo Artículo</h2>
                 <p>Agrega un nuevo producto al inventario</p>
             </div>
             <a href="admin_inventory.html" class="close-link" aria-label="Cerrar"><i class='bx bx-x' style="font-size: 24px; color: #fff;"></i></a>
         </header>
 
         <form class="modal-form" id="createItemForm">
+            <!-- Fila 1: Nombre y Precio -->
             <div class="form-row two-col">
                 <label>
-                    Nombre del articulo *
-                    <input type="text" id="articleName" placeholder="Ej: Bicicleta de Montana Pro" required>
+                    Nombre del artículo *
+                    <input type="text" id="articleName" placeholder="Ej: Bicicleta de Montaña Pro" required>
                 </label>
                 <label>
-                    Precio / dia (€) *
-                    <input type="number" id="articlePrice" min="0" step="1" value="0" required>
+                    Precio / día (€) *
+                    <input type="number" id="articlePrice" min="0" step="0.01" value="0" required>
                 </label>
             </div>
 
-            <div class="form-row">
-                <label>
-                    Categoria *
-                    <div class="inline-input">
-                        <select id="articleCategory" required>
-                            <option value="">Selecciona una categoria</option>
-                        </select>
-                        <button type="button" class="small-add-btn" id="addCategoryBtn"><i class='bx bx-plus'></i></button>
-                    </div>
+            <!-- Fila 2: Categoría y crear nueva -->
+            <div class="form-row inline">
+                <label style="flex: 1;">
+                    Categoría *
+                    <select id="articleCategory" required>
+                        <option value="">Selecciona una categoría</option>
+                    </select>
                 </label>
+                <button type="button" class="small-add-btn" id="addCategoryBtn" title="Crear nueva categoría">
+                    <i class='bx bx-plus'></i>
+                </button>
             </div>
 
+            <!-- Fila 3: Stock -->
             <div class="form-row">
                 <label>
                     Stock disponible *
@@ -54,18 +141,20 @@
                 </label>
             </div>
 
+            <!-- Fila 4: Descripción -->
             <div class="form-row">
                 <label>
-                    Descripcion *
-                    <textarea id="articleDescription" rows="4" placeholder="Describe el articulo deportivo..." required></textarea>
+                    Descripción *
+                    <textarea id="articleDescription" rows="4" placeholder="Describe el artículo deportivo..." required></textarea>
                 </label>
             </div>
 
+            <!-- Fila 5: Estado Activo -->
             <div class="form-row">
                 <div class="admin-role-box">
                     <div>
-                        <strong>Articulo Activo</strong>
-                        <p>Visible en el catalogo</p>
+                        <strong>Artículo Activo</strong>
+                        <p>Visible en el catálogo</p>
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="articleActive" checked>
@@ -74,34 +163,66 @@
                 </div>
             </div>
 
+            <!-- Fila 6: Fotos del producto -->
             <div class="form-row">
                 <p class="section-title">Fotos del producto</p>
+
+                <!-- Tabs para elegir URL o archivo -->
                 <div class="upload-tabs">
-                    <button type="button" class="upload-tab active">URL</button>
-                    <button type="button" class="upload-tab">Subir Archivo</button>
+                    <button type="button" class="upload-tab active" data-tab="url-tab">URL</button>
+                    <button type="button" class="upload-tab" data-tab="file-tab">Subir Archivo</button>
                 </div>
-                <div class="inline-input" id="urlInputGroup">
-                    <input type="url" id="articleImageUrl" placeholder="https://ejemplo.com/foto.jpg">
-                    <button type="button" class="small-add-btn" id="addImageBtn"><i class='bx bx-plus'></i></button>
+
+                <!-- Tab 1: URL -->
+                <div id="url-tab" class="upload-tab-content active">
+                    <div class="inline-input">
+                        <input type="text" id="articleImageUrl" placeholder="https://ejemplo.com/foto.jpg">
+                        <button type="button" class="small-add-btn" id="addImageBtn"><i class='bx bx-plus'></i></button>
+                    </div>
                 </div>
+
+                <!-- Tab 2: Subir Archivo -->
+                <div id="file-tab" class="upload-tab-content">
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label">
+                            📁 Selecciona archivo
+                            <input type="file" id="articleImageFile" accept="image/jpeg,image/png,image/webp">
+                        </label>
+                    </div>
+                    <button type="button" class="small-add-btn" id="addImageFileBtn" style="margin-left: 8px;"><i class='bx bx-plus'></i></button>
+                </div>
+
+                <!-- Lista de imágenes cargadas -->
                 <div class="chip-list" id="imageList">
-                    <span class="chip-empty">Sin imagenes</span>
+                    <span class="chip-empty">Sin imágenes</span>
                 </div>
             </div>
 
+            <!-- Fila 7: Especificaciones Técnicas -->
             <div class="form-row">
-                <div class="section-header-inline">
-                    <p class="section-title">Especificaciones tecnicas</p>
-                    <button type="button" class="add-link" id="addSpecBtn"><i class='bx bx-plus'></i> Agregar</button>
+                <p class="section-title">Especificaciones técnicas</p>
+
+                <!-- Inputs para agregar especificación -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; margin-bottom: 12px;">
+                    <input type="text" id="specKey" placeholder="Ej: Material" maxlength="50">
+                    <input type="text" id="specValue" placeholder="Ej: Aluminio">
+                    <button type="button" class="small-add-btn" id="addSpecBtn"><i class='bx bx-plus'></i></button>
                 </div>
-                <div class="chip-list specs" id="specList">
-                    <span class="chip-empty">Sin especificaciones</span>
+
+                <!-- Tabla de especificaciones -->
+                <div id="specListContainer" style="display: none;">
+                    <table class="specs-table">
+                        <thead style="display: none;"></thead>
+                        <tbody id="specList"></tbody>
+                    </table>
                 </div>
+                <div id="specEmpty" class="chip-empty">Sin especificaciones</div>
             </div>
 
-            <footer class="modal-footer">
-                <a href="admin_inventory.html" class="btn-cancel" style="text-align: center; text-decoration: none;">Cancelar</a>
-                <button type="submit" class="btn-create">Crear Articulo</button>
+            <!-- Botones de acción -->
+            <footer class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
+                <a href="admin_inventory.html" class="btn-cancel" style="text-decoration: none; padding: 10px 20px; background: #e2e8f0; color: #1e293b; border-radius: 6px; text-align: center;">Cancelar</a>
+                <button type="submit" class="btn-create" style="padding: 10px 20px;">Crear Artículo</button>
             </footer>
         </form>
     </section>

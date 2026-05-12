@@ -135,12 +135,12 @@ table {
 
 thead th:nth-child(1), tbody td:nth-child(1) { width: 9%; }
 thead th:nth-child(2), tbody td:nth-child(2) { width: 17%; }
-thead th:nth-child(3), tbody td:nth-child(3) { width: 22%; }
+thead th:nth-child(3), tbody td:nth-child(3) { width: 20%; }
 thead th:nth-child(4), tbody td:nth-child(4) { width: 11%; }
 thead th:nth-child(5), tbody td:nth-child(5) { width: 11%; }
-thead th:nth-child(6), tbody td:nth-child(6) { width: 9%; }
-thead th:nth-child(7), tbody td:nth-child(7) { width: 13%; }
-thead th:nth-child(8), tbody td:nth-child(8) { width: 8%; }
+thead th:nth-child(6), tbody td:nth-child(6) { width: 8%; }
+thead th:nth-child(7), tbody td:nth-child(7) { width: 12%; }
+thead th:nth-child(8), tbody td:nth-child(8) { width: 12%; }
 
 thead th {
     text-align: left;
@@ -164,6 +164,11 @@ tbody td:nth-child(5),
 tbody td:nth-child(6),
 tbody td:nth-child(8) {
     white-space: nowrap;
+}
+
+tbody td:nth-child(8) {
+    overflow: visible;
+    text-align: center;
 }
 
 .ticket-id {
@@ -211,19 +216,22 @@ tbody td:nth-child(8) {
     display: block;
     color: #0f172a;
     font-size: 0.9rem;
-    line-height: 1.16;
+    line-height: 1.18;
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
 }
 
 .article-cell strong {
-    display: block;
+    display: -webkit-box;
     color: #111827;
     font-size: 0.88rem;
-    white-space: nowrap;
+    line-height: 1.15;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .client-cell span {
@@ -250,7 +258,7 @@ td span {
 .total {
     display: block;
     color: #111827;
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
 /* Status Badges */
@@ -285,6 +293,91 @@ td span {
     color: #ea580c;
     background: #ffedd5;
     border-color: #fdba74;
+}
+
+.status-badge.cancelled {
+    color: #64748b;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.status-badge.overdue {
+    color: #dc2626;
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+/* Actions cell */
+.actions-cell {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.icon-btn {
+    border: 0;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 0.88rem;
+    cursor: pointer;
+    padding: 0.35rem 0.45rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+}
+
+.icon-btn:hover {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+
+/* Status change dropdown */
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.status-dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    min-width: 140px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.drop-item {
+    display: block;
+    width: 100%;
+    padding: 8px 14px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 13px;
+    color: #334155;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.drop-item:hover {
+    background: #f8fafc;
+}
+
+.drop-item.current {
+    font-weight: 700;
+    color: #df2be4;
+    background: #fdf4ff;
 }
 
 .more-actions {
@@ -391,7 +484,7 @@ td span {
     }
 
     table {
-        min-width: 980px;
+        min-width: 1080px;
     }
 
     .table-footer {

@@ -24,22 +24,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+    <rect width="100%" height="100%" fill="#f1f5f9"/>
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#64748b" font-family="Arial,Helvetica,sans-serif" font-size="20">Imagen no disponible</text>
+  </svg>
+`);
+
 // ── Renderiza todos los datos del producto ───────────────────────
 function renderizarProducto(p) {
 
     // Imagen principal
     const imgEl = document.querySelector('.main-image img');
-    if (imgEl && p.images && p.images.length > 0) {
-        const url = p.images[0].url;
-        imgEl.src = url.startsWith('http') ? url : `../../${url.replace(/^\//, '')}`;
-        imgEl.alt = p.name;
+    if (imgEl) {
+        if (p.images && p.images.length > 0) {
+            const url = p.images[0].url;
+            imgEl.src = url.startsWith('http')    ? url
+                      : url.startsWith('/files/') ? `${API_BASE}${url}`
+                      : `../../${url.replace(/^\//, '')}`;
+            imgEl.alt = p.name;
+        } else {
+            imgEl.src = PLACEHOLDER_IMG;
+            imgEl.alt = p.name || 'Producto';
+        }
     }
 
     // Thumbnails
     const thumbsEl = document.querySelector('.thumbnails');
     if (thumbsEl && p.images) {
         thumbsEl.innerHTML = p.images.map((img, i) => {
-            const url = img.url.startsWith('http') ? img.url : `../../${img.url.replace(/^\//, '')}`;
+            const url = img.url.startsWith('http')    ? img.url
+                      : img.url.startsWith('/files/') ? `${API_BASE}${img.url}`
+                      : `../../${img.url.replace(/^\//, '')}`;
             return `<img src="${url}" alt="Thumb ${i+1}" class="thumb ${i===0?'active':''}"
                          onclick="document.querySelector('.main-image img').src=this.src">`;
         }).join('');
@@ -249,7 +266,7 @@ function mostrarOpcionesCarrito(btnRef) {
         'cursor:pointer','font-size:14px','color:#475569'
     ].join(';');
     btnSeguir.addEventListener('click', () => {
-        wrapper.remove();
+        window.location.href = 'client_index.html';
     });
 
     wrapper.appendChild(btnIr);

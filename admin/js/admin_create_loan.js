@@ -60,7 +60,11 @@ function renderCatalog() {
     }
 
     grid.innerHTML = products.map(p => {
-        const img = p.mainImageUrl || '../../img/icon.png';
+        const raw = p.mainImageUrl;
+        const img = !raw ? '../../img/icon.png'
+                  : raw.startsWith('http')    ? raw
+                  : raw.startsWith('/files/') ? `${API_BASE}${raw}`
+                  : `../../${raw.replace(/^\//, '')}`;
         const selected = selectedItems.some(i => i.productId === p.id);
         return `
             <article class="item-card ${selected ? 'selected' : ''}" data-id="${p.id}">

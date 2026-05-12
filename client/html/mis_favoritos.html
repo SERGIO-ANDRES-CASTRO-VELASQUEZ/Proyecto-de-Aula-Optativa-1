@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<title>SportRent — Mis Favoritos</title>
+<meta content="Sistema de alquiler de artículos deportivos SportRent" name="description"/>
+<link href="../../img/icon.png" rel="Shortcut icon"/>
+<link href="../../img/icon.png?v=2" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="../css/default.css" rel="stylesheet"/>
+<link href="../css/client.css" rel="stylesheet"/>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+<style>
+  .favs-container { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+  .favs-header { margin-bottom: 28px; }
+  .favs-subtitle { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #df2be4; text-transform: uppercase; }
+  .favs-title { font-size: 2rem; font-weight: 800; color: #1e293b; margin: 6px 0 4px; }
+  .favs-count { font-size: 14px; color: #64748b; }
+  .favs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .fav-card { background: #fff; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.07); overflow: hidden; transition: box-shadow .2s; }
+  .fav-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.13); }
+  .fav-card-img { width: 100%; height: 170px; object-fit: cover; }
+  .fav-card-body { padding: 16px; }
+  .fav-card-category { font-size: 11px; font-weight: 700; letter-spacing: .07em; color: #df2be4; text-transform: uppercase; margin-bottom: 6px; }
+  .fav-card-name { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0 0 6px; }
+  .fav-card-price { font-size: 15px; font-weight: 700; color: #0f172a; }
+  .fav-card-price span { font-size: 12px; font-weight: 400; color: #64748b; }
+  .fav-card-footer { display: flex; gap: 8px; margin-top: 12px; }
+  .fav-rent-btn { flex: 1; padding: 9px 0; background: #df2be4; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+  .fav-rent-btn:hover { background: #c026d3; }
+  .fav-remove-btn { padding: 9px 12px; background: #fee2e2; color: #dc2626; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .fav-remove-btn:hover { background: #fecaca; }
+  .favs-empty { text-align: center; padding: 80px 20px; color: #64748b; }
+  .favs-empty svg { margin-bottom: 16px; opacity: .3; }
+  .favs-empty h3 { font-size: 1.2rem; font-weight: 700; color: #94a3b8; margin-bottom: 8px; }
+  .favs-empty p { font-size: 14px; }
+  .favs-empty a { color: #df2be4; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- Header Navbar -->
+<header class="navbar">
+  <div class="navbar-container">
+    <a class="logo" href="client_index.html" style="text-decoration:none;color:inherit;">
+      <svg fill="none" height="32" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" fill="#df2be4" r="10"></circle>
+        <path d="M8 12L11 15L16 9" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+      </svg>
+      <span>SportRent</span>
+    </a>
+    <div class="user-actions">
+      <button class="cart-btn" onclick="window.location.href='client_index.html'">
+        <svg fill="none" height="24" stroke="currentColor" viewBox="0 0 24 24" width="24">
+          <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </button>
+      <div class="user-profile">
+        <div class="avatar" id="navAvatar">—</div>
+        <div class="user-info">
+          <span class="user-name" id="navName">...</span>
+          <span class="user-role">Mi cuenta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="favs-container">
+  <div class="favs-header">
+    <span class="favs-subtitle">MI CUENTA</span>
+    <h1 class="favs-title">Mis Favoritos</h1>
+    <p class="favs-count" id="favsCount">Cargando...</p>
+  </div>
+
+  <div class="favs-grid" id="favsGrid">
+    <!-- Poblado dinámicamente -->
+  </div>
+</main>
+
+<script src="../../client/js/api.js"></script>
+<script>
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#f1f5f9"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#64748b" font-family="Arial,Helvetica,sans-serif" font-size="20">Imagen no disponible</text></svg>'
+);
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!isLoggedIn()) { window.location.href = 'index.html'; return; }
+
+  const user = getUser();
+  if (user) {
+    const initials = (user.fullName || '??').split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+    const el = document.getElementById('navAvatar');
+    const nm = document.getElementById('navName');
+    if (el) el.textContent = initials;
+    if (nm) nm.textContent = (user.fullName || '').split(' ')[0];
+  }
+
+  await loadFavorites();
+});
+
+async function loadFavorites() {
+  const grid     = document.getElementById('favsGrid');
+  const countEl  = document.getElementById('favsCount');
+
+  try {
+    const favorites = await apiGet('/api/me/favorites');
+
+    if (countEl) countEl.textContent = `${favorites.length} artículo${favorites.length !== 1 ? 's' : ''} guardado${favorites.length !== 1 ? 's' : ''}`;
+
+    if (!favorites.length) {
+      grid.innerHTML = `
+        <div class="favs-empty" style="grid-column:1/-1;">
+          <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+          <h3>Sin favoritos aún</h3>
+          <p>Explora el catálogo y guarda los artículos que te interesen.<br>
+             <a href="client_index.html">Ver catálogo →</a>
+          </p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = favorites.map(p => {
+      const imgUrl = !p.mainImageUrl     ? PLACEHOLDER_IMG
+        : p.mainImageUrl.startsWith('http')    ? p.mainImageUrl
+        : p.mainImageUrl.startsWith('/files/') ? `${API_BASE}${p.mainImageUrl}`
+        : `../../${p.mainImageUrl.replace(/^\//, '')}`;
+
+      const price = Number(p.pricePerDay || 0).toLocaleString('es-CO');
+
+      return `
+        <div class="fav-card" data-id="${p.id}">
+          <img class="fav-card-img" src="${imgUrl}" alt="${p.name}"
+               onerror="this.src='${PLACEHOLDER_IMG}'">
+          <div class="fav-card-body">
+            <p class="fav-card-category">${p.categoryName || ''}</p>
+            <h3 class="fav-card-name">${p.name}</h3>
+            <p class="fav-card-price">COP ${price} <span>/ día</span></p>
+            <div class="fav-card-footer">
+              <a class="fav-rent-btn" href="alquilar_producto.html?id=${p.id}">Alquilar</a>
+              <button class="fav-remove-btn" data-remove-id="${p.id}" title="Quitar de favoritos">♡ Quitar</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Listeners para quitar favorito
+    grid.querySelectorAll('[data-remove-id]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-remove-id');
+        try {
+          await apiDelete(`/api/products/${id}/favorite`);
+          const card = grid.querySelector(`[data-id="${id}"]`);
+          if (card) card.remove();
+          // Actualizar contador
+          const remaining = grid.querySelectorAll('.fav-card').length;
+          if (countEl) countEl.textContent = `${remaining} artículo${remaining !== 1 ? 's' : ''} guardado${remaining !== 1 ? 's' : ''}`;
+          if (remaining === 0) loadFavorites(); // Mostrar estado vacío
+        } catch (err) {
+          alert(err.message || 'No se pudo quitar el favorito.');
+        }
+      });
+    });
+
+  } catch (err) {
+    if (err.status === 401) { window.location.href = 'index.html'; return; }
+    if (grid) grid.innerHTML = '<p style="color:#ef4444;padding:20px;">Error al cargar favoritos. Intenta de nuevo.</p>';
+    if (countEl) countEl.textContent = '';
+  }
+}
+</script>
+</body>
+</html>

@@ -25,6 +25,14 @@ const TAB_ESTADOS = {
 
 let todosLosAlquileres = [];
 
+// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+    <rect width="100%" height="100%" fill="#f1f5f9"/>
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#64748b" font-family="Arial,Helvetica,sans-serif" font-size="20">Imagen no disponible</text>
+  </svg>
+`);
+
 document.addEventListener('DOMContentLoaded', async () => {
 
     await cargarPerfil();
@@ -163,7 +171,7 @@ function renderizarLista(alquileres) {
         const d       = dias(a);
         const imgSrc  = a.mainImageUrl
             ? (a.mainImageUrl.startsWith('http') ? a.mainImageUrl : `../../${a.mainImageUrl.replace(/^\//,'')}`)
-            : '../../img/bike-trek.jpg';
+            : PLACEHOLDER_IMG;
 
         // Botones según estado
         let btns = `<a href="detalle_alquiler.html?id=${a.id}" class="r-btn outline" style="text-decoration:none;">
@@ -195,7 +203,7 @@ function renderizarLista(alquileres) {
         <div class="r-ticket-item" style="border-left:6px solid ${cfg.border}; display:flex;">
             <div class="r-ticket-img-container">
                 <img src="${imgSrc}" alt="${a.productName || 'Producto'}"
-                     onerror="this.src='../../img/bike-trek.jpg'">
+                     onerror="this.src='${PLACEHOLDER_IMG}'">
             </div>
             <div class="r-ticket-main">
                 <div class="r-ticket-status ${cfg.badge}" style="${cfg.badgeStyle}">
@@ -286,11 +294,11 @@ function renderizarCarritoLateral() {
         const total  = item.pricePerDay * item.days * (item.quantity || 1);
         const imgSrc = item.imageUrl
             ? (item.imageUrl.startsWith('http') ? item.imageUrl : `../../${item.imageUrl.replace(/^\//, '')}`)
-            : '../../img/bike-trek.jpg';
+            : PLACEHOLDER_IMG;
         return `
         <div class="cart-item" data-product-id="${item.productId}">
             <img src="${imgSrc}" alt="${item.productName}" class="cart-item-img"
-                 onerror="this.src='../../img/bike-trek.jpg'">
+                 onerror="this.src='${PLACEHOLDER_IMG}'">
             <div class="cart-item-info">
                 <h4>${item.productName}</h4>
                 <span class="category-pill">${item.categoryName || ''}</span>

@@ -1,25 +1,30 @@
 let inventoryProducts = [];
 let inventoryDetails = new Map();
+let currentPage = 0;
+let PAGE_SIZE = 10;
+let totalPages = 0;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const user = await ensureAdmin();
     if (!user) return;
 
     await loadCategories();
-    await loadProducts();
+    await loadProducts(0);
 
     const searchInput = document.getElementById('inventorySearch');
     const categoryFilter = document.getElementById('categoryFilter');
 
     if (searchInput) {
         searchInput.addEventListener('input', debounce(() => {
-            loadProducts();
+            currentPage = 0;
+            loadProducts(0);
         }, 350));
     }
 
     if (categoryFilter) {
         categoryFilter.addEventListener('change', () => {
-            loadProducts();
+            currentPage = 0;
+            loadProducts(0);
         });
     }
 });
@@ -37,13 +42,13 @@ async function loadCategories() {
     }
 }
 
-async function loadProducts() {
+async function loadProducts(page = 0) {
     const searchInput = document.getElementById('inventorySearch');
     const categoryFilter = document.getElementById('categoryFilter');
 
     const params = new URLSearchParams();
-    params.set('page', '0');
-    params.set('size', '200');
+    params.set('page', String(page));
+    params.set('size', String(PAGE_SIZE));
 
     const q = searchInput ? searchInput.value.trim() : '';
     const categoryId = categoryFilter ? categoryFilter.value : '';
@@ -52,8 +57,11 @@ async function loadProducts() {
     if (categoryId) params.set('category', categoryId);
 
     try {
+        console.log('Loading products page:', page);
         const data = await apiGet(`/api/admin/products?${params.toString()}`);
         inventoryProducts = data?.content || [];
+        totalPages = data?.totalPages ?? 1;
+        currentPage = page;
 
         // Fetch details for active flag (AdminProductDto includes active)
         const detailList = await Promise.all(
@@ -63,6 +71,7 @@ async function loadProducts() {
 
         renderProducts(inventoryProducts);
         updateInventoryStats(data?.totalElements ?? inventoryProducts.length, detailList);
+        renderPagination(totalPages);
     } catch (err) {
         console.error('Error loading products:', err);
         renderProducts([]);
@@ -84,7 +93,10 @@ function renderProducts(products) {
         const active = details ? details.active : true;
         const statusText = active ? 'Publico' : 'Oculto';
         const statusClass = active ? 'public' : 'private';
-        const img = p.mainImageUrl || '../../img/icon.png';
+        const img = !p.mainImageUrl                         ? '../../img/icon.png'
+            : p.mainImageUrl.startsWith('http')              ? p.mainImageUrl
+            : p.mainImageUrl.startsWith('/files/')           ? `${API_BASE}${p.mainImageUrl}`
+            : `../../${p.mainImageUrl.replace(/^\//, '')}`;
 
         return `
             <tr data-id="${p.id}">
@@ -149,4 +161,36 @@ function updateInventoryStats(total, detailList) {
     if (totalEl) totalEl.textContent = String(total ?? 0);
     if (activeEl) activeEl.textContent = String(activeCount ?? 0);
     if (stockEl) stockEl.textContent = String(stockSum ?? 0);
+}
+
+function renderPagination(totalPages) {
+    const container = document.querySelector('.table-footer .table-pagination');
+    if (!container) return;
+
+    let html = '';
+
+    // Botón anterior
+    if (currentPage > 0) {
+        html += `<button type="button" class="page-btn" onclick="loadProducts(${currentPage - 1})">‹</button>`;
+    } else {
+        html += '<button type="button" class="page-btn" disabled>‹</button>';
+    }
+
+    // Números de página (máximo 5 visibles)
+    const startPage = Math.max(0, currentPage - 2);
+    const endPage = Math.min(totalPages, startPage + 5);
+
+    for (let i = startPage; i < endPage; i++) {
+        const isActive = i === currentPage ? 'active' : '';
+        html += `<button type="button" class="page-btn ${isActive}" onclick="loadProducts(${i})">${i + 1}</button>`;
+    }
+
+    // Botón siguiente
+    if (currentPage < totalPages - 1) {
+        html += `<button type="button" class="page-btn" onclick="loadProducts(${currentPage + 1})">›</button>`;
+    } else {
+        html += '<button type="button" class="page-btn" disabled>›</button>';
+    }
+
+    container.innerHTML = html;
 }

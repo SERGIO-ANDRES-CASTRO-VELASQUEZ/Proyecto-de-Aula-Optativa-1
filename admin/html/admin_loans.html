@@ -149,66 +149,15 @@
                         <th>ACCIONES</th>
                     </tr>
                     </thead>
-                    <tbody id="loansRows"></tbody>
-                    <tr>
-                        <td><span class="ticket-id">TK-004</span></td>
-                        <td>
-                            <div class="client-cell">
-                                <div class="client-avatar">AL</div>
-                                <div><strong>Ana López</strong><span>55667788D</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/scooter.jpg" alt="Pelota">
-                                <div><strong>Pelota de Futbol Pro</strong><span>2 dias</span></div>
-                            </div>
-                        </td>
-                        <td>27 feb 2026</td>
-                        <td>01 mar 2026</td>
-                        <td><strong class="total">€10</strong><span>Tarjeta</span></td>
-                        <td><span class="status-badge returned">Devuelto</span></td>
-                        <td><span class="more-actions">•••</span></td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="ticket-id">TK-005</span></td>
-                        <td>
-                            <div class="client-cell">
-                                <div class="client-avatar">PS</div>
-                                <div><strong>Pedro Sánchez</strong><span>99887766E</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="article-cell">
-                                <img src="../../img/bike-mountain.jpg" alt="Bicicleta">
-                                <div><strong>Bicicleta de Montana Pro</strong><span>5 dias</span></div>
-                            </div>
-                        </td>
-                        <td>04 mar 2026</td>
-                        <td>09 mar 2026</td>
-                        <td><strong class="total">€90</strong><span>Tarjeta</span></td>
-                        <td><span class="status-badge progress">En Progreso</span></td>
-                        <td><span class="more-actions">•••</span></td>
-                    </tr>
+                    <tbody id="loansRows">
+                        <!-- Poblado dinámicamente por admin_loans.js -->
                     </tbody>
                 </table>
             </div>
             <div class="table-footer">
-                <span class="table-count">5 de 5 tickets</span>
-                <div class="table-pagination">
-                    <label>
-                        Filas
-                        <select>
-                            <option selected>5</option>
-                            <option>10</option>
-                            <option>20</option>
-                        </select>
-                    </label>
-                    <button type="button" class="page-btn" aria-label="Pagina anterior">‹</button>
-                    <button type="button" class="page-btn active">1</button>
-                    <button type="button" class="page-btn">2</button>
-                    <button type="button" class="page-btn" aria-label="Pagina siguiente">›</button>
+                <span class="table-count" id="loansCounter">0 de 0 tickets</span>
+                <div class="table-pagination" id="loansPagination">
+                    <!-- Poblado dinámicamente -->
                 </div>
             </div>
         </section>

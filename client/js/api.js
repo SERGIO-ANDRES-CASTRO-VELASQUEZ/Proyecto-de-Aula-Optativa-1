@@ -110,6 +110,36 @@ function apiDelete(path) {
     return apiFetch(path, { method: 'DELETE' });
 }
 
+/** Sube un archivo como multipart/form-data (campo "file"). */
+async function apiPostFile(path, file) {
+    const token = getToken();
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_BASE}${path}`, {
+        method: 'POST',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body: formData
+    });
+
+    if (response.status === 204) return null;
+    if (response.status === 401) {
+        clearSession();
+        window.location.href = getLoginPath();
+        return;
+    }
+
+    const data = await response.json();
+    if (!response.ok) {
+        throw new ApiError(
+            response.status,
+            data.message || data.error || 'Error desconocido',
+            data.fieldErrors || []
+        );
+    }
+    return data;
+}
+
 // ── Helpers del carrito (localStorage) ──────────────────────────────────────
 // El carrito es un array de objetos:
 // { productId, productName, pricePerDay, categoryName,

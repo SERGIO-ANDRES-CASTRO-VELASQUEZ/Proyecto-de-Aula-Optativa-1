@@ -3,11 +3,20 @@
 // ═══════════════════════════════════════════════════════════════
 
 // ── Estado global ────────────────────────────────────────────────
-let currentPage     = 0;
-let currentCategory = null;
-let currentQuery    = '';
-let currentMaxPrice = null;
-let totalPages      = 1;
+let currentPage       = 0;
+let currentCategory   = null;
+let currentQuery      = '';
+let currentMaxPrice   = null;
+let totalPages        = 1;
+let favoritosIds      = new Set();   // IDs de favoritos del usuario actual
+
+// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+    <rect width="100%" height="100%" fill="#f1f5f9"/>
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#64748b" font-family="Arial,Helvetica,sans-serif" font-size="20">Imagen no disponible</text>
+  </svg>
+`);
 
 // ── Protección de ruta ───────────────────────────────────────────
 if (!isLoggedIn()) {
@@ -19,6 +28,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cargar perfil del usuario en el sidebar
     await cargarPerfil();
+
+    // Cargar IDs de favoritos del usuario para marcar corazones en el catálogo
+    try {
+        const favs = await apiGet('/api/me/favorites');
+        favoritosIds = new Set((favs || []).map(f => f.id));
+    } catch (_) { /* no bloquear si falla */ }
 
     // Cargar categorías del backend
     await cargarCategorias();
@@ -121,13 +136,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (sidebarEditForm) {
         sidebarEditForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const inputs = sidebarEditForm.querySelectorAll('input');
-            const fullName = inputs[0]?.value.trim();
-            const phone    = inputs[2]?.value.trim();
+            const inputs     = sidebarEditForm.querySelectorAll('input');
+            const fullName   = inputs[0]?.value.trim();
+            const phone      = inputs[2]?.value.trim();
+            const idDocument = document.getElementById('editIdDocument')?.value.trim();
             try {
                 // PUT /api/me
-                const updated = await apiPut('/api/me', { fullName, phone });
-                setUser({ ...getUser(), fullName: updated.fullName });
+                const updated = await apiPut('/api/me', { fullName, phone, idDocument });
+                setUser({ ...getUser(), fullName: updated.fullName, phone: updated.phone, idDocument: updated.idDocument });
                 actualizarUIperfil(updated);
                 salirModoEdicion();
             } catch (err) {
@@ -163,21 +179,25 @@ function actualizarUIperfil(user) {
     if (navName)   navName.textContent   = (user.fullName || '').split(' ')[0];
 
     // Sidebar perfil
-    const sidebarAvatar = document.querySelector('.avatar-circle');
-    const sidebarName   = document.querySelector('.profile-name-info h3');
-    const sidebarEmail  = document.querySelector('.profile-name-info p');
-    const phoneValue    = document.querySelector('.info-row .info-value');
+    const sidebarAvatar  = document.querySelector('.avatar-circle');
+    const sidebarName    = document.querySelector('.profile-name-info h3');
+    const sidebarEmail   = document.querySelector('.profile-name-info p');
+    const displayPhone   = document.getElementById('displayPhone');
+    const displayDoc     = document.getElementById('displayDocument');
 
-    if (sidebarAvatar) sidebarAvatar.textContent = iniciales;
-    if (sidebarName)   sidebarName.textContent   = user.fullName  || '—';
-    if (sidebarEmail)  sidebarEmail.textContent  = user.email     || '—';
-    if (phoneValue)    phoneValue.textContent     = user.phone     || '—';
+    if (sidebarAvatar)  sidebarAvatar.textContent  = iniciales;
+    if (sidebarName)    sidebarName.textContent     = user.fullName   || '—';
+    if (sidebarEmail)   sidebarEmail.textContent    = user.email      || '—';
+    if (displayPhone)   displayPhone.textContent    = user.phone      || '—';
+    if (displayDoc)     displayDoc.textContent      = user.idDocument || '—';
 
     // Pre-rellenar formulario de edición
     const inputs = document.querySelectorAll('#sidebarEditForm input');
-    if (inputs[0]) inputs[0].value = user.fullName  || '';
-    if (inputs[1]) inputs[1].value = user.email     || '';
-    if (inputs[2]) inputs[2].value = user.phone     || '';
+    if (inputs[0]) inputs[0].value = user.fullName    || '';
+    if (inputs[1]) inputs[1].value = user.email       || '';
+    if (inputs[2]) inputs[2].value = user.phone       || '';
+    const docInput = document.getElementById('editIdDocument');
+    if (docInput)  docInput.value  = user.idDocument  || '';
 }
 
 async function cargarCategorias() {
@@ -271,22 +291,23 @@ function renderizarProductos(productos) {
         // Resolver URL de imagen
         let imgSrc;
         if (!p.mainImageUrl) {
-            imgSrc = '../../img/bike-trek.jpg'; // fallback
+            imgSrc = PLACEHOLDER_IMG;
         } else if (p.mainImageUrl.startsWith('http')) {
-            imgSrc = p.mainImageUrl;
+            imgSrc = p.mainImageUrl;                          // URL externa
+        } else if (p.mainImageUrl.startsWith('/files/')) {
+            imgSrc = `${API_BASE}${p.mainImageUrl}`;         // upload del backend
         } else {
-            // Ruta relativa devuelta por el backend → apunta a la carpeta img/
-            imgSrc = `../../${p.mainImageUrl.replace(/^\//, '')}`;
+            imgSrc = `../../${p.mainImageUrl.replace(/^\//, '')}`; // asset estático del frontend
         }
 
         const estrellas = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
-        const isFav     = p.isFavorite || false;
+        const isFav     = favoritosIds.has(p.id);
 
         return `
         <div class="product-card">
             <div class="card-image-wrapper">
-                <img src="${imgSrc}" alt="${p.name}" class="product-image"
-                     onerror="this.src='../../img/bike-trek.jpg'">
+                 <img src="${imgSrc}" alt="${p.name}" class="product-image"
+                      onerror="this.src='${PLACEHOLDER_IMG}'">
                 <button class="favorite-btn ${isFav ? 'fav-active' : ''}"
                         data-product-id="${p.id}"
                         data-is-fav="${isFav}"
@@ -347,9 +368,11 @@ async function toggleFavorito(e) {
         if (isFav) {
             // DELETE /api/products/{id}/favorite
             await apiDelete(`/api/products/${productId}/favorite`);
+            favoritosIds.delete(Number(productId));
         } else {
             // POST /api/products/{id}/favorite
             await apiPost(`/api/products/${productId}/favorite`);
+            favoritosIds.add(Number(productId));
         }
     } catch (err) {
         // Revertir si falla
@@ -461,14 +484,15 @@ function renderizarCarrito() {
 
     cartBody.innerHTML = cart.map(item => {
         const total  = item.pricePerDay * item.days * (item.quantity || 1);
-        const imgSrc = item.imageUrl
-            ? (item.imageUrl.startsWith('http') ? item.imageUrl : `../../${item.imageUrl.replace(/^\//, '')}`)
-            : '../../img/bike-trek.jpg';
+        const imgSrc = !item.imageUrl ? PLACEHOLDER_IMG
+            : item.imageUrl.startsWith('http')    ? item.imageUrl
+            : item.imageUrl.startsWith('/files/') ? `${API_BASE}${item.imageUrl}`
+            : `../../${item.imageUrl.replace(/^\//, '')}`;
 
         return `
         <div class="cart-item" data-product-id="${item.productId}">
             <img src="${imgSrc}" alt="${item.productName}" class="cart-item-img"
-                 onerror="this.src='../../img/bike-trek.jpg'">
+                 onerror="this.src='${PLACEHOLDER_IMG}'">
             <div class="cart-item-info">
                 <h4>${item.productName}</h4>
                 <span class="category-pill">${item.categoryName || ''}</span>

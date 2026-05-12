@@ -4,6 +4,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+// Placeholder SVG (data URI) para evitar imágenes "quemadas" desde archivos estáticos
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+    <rect width="100%" height="100%" fill="#f1f5f9"/>
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#64748b" font-family="Arial,Helvetica,sans-serif" font-size="20">Imagen no disponible</text>
+  </svg>
+`);
+
     // ── Redirigir si no hay sesión ───────────────────────────────
     if (!isLoggedIn()) { window.location.href = 'index.html'; return; }
 
@@ -46,15 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Insertar items antes de las líneas de resumen
         cart.forEach(item => {
             const total  = item.pricePerDay * item.days * (item.quantity || 1);
-            const imgSrc = item.imageUrl
-                ? (item.imageUrl.startsWith('http') ? item.imageUrl : `../../${item.imageUrl.replace(/^\//, '')}`)
-                : '../../img/bike-trek.jpg';
+            const imgSrc = !item.imageUrl ? PLACEHOLDER_IMG
+                : item.imageUrl.startsWith('http')    ? item.imageUrl
+                : item.imageUrl.startsWith('/files/') ? `${API_BASE}${item.imageUrl}`
+                : `../../${item.imageUrl.replace(/^\//, '')}`;
 
             const div = document.createElement('div');
             div.className = 'summary-item';
             div.innerHTML = `
                 <img src="${imgSrc}" alt="${item.productName}"
-                     onerror="this.src='../../img/bike-trek.jpg'">
+                     onerror="this.src='${PLACEHOLDER_IMG}'">
                 <div class="summary-item-info">
                     <h3>${item.productName}</h3>
                     <p>${fmtDate(item.startDate)} → ${fmtDate(item.endDate)}</p>
