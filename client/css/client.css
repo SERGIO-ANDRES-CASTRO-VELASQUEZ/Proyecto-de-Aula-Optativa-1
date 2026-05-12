@@ -243,17 +243,9 @@
         padding-right: 1rem;
     }
 
-    .search-bar {
-        display: none;
-    }
-
-    .user-info {
-        display: none;
-    }
-
-    .cart-sidebar {
-        width: 100%;
-    }
+    .search-bar { display: none; }
+    .user-info { display: none; }
+    .cart-sidebar { width: 100%; }
 
     .banner {
         padding: 1.5rem;
@@ -261,9 +253,18 @@
         align-items: flex-start;
         gap: 1rem;
     }
+    .banner-title { font-size: 1.7rem; }
+    .banner-stats { gap: 1rem; padding: 1rem; }
+    .stat-value { font-size: 1.4rem; }
 
-    .banner-title {
-        font-size: 1.7rem;
+    .footer-content {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     }
 }
 

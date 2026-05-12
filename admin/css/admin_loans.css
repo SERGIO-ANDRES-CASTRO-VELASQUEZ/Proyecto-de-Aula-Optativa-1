@@ -475,6 +475,16 @@ td span {
         padding: 1rem;
     }
 
+    .loans-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .loans-controls {
+        grid-template-columns: 1fr;
+    }
+
     .loans-stats {
         grid-template-columns: 1fr 1fr;
     }
@@ -490,6 +500,16 @@ td span {
     .table-footer {
         flex-direction: column;
         align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .loans-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .loans-main {
+        padding: 0.75rem;
     }
 }
 
