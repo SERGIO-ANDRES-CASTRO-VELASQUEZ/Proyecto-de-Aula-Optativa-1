@@ -50,6 +50,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        // Si el usuario dejó algo escrito en los inputs de spec sin clickear "+", agregarlo automáticamente
+        const pendingKey   = document.getElementById('specKey')?.value.trim();
+        const pendingValue = document.getElementById('specValue')?.value.trim();
+        if (pendingKey && pendingValue) {
+            specs.push({ key: pendingKey, value: pendingValue });
+            if (document.getElementById('specKey'))   document.getElementById('specKey').value   = '';
+            if (document.getElementById('specValue')) document.getElementById('specValue').value = '';
+            renderSpecList();
+        }
+
         const payload = {
             name,
             description,
@@ -57,8 +67,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             pricePerDay: price,
             stock,
             active: document.getElementById('articleActive')?.checked ?? true,
-            images: imageUrls.length > 0 ? imageUrls.map(url => ({ url })) : [],
-            specs:  specs.length ? specs : []
+            imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+            specs:     specs.length ? specs : []
         };
 
         try {
@@ -325,23 +335,45 @@ function updateImageControls() {
 
 // ─── Especificaciones ─────────────────────────────────────────────────────────
 function wireSpecControls() {
-    const addBtn = document.getElementById('addSpecBtn');
+    const addBtn     = document.getElementById('addSpecBtn');
+    const keyInput   = document.getElementById('specKey');
+    const valueInput = document.getElementById('specValue');
     if (!addBtn) return;
+
+    function tryAddSpec() {
+        const key   = keyInput?.value.trim();
+        const value = valueInput?.value.trim();
+        if (!key || !value) return;
+        specs.push({ key, value });
+        if (keyInput)   keyInput.value   = '';
+        if (valueInput) valueInput.value = '';
+        renderSpecList();
+        keyInput?.focus();
+    }
 
     addBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const keyInput   = document.getElementById('specKey');
-        const valueInput = document.getElementById('specValue');
-        if (!keyInput || !valueInput) return;
+        if (!keyInput?.value.trim() || !valueInput?.value.trim()) {
+            alert('⚠️ Completa ambos campos (clave y valor)');
+            return;
+        }
+        tryAddSpec();
+    });
 
-        const key   = keyInput.value.trim();
-        const value = valueInput.value.trim();
-        if (!key || !value) { alert('⚠️ Completa ambos campos'); return; }
-
-        specs.push({ key, value });
-        keyInput.value   = '';
-        valueInput.value = '';
-        renderSpecList();
+    // Enter en cualquiera de los dos inputs agrega la spec (no envía el form)
+    [keyInput, valueInput].forEach(input => {
+        if (!input) return;
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                if (keyInput?.value.trim() && valueInput?.value.trim()) {
+                    tryAddSpec();
+                } else if (e.target === keyInput && keyInput.value.trim()) {
+                    valueInput?.focus(); // Saltar al campo de valor si la clave está lista
+                }
+            }
+        });
     });
 
     renderSpecList();

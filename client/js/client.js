@@ -309,27 +309,31 @@ async function toggleFavorito(e) {
     e.stopPropagation();
 
     const btn       = e.currentTarget;
-    const productId = btn.dataset.productId;
-    const isFav     = btn.dataset.isFav === 'true';
+    const productId = Number(btn.dataset.productId);
 
-    // Actualización optimista — la clase fav-active controla el relleno vía CSS
-    btn.dataset.isFav = String(!isFav);
-    btn.classList.toggle('fav-active', !isFav);
+    // Fuente de verdad: el Set en memoria, no el atributo HTML
+    const isFav = favoritosIds.has(productId);
+
+    btn.style.opacity = '0.5';
+    btn.disabled = true;
 
     try {
         if (isFav) {
             // DELETE /api/products/{id}/favorite
             await apiDelete(`/api/products/${productId}/favorite`);
-            favoritosIds.delete(Number(productId));
+            favoritosIds.delete(productId);
+            btn.style.opacity = '';
+            btn.disabled = false;
+            btn.classList.remove('fav-active');
         } else {
             // POST /api/products/{id}/favorite
             await apiPost(`/api/products/${productId}/favorite`);
-            favoritosIds.add(Number(productId));
+            // Recargar página para reflejar el corazón relleno
+            window.location.reload();
         }
     } catch (err) {
-        // Revertir en caso de error
-        btn.dataset.isFav = String(isFav);
-        btn.classList.toggle('fav-active', isFav);
+        btn.style.opacity = '';
+        btn.disabled = false;
         if (err.status === 401) alert('Debes iniciar sesión para guardar favoritos.');
         else console.error('Error favorito:', err);
     }

@@ -32,11 +32,13 @@ async function apiFetch(path, options = {}) {
         return;
     }
 
-    const data = await response.json();
+    // Leer como texto primero para manejar respuestas vacías (ej: 201 sin body)
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
-        const msg = data.message || data.error || 'Error desconocido';
-        throw new ApiError(response.status, msg, data.fieldErrors || []);
+        const msg = (data && (data.message || data.error)) || 'Error desconocido';
+        throw new ApiError(response.status, msg, (data && data.fieldErrors) || []);
     }
 
     return data;
